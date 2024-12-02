@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Alex_Brush } from 'next/font/google';
 import Navbar from "@/components/Navbar";
-
-export const alexBrush = Alex_Brush({
-  subsets: ['latin'],
-  weight: '400',
-});
 
 export const metadata: Metadata = {
   title: "Abhijit Panchal",

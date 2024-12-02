@@ -1,20 +1,11 @@
+"use client"
+import { projects } from '@/components/constants/projects';
 import Button from '@/components/ui/Button/index';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Image from 'next/image';
 import React from 'react';
 
-interface Project {
-  id: number;
-  title: string;
-  description: string;
-  status: 'Live' | 'Planning' | 'In Development';
-  imageUrl: string;
-  githubUrl: string;
-  liveUrl: string;
-  techStack: string[];
-}
-
-const ProjectPage: React.FC<{ projects: Project[] }> = ({ projects }) => {
+const ProjectPage = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {projects.map((project) => (
