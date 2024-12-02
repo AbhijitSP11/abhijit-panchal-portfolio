@@ -32,7 +32,7 @@ export interface Experience {
     role: string;
     company: string;
     location: string;
-    description: string[];
+    description?: string[];
     startDate: string; 
     endDate: string; 
   }

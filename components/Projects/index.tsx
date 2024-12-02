@@ -6,7 +6,7 @@ const Projects: React.FC = () => {
   return (
     <>
       {
-        projects.map((project, idx)=> (
+        projects.map((project)=> (
           <ProjectCard
             key={project.id} 
             id={project.id}

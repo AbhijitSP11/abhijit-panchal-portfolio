@@ -98,7 +98,7 @@ const BlogCarousel: React.FC<{ blogs: BlogCardProps[] }> = ({ blogs }) => {
     return 0.5;
   };
 
-  const hasMoreCards = blogs.length > 3;
+  // const hasMoreCards = blogs.length > 3;
 
   return (
     <div className="relative w-full h-72 flex items-center justify-center overflow-hidden">

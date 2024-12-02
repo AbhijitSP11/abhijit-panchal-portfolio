@@ -19,7 +19,7 @@ const Home = () => {
             </div>
         </div>
         <div className='flex items-center justify-between mt-4'>
-            <p className='w-96 p-4 leading-6'>I'm a Senior Frontend Engineer passionate about crafting web applications that excel in both speed and design. 
+            <p className='w-96 p-4 leading-6'>I&apos;m a Frontend Engineer passionate about crafting web applications that excel in both speed and design. 
               I utilize the latest technologies and prioritize a user-centric
             </p>
             <h1 className='text-9xl hover:font-normal font-bold transition-all duration-500 cursor-default tracking-wide'>Developer</h1>

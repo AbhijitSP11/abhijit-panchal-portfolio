@@ -1,6 +1,5 @@
+import Link from 'next/link';
 import React from 'react'
-
-type Props = {}
 
 interface INavLinks {
     id: number;
@@ -11,23 +10,23 @@ interface INavLinks {
 const Nav_Links: INavLinks[] = [
     {   id:1,
         name: "About", 
-        link: "", 
+        link: "/about", 
     },
     {   id:2,
         name: "Projects", 
-        link: "", 
+        link: "/projects", 
     },
     {   id:3,
         name: "Experience", 
-        link: "", 
+        link: "/experience", 
     },
     {   id:4,
         name: "Contact", 
-        link: "", 
+        link: "/contact", 
     },
 ]
 
-const Navbar = (props: Props) => {
+const Navbar = () => {
   return (
     <nav className='flex justify-between items-center fixed top-0 left-0 w-full backdrop-blur-md bg-black bg-opacity-60 px-32 py-4 z-50'>
        <div className="text-lg font-signature text-white">
@@ -36,7 +35,9 @@ const Navbar = (props: Props) => {
         <div className='flex gap-8 items-center'>
             {
                 Nav_Links.map((nav, idx) => (
-                    <div key={idx} className="text-white">{nav.name}</div>
+                    <Link href={nav.link} >
+                        <div key={idx} className="text-white">{nav.name}</div>
+                    </Link>
                 ))
             }
         </div>
