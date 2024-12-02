@@ -2,8 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import  Button  from '@/components/ui/Button';
-import { ArrowRight } from 'lucide-react';
+import Button from '@/components/ui/Button';
 
 type BlogCardProps = {
   title: string;
@@ -54,7 +53,7 @@ const BlogCard: React.FC<{
           </div> 
             <Button 
               text="Read More" 
-              onClick={() => window.open(blog.url, '_blank')} 
+              onClick={() => console.log('_blank')} 
             /> 
           </div> 
       </motion.div> 

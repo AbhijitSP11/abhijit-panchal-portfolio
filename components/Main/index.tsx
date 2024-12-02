@@ -2,8 +2,6 @@ import { ArrowRight } from 'lucide-react'
 import React from 'react'
 import { social_links } from '../constants/social'
 import Social from '../Social'
-import BlogCarousel from '../BlogCard'
-import { blogs } from '../constants/blog'
 
 
 const Home = () => {

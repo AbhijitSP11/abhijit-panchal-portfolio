@@ -1,4 +1,3 @@
-import { div } from 'framer-motion/client';
 import React from 'react'
 
 type Props = {}
@@ -30,18 +29,24 @@ const Nav_Links: INavLinks[] = [
 
 const Navbar = (props: Props) => {
   return (
-    <nav className='flex justify-between items-center'> 
-        <div>Abhijit</div>
+    <nav className='flex justify-between items-center fixed top-0 left-0 w-full backdrop-blur-md bg-black bg-opacity-60 px-32 py-4 z-50'>
+       <div className="text-lg font-signature text-white">
+            Abhijit
+        </div>
         <div className='flex gap-8 items-center'>
             {
-                Nav_Links.map((nav, idx)=> (
-                    <div key={idx}>{nav.name}</div>
+                Nav_Links.map((nav, idx) => (
+                    <div key={idx} className="text-white">{nav.name}</div>
                 ))
             }
         </div>
-        <button className='bg-white text-gray-800 px-4 py-2 rounded-full'>Resume</button>
+        <a href="/path-to-your-resume.pdf" download>
+            <button className='bg-white text-black italic px-6 py-2 rounded-full hover:scale-105 transition transform duration-300'>
+                Resume
+            </button>
+        </a>
     </nav>
   )
 }
 
-export default Navbar
+export default Navbar;

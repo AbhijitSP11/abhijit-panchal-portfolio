@@ -18,7 +18,7 @@ export interface BlogCard{
 
 
 export interface Project {
-    id: number;
+    id?: number;
     title: string;
     description: string;
     status: 'Live' | 'Planning' | 'In Development';

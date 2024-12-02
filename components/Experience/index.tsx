@@ -4,7 +4,7 @@ import { Experience as ExperienceType } from '../types'
 
 const Experience = () => {
   return (
-    <div className=''>
+    <div >
         {experiences.map((exp, index) => (
             <ExperienceCard key={index} {...exp} />
         ))}
@@ -32,7 +32,7 @@ const calculateExperience = (startDate: string, endDate: string) => {
     
     return (
       <div className="flex items-center justify-between p-8 hover:cursor-pointer bg-[#121212] 
-            border border-gray-600 hover:bg-[#F5F5F5] text-gray-300 hover:text-gray-950"
+            border border-gray-600 hover:bg-[#F5F5F5] text-gray-300 hover:text-gray-950 rounded-2xl mb-2"
         >
         <div className="flex-1">{role}</div>
         <div className="flex-1">{company}</div>

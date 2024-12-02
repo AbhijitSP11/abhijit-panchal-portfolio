@@ -1,13 +1,12 @@
 "use client"
 import React from 'react'
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa'
-import { motion } from 'framer-motion'
+import { FaGithub} from 'react-icons/fa'
 import { Project } from '../types'
 import Image from 'next/image'
 import Button from '../ui/Button'
-import { ArrowBigLeft, ArrowRight, MoveUp, MoveUpRight } from 'lucide-react'
+import {  MoveUpRight } from 'lucide-react'
 
-const ProjectCard = ({id, description, githubUrl, imageUrl, liveUrl, status, techStack, title}: Project) => {
+const ProjectCard = ({description, githubUrl, imageUrl, liveUrl, status, techStack, title}: Project) => {
   return (
     <div className='flex w-full gap-8 border border-gray-800 rounded-2xl p-8 h-[460px] mb-6'>
       {/* Left */}

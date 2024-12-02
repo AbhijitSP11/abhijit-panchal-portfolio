@@ -1,5 +1,6 @@
 import BlogCarousel from "@/components/BlogCard";
 import { blogs } from "@/components/constants/blog";
+import Contact from "@/components/Contact";
 import Experience from "@/components/Experience";
 import Main from "@/components/Main";
 import Projects from "@/components/Projects";
@@ -16,6 +17,8 @@ const Home = () => {
       />
       <Projects />
       <Experience/>
+      <Contact/>
+    
     </div>
   );
 };
