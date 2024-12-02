@@ -1,5 +1,6 @@
 import Button from '@/components/ui/Button/index';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Image from 'next/image';
 import React from 'react';
 
 interface Project {
@@ -19,7 +20,13 @@ const ProjectPage: React.FC<{ projects: Project[] }> = ({ projects }) => {
       {projects.map((project) => (
         <Card key={project.id} className="h-full">
           <div className="relative h-48 overflow-hidden">
-            <img src={project.imageUrl} alt={project.title} className="w-full h-full object-cover" />
+          <Image
+            src={project.imageUrl}
+            alt={project.title}
+            layout="fill"
+            objectFit="cover"
+            className="w-full h-full"
+          />
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
               <div className="flex gap-4">
                 <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
