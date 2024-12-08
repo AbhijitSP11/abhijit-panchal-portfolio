@@ -8,7 +8,7 @@ import {  MoveUpRight } from 'lucide-react'
 
 const ProjectCard = ({description, githubUrl, imageUrl, liveUrl, status, techStack, title}: Project) => {
   return (
-    <div className='flex w-full gap-8 border border-gray-800 rounded-2xl p-8 h-[460px] mb-6'>
+    <div className='flex w-full gap-8  rounded-2xl p-8 h-[460px] mb-6 bg-[#070707]'>
       {/* Left */}
       <div className='flex flex-col justify-between w-[45%]'>
         <div className='flex flex-col gap-4'>

@@ -28,15 +28,18 @@ const Nav_Links: INavLinks[] = [
 
 const Navbar = () => {
   return (
-    <nav className='flex justify-between items-center fixed top-0 left-0 w-full backdrop-blur-md bg-black bg-opacity-60 px-32 py-4 z-50'>
-       <div className="text-lg font-signature text-white">
-            Abhijit
+    <nav className={`flex justify-between items-center fixed top-0 left-0 w-full px-32 py-4 z-50 `}>
+       <div className='flex items-center gap-2'>
+            <span className='text-2xl font-bold text-white'>Abhijit</span>
+            <span className='text-sm text-green-500 tracking-wide rounded-full px-4 bg-[#1A1A1A]'>
+                Available
+            </span>
         </div>
-        <div className='flex gap-8 items-center'>
+        <div className='flex gap-8 items-center bg-[#070707] text-sm py-4  px-8 rounded-full'>
             {
                 Nav_Links.map((nav, idx) => (
                     <Link href={nav.link} key={idx}>
-                        <div key={idx} className="text-white">{nav.name}</div>
+                        <div key={idx} className="text-white hover:bg-white hover:text-black hover:p-4 hover:rounded-full">{nav.name}</div>
                     </Link>
                 ))
             }

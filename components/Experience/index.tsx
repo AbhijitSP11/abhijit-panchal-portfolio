@@ -32,7 +32,7 @@ const calculateExperience = (startDate: string, endDate: string) => {
 
     return (
       <div className="flex items-center justify-between p-8 hover:cursor-pointer bg-[#121212] 
-            border border-gray-600 hover:bg-[#F5F5F5] text-gray-300 hover:text-gray-950 rounded-2xl mb-2"
+        hover:bg-[#F5F5F5] text-gray-300 hover:text-gray-950 rounded-2xl mb-2"
         >
         <div className="flex-1">{role}</div>
         <div className="flex-1">{company}</div>
@@ -65,9 +65,9 @@ const calculateExperience = (startDate: string, endDate: string) => {
     }
   
     return (
-      <div className="flex flex-col justify-between p-8 bg-[#121212] border-t border-gray-300 text-gray-300">
-        <div className="flex-1 text-lg text-gray-100">Total Experience</div>
-        <div className="flex-1 italic">{totalYears} years, {totalMonths} months</div>
+      <div className="flex flex-col justify-between p-8">
+        <div className="flex-1 text-gray-100">Total Experience</div>
+        <div className="flex-1 italic text-sm">{totalYears} years, {totalMonths} months</div>
       </div>
     );
   };

@@ -1,9 +1,9 @@
-import { LucideIcon } from "lucide-react";
+import React from "react";
 
 export interface ISocialLinks {
     id:number;
     name: string;
-    icon: LucideIcon;
+    icon:  React.ReactNode;
     link:string
 }
 

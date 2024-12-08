@@ -1,20 +1,20 @@
-import { LucideIcon, MoveUpRight } from 'lucide-react';
+import { MoveUpRight } from 'lucide-react';
 import React from 'react'
 
 type SocialProps = {
     link:string;
-    icon: LucideIcon
+    icon: React.ReactNode
     name:string
 }
 
-const Social = ({icon: Icon, link, name} : SocialProps) => {
+const Social = ({icon, link, name} : SocialProps) => {
   return (
     <div className='relative w-full group'>
     <a href={link} target="_blank" rel="noopener noreferrer" className="flex items-center gap-4 p-2">
       {/* Icon and name */}
-      <span className='bg-white text-black p-1 rounded-full'>
-        <Icon className="size-4" />
-      </span>
+      {/* <span className='bg-white text-black rounded-full'> */}
+      {React.cloneElement(icon as React.ReactElement, { className: 'w-2 h-2' })}
+      {/* </span> */}
       <p className='text-gray-400 italic'>{name}</p>
       
       {/* Hover Icon */}
@@ -24,12 +24,6 @@ const Social = ({icon: Icon, link, name} : SocialProps) => {
       </span>
     </a>
     
-    {/* Gradient Border */}
-    <div className="absolute inset-0 rounded-full border-1
-         bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-500 
-         p-[2px] z-[-1] opacity-50 group-hover:opacity-100 transition-opacity duration-300 ease-in-out">
-      <div className="w-full h-full bg-black rounded-full"></div>
-    </div>
   </div>
     ) 
 }

@@ -1,35 +1,35 @@
-import { Code, FolderArchive, GitBranch, Linkedin, Text } from "lucide-react";
 import { ISocialLinks } from "../types";
+import  { Code, Github, Linkedin, } from "../ui/SVGs/svg";
 
 export const social_links: ISocialLinks[] = [
     {   
         id: 1, 
         name: "Github",
-        icon: GitBranch, 
+        icon: <Github/>, 
         link: "", 
     },
     {   
         id: 1, 
         name: "Linkedin",
-        icon: Linkedin, 
+        icon: <Linkedin/>, 
         link: "", 
     },
     {   
         id: 1, 
         name: "Leetcode",
-        icon: Code, 
+        icon: <Code/>, 
         link: "", 
     },
     {   
         id: 1, 
         name: "Peerlist",
-        icon: FolderArchive, 
+        icon: <Code/>, 
         link: "", 
     },
     {   
         id: 1, 
         name: "Medium",
-        icon: Text, 
+        icon: <Code/>, 
         link: "", 
     },
 ]

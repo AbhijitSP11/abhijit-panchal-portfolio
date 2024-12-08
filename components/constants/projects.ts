@@ -3,10 +3,10 @@ import { Project } from "../types";
 export const projects: Project[] = [
   {
     id: 1,
-    title: "Nebula: AI-Powered Task Management",
+    title: "Aster: AI-Powered Task Management",
     description: "Revolutionary task management platform leveraging AI to optimize productivity and workflow efficiency.",
     status: "Live",
-    imageUrl: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?q=80&w=2070&auto=format&fit=crop",
+    imageUrl: "/images/aster.png",
     githubUrl: "https://github.com/username/nebula",
     liveUrl: "https://nebula-tasks.com",
     techStack: ["React", "Node.js", "TensorFlow", "GraphQL"],
@@ -16,7 +16,7 @@ export const projects: Project[] = [
     title: "EcoTrack: Sustainable Living Companion",
     description: "Mobile app empowering users to reduce their carbon footprint through personalized recommendations and community challenges.",
     status: "In Development",
-    imageUrl: "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop",
+    imageUrl: "/images/twello.png",
     githubUrl: "https://github.com/username/ecotrack",
     liveUrl: "https://ecotrack.io",
     techStack: ["React Native", "Firebase", "TensorFlow Lite", "Node.js"],
