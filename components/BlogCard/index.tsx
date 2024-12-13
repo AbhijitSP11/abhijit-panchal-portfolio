@@ -26,6 +26,7 @@ const BlogCard: React.FC<{
           opacity: opacity, 
         }} 
         transition={{ duration: 0.3 }} 
+        style={{ pointerEvents: 'auto' }} 
         className={` 
           h-[220px] flex rounded-2xl overflow-hidden shadow-2xl relative 
           transition-all duration-300 
@@ -51,10 +52,14 @@ const BlogCard: React.FC<{
               {blog.description} 
             </p> 
           </div> 
-            <Button 
-              text="Read More" 
-              onClick={() => console.log('_blank')} 
-            /> 
+          <Button 
+            text="Read More" 
+            onClick={() => {
+              console.log('Button clicked');
+              window.open(blog.url, '_blank', 'noopener,noreferrer');
+            }} 
+          />
+
           </div> 
       </motion.div> 
     ); 
@@ -75,12 +80,12 @@ const BlogCarousel: React.FC<{ blogs: BlogCardProps[] }> = ({ blogs }) => {
 
     const computeVisibleCards = () => {
       const visibleIndexes = [];
-      const leftIndex = (currentIndex - 1 + totalBlogs) % totalBlogs;
-      const rightIndex = (currentIndex + 1) % totalBlogs;
-
-      visibleIndexes.push(leftIndex, currentIndex, rightIndex);
+      const nextIndex = (currentIndex + 1) % blogs.length; 
+    
+      visibleIndexes.push(currentIndex, nextIndex);
       return visibleIndexes;
     };
+    
 
     setVisibleCards(computeVisibleCards());
   }, [currentIndex, blogs.length]);
@@ -120,7 +125,6 @@ const BlogCarousel: React.FC<{ blogs: BlogCardProps[] }> = ({ blogs }) => {
       )}
 
       <div className="flex items-center justify-center space-x-6">
-        <AnimatePresence>
           {visibleCards.map((index) => (
             <BlogCard
               key={index}
@@ -129,7 +133,6 @@ const BlogCarousel: React.FC<{ blogs: BlogCardProps[] }> = ({ blogs }) => {
               opacity={calculateOpacity(index)}
             />
           ))}
-        </AnimatePresence>
       </div>
 
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
