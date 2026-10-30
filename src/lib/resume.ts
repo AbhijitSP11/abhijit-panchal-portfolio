@@ -1,0 +1,274 @@
+export const profile = {
+  name: "Abhijit Panchal",
+  first: "Abhijit",
+  last: "Panchal",
+  role: "Software Development Engineer — Full Stack",
+  shortRole: "Full Stack Engineer",
+  location: "Mumbai, India",
+  email: "abhijit.panchal2406@gmail.com",
+  phone: "+91-7999173541",
+  linkedin: "https://www.linkedin.com/in/abhijit-panchal",
+  linkedinLabel: "abhijit-panchal",
+  github: "https://github.com/abhijitsp11",
+  githubLabel: "abhijitsp11",
+  tagline: "I build the systems banks run on.",
+  summary:
+    "Full stack software engineer with a B.Tech in Computer Science and 3.5+ years building service-oriented web applications for banks and capital-markets firms. Strong in object-oriented programming, data structures and algorithms, and API design; builds record-matching and batch pipelines over 100,000+ rows per run and search systems over 25M+ records.",
+  summary2:
+    "I design responsive, data-dense interfaces from reusable component systems, and have shipped on small, highly collaborative teams spread across India, South Korea and Brazil — where confidentiality and integrity of financial data are hard requirements.",
+};
+
+export const stats = [
+  { value: 3.5, suffix: "+", label: "Years building for finance", decimals: 1 },
+  { value: 25, suffix: "M+", label: "Records searched at scale", decimals: 0 },
+  { value: 73, suffix: "+", label: "Data-dense screens shipped", decimals: 0 },
+  { value: 4000, suffix: "+", label: "Invoices per billing cycle", decimals: 0 },
+];
+
+export type Project = {
+  id: string;
+  index: string;
+  eyebrow: string;
+  title: string;
+  blurb: string;
+  stack: string[];
+  points: string[];
+  metrics: { value: string; label: string }[];
+  org: string;
+  year: string;
+  accent: string;
+};
+
+export const projects: Project[] = [
+  {
+    id: "recon",
+    index: "01",
+    eyebrow: "Banking · Reconciliation",
+    title: "CMS — Reconciliation Platform",
+    org: "Oneture Technologies · UBI Bank",
+    year: "2025 — Present",
+    accent: "#e0502a",
+    blurb:
+      "A reconciliation platform whose matching logic pairs transaction records across three independent sources and flags every mismatch across lakhs of rows.",
+    stack: ["Python", "PostgreSQL", "Binary parsing", "Excel"],
+    points: [
+      "Matching logic pairs records across the ATM switch, ATM electronic journals and the core banking system, flagging every mismatch across 100,000+ rows.",
+      "Python parsers decode binary-format machine files into structured records — turning raw data into input that can be matched and audited at scale.",
+      "Maintain the multi-source ingestion pipeline and keep each format handler working as upstream files change, then load results and produce formatted Excel output for operations.",
+      "Built to be reused rather than tied to one bank — planned for rollout to Yes Bank and others.",
+    ],
+    metrics: [
+      { value: "100K+", label: "rows per run" },
+      { value: "3", label: "independent sources" },
+    ],
+  },
+  {
+    id: "billing",
+    index: "02",
+    eyebrow: "Banking · Enterprise Billing",
+    title: "CMS — Enterprise Billing Platform",
+    org: "Oneture Technologies · Axis Bank, SBI",
+    year: "2025",
+    accent: "#2f6f5e",
+    blurb:
+      "Calculates what each bank owes every month for cash management and cash van services, issues the invoice, and evidences every line — replacing a spreadsheet-and-email process.",
+    stack: ["Python", "FastAPI", "Celery", "PostgreSQL", "React", "Vite"],
+    points: [
+      "Automated the month-end workflow with Celery workers and Python cron jobs: runs that took 3 days of manual effort now finish unattended in under 20 minutes.",
+      "Retries and idempotency mean a re-run never double-bills. Generates 4,000+ invoices per cycle across 12 states.",
+      "Configuration-driven, multi-tenant rate engine — object-oriented rate-card, SLA and deduction models — so a new bank, state or provider is onboarded through configuration rather than code.",
+      "Designed the complete application UI and built 40+ responsive screens across Operations, Finance and Admin, with maker-checker approval enforced via JWT and RBAC.",
+    ],
+    metrics: [
+      { value: "3d → 20m", label: "month-end run" },
+      { value: "40+", label: "screens designed" },
+      { value: "<1s", label: "API response" },
+    ],
+  },
+  {
+    id: "mirae",
+    index: "03",
+    eyebrow: "Capital Markets · Securities Settlement",
+    title: "Mirae Asset — Bond Custodian Platform",
+    org: "Oneture Technologies · South Korea & Brazil",
+    year: "2024 — 2025",
+    accent: "#3b5bdb",
+    blurb:
+      "A bond custodian platform that safekeeps bonds for investors and settles their trades, delivered by a small cross-functional team spread across three countries.",
+    stack: ["React", "Redux", "AG Grid", "C# / .NET", "SWIFT MT/MX"],
+    points: [
+      "Object-oriented C#/.NET REST services implementing SWIFT MT and MX messaging so transaction records met regulatory reporting obligations in Brazil and South Korea.",
+      "Supported millions of BRL in daily settlements.",
+      "Built 33+ responsive, data-dense interactive screens for settlements, securities, corporate actions and reconciliation; migrated the build from CRA to Vite.js.",
+      "Ran requirement analysis and solution design with clients — specifications, flowcharts and API contracts — enforcing confidentiality through JWT, RBAC scoping and encryption.",
+    ],
+    metrics: [
+      { value: "33+", label: "interactive screens" },
+      { value: "3", label: "countries, one team" },
+    ],
+  },
+  {
+    id: "aster",
+    index: "04",
+    eyebrow: "Personal · AI Product",
+    title: "Aster — AI Project Management",
+    org: "github.com/abhijitsp11",
+    year: "Personal project",
+    accent: "#8b5cf6",
+    blurb:
+      "A full stack platform with real-time data dashboards and a Groq-backed assistant that converts natural-language questions into SQL.",
+    stack: ["Next.js", "TypeScript", "Express", "Prisma", "PostgreSQL", "AWS", "Groq"],
+    points: [
+      "Groq-backed assistant converts natural-language questions to SQL at 92% accuracy.",
+      "Provisioned production AWS infrastructure — VPC, EC2, RDS, Cognito — with RBAC, sustaining 99.9% uptime.",
+    ],
+    metrics: [
+      { value: "92%", label: "NL → SQL accuracy" },
+      { value: "99.9%", label: "uptime" },
+    ],
+  },
+];
+
+export const experience = [
+  {
+    role: "Full Stack Software Engineer",
+    company: "Oneture Technologies",
+    location: "Mumbai, India",
+    period: "Dec 2024 — Present",
+    current: true,
+    points: [
+      "Build reconciliation, billing and custodian platforms for banks and capital-markets firms.",
+      "Own both the service layer and the data-dense React interfaces on top of it.",
+      "Nominated for Team of the Year as part of a 4-developer Mirae Asset team.",
+    ],
+  },
+  {
+    role: "Frontend Engineer",
+    company: "Taiyo.AI",
+    location: "San Francisco, USA (Remote)",
+    period: "Jul 2023 — Sep 2024",
+    current: false,
+    points: [
+      "Scaled an analytics platform serving 50+ enterprise clients over a 25M+-record dataset, cutting insight generation from 4 hours to 3 minutes.",
+      "Diagnosed Elasticsearch query bottlenecks and designed multi-tier caching — API latency 5s to 0.8s, infrastructure spend down $3,200/month.",
+      "Built a Gen-AI news module on OpenAI streaming APIs for 100+ users, cutting token costs 45%; A/B-tested prompts lowered hallucination from 12% to 7.8%.",
+    ],
+  },
+  {
+    role: "Frontend Developer",
+    company: "My Next Film",
+    location: "Delhi, India (Remote)",
+    period: "Oct 2022 — Apr 2023",
+    current: false,
+    points: [
+      "Built full stack features with React.js, Python and Django REST APIs; cut homepage load from 4.2s to 3.1s, lifting 30-day retention 15%.",
+      "Cleared 60+ Jira defects across 3 sprints, eliminating 80% of the backlog and unblocking a delayed launch.",
+    ],
+  },
+];
+
+export const skills = [
+  {
+    group: "Languages (OOP)",
+    items: ["C#", "Java", "Python", "TypeScript", "JavaScript (ES6+)", "SQL"],
+  },
+  {
+    group: "CS Fundamentals",
+    items: [
+      "Data structures & algorithms",
+      "Object-oriented design",
+      "Design patterns",
+      "System design",
+    ],
+  },
+  {
+    group: "Backend & Services",
+    items: [
+      ".NET (C#)",
+      "FastAPI",
+      "Django",
+      "Node.js",
+      "Express.js",
+      "REST APIs",
+      "Service-oriented architecture",
+      "Microservices",
+    ],
+  },
+  {
+    group: "Frontend & Data Viz",
+    items: [
+      "React.js",
+      "Next.js",
+      "Redux",
+      "AG Grid",
+      "Vite.js",
+      "Tailwind CSS",
+      "Interactive dashboards",
+      "Reusable component libraries",
+      "UI/UX design",
+    ],
+  },
+  {
+    group: "Data at Scale",
+    items: [
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "Elasticsearch",
+      "Redis caching",
+      "Schema design",
+      "Indexing",
+      "Query optimization",
+    ],
+  },
+  {
+    group: "Infrastructure & Automation",
+    items: [
+      "AWS (EC2, RDS, S3, VPC, Cognito)",
+      "Docker",
+      "CI/CD",
+      "GitHub Actions",
+      "Celery",
+      "cron",
+      "Git",
+    ],
+  },
+  {
+    group: "Security",
+    items: ["OAuth 2.0", "JWT", "RBAC", "AES encryption", "Maker-checker controls"],
+  },
+  {
+    group: "Domain",
+    items: [
+      "SWIFT MT/MX",
+      "ISO 15022/20022",
+      "Securities settlement",
+      "Bank reconciliation",
+      "Billing",
+    ],
+  },
+];
+
+export const education = {
+  school: "Avantika University",
+  degree: "B.Tech, Computer Science & Engineering",
+  location: "Ujjain, India",
+  period: "Jun 2019 — May 2023",
+};
+
+export const achievements = [
+  "Nominated for Team of the Year at Oneture as part of a 4-developer Mirae Asset team.",
+  "Drove an 84% API latency cut at Taiyo.AI and a 26% page-speed gain at My Next Film.",
+];
+
+export const marqueeWords = [
+  "Full Stack",
+  "Fintech",
+  "SWIFT MT/MX",
+  "React",
+  "Python",
+  "C# / .NET",
+  "PostgreSQL",
+  "AWS",
+  "System Design",
+];
