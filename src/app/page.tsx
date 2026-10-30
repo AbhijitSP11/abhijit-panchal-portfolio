@@ -4,11 +4,11 @@ import Nav from "@/components/Nav";
 import ScrollRail from "@/components/ScrollRail";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
-import Statement from "@/components/Statement";
+import WordScroll from "@/components/WordScroll";
 import Stats from "@/components/Stats";
 import Work from "@/components/Work";
 import Experience from "@/components/Experience";
-import About from "@/components/About";
+import TabsWindow from "@/components/TabsWindow";
 import Contact from "@/components/Contact";
 
 export default function Home() {
@@ -23,16 +23,37 @@ export default function Home() {
         <Hero />
         <Marquee />
 
-        <Statement
-          lead="Three and a half years of"
-          accentLine="money moving correctly."
-          note="Reconciliation across millions of rows, month-end billing that used to take three days, and bond settlements clearing in two countries. The interesting part was never the UI — it was making sure the numbers agree."
+        <WordScroll
+          words={["every", "rupee", "has", "to", "land", "where", "it", "should."]}
+          accentAt={[5, 6, 7]}
+          footnote="keep scrolling ↓"
+          length={2.6}
         />
 
         <Stats />
         <Work />
         <Experience />
-        <About />
+        <TabsWindow />
+
+        <WordScroll
+          words={[
+            "that's",
+            "the",
+            "short",
+            "version.",
+            "the",
+            "rest",
+            "is",
+            "in",
+            "the",
+            "case",
+            "studies.",
+          ]}
+          accentAt={[9, 10]}
+          dark
+          length={2.8}
+        />
+
         <Contact />
       </main>
     </>

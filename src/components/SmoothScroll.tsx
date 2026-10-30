@@ -14,7 +14,15 @@ import {
  * Drives the page with Lenis and keeps ScrollTrigger in step with it, so pinned
  * and scrubbed sections stay aligned with the eased scroll position.
  */
-export default function SmoothScroll() {
+/**
+ * `waitForIntro` is false on pages that have no preloader — otherwise Lenis
+ * would stay stopped waiting for an intro that never runs, locking the page.
+ */
+export default function SmoothScroll({
+  waitForIntro = true,
+}: {
+  waitForIntro?: boolean;
+}) {
   useEffect(() => {
     registerGsap();
     if (prefersReducedMotion()) return;
@@ -33,7 +41,7 @@ export default function SmoothScroll() {
     gsap.ticker.lagSmoothing(0);
 
     // The preloader holds the page still until it finishes.
-    lenis.stop();
+    if (waitForIntro) lenis.stop();
     const offReady = onPreloaderDone(() => {
       lenis.start();
       // honour a hash the page was opened with, now that scrolling is live
@@ -63,7 +71,7 @@ export default function SmoothScroll() {
       gsap.ticker.remove(raf);
       lenis.destroy();
     };
-  }, []);
+  }, [waitForIntro]);
 
   return null;
 }

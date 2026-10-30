@@ -29,11 +29,24 @@ npm run build   # production build
 > `.next` and the dev server starts returning 500s. Stop dev first, or delete
 > `.next` and restart it.
 
+## Routes
+
+| Route           | What it is                                        |
+| --------------- | ------------------------------------------------- |
+| `/`             | The single-page portfolio                          |
+| `/work/[slug]`  | A long-form case study per project (4, prerendered) |
+
 ## Editing the content
 
-Everything on the page is driven by `src/lib/resume.ts`: profile details, the
-stat counters, projects, experience, skills, education and achievements. Change
-that file and the whole site follows — no component edits needed.
+Two files drive everything:
+
+- `src/lib/resume.ts` — profile, stat counters, projects, experience, skills,
+  education, achievements, hero cards.
+- `src/lib/case-studies.ts` — the long-form case study behind each project:
+  overview, insights, the passes it took, results.
+
+A project links to its case study through its `slug`, which must match a slug in
+`case-studies.ts`. Change these files and the whole site follows.
 
 ## Animation map
 
@@ -44,7 +57,9 @@ that file and the whole site follows — no component edits needed.
 | `Hero`             | Drawn underline, name revealed letter by letter, tilted cards        |
 | `Character`        | Original chibi ninja perched on the name — idle bob, fluttering ties, blink, waves on hover |
 | `Marquee`          | Ticker that reverses with scroll direction and shears with velocity  |
-| `Statement`        | Masked word reveal plus a hand-drawn rule that strokes on            |
+| `WordScroll`       | Sticky panel whose words light up one at a time as you scroll past   |
+| `TabsWindow`       | Fake browser chrome — tabs switch as you scroll, address bar retypes |
+| `CaseStudyView`    | Case study page: reading progress, pass stepper, counting results    |
 | `Stats`            | Counters that run up when scrolled into view                         |
 | `Work`             | Per-project reveals, mock console lifting in, scrubbed index numerals |
 | `Experience`       | Timeline spine that fills as you scroll through it                   |

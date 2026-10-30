@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Link from "next/link";
 import {
   gsap,
   registerGsap,
@@ -92,9 +93,9 @@ export default function Work() {
     >
       <div className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:py-28">
         <div className="mb-16 flex items-end justify-between border-b border-ink/15 pb-5">
-          <h2 className="label text-muted">Selected work</h2>
+          <h2 className="label text-muted">01 / Selected work</h2>
           <span className="label text-muted">
-            {String(projects.length).padStart(2, "0")} projects
+            {String(projects.length).padStart(2, "0")} case studies
           </span>
         </div>
 
@@ -172,6 +173,20 @@ export default function Work() {
                   <span className="text-ink/25">/</span>
                   <span>{p.year}</span>
                 </div>
+
+                <Link
+                  href={`/work/${p.slug}`}
+                  className="p-fade reveal-ready group mt-7 inline-flex items-center gap-2.5 rounded-full px-5 py-3 text-sm font-medium text-paper transition-opacity hover:opacity-90"
+                  style={{ backgroundColor: p.accent }}
+                >
+                  Read the case study
+                  <span
+                    className="transition-transform group-hover:translate-x-0.5"
+                    aria-hidden="true"
+                  >
+                    →
+                  </span>
+                </Link>
               </div>
 
               {/* mock */}

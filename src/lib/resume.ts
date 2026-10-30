@@ -27,6 +27,7 @@ export const stats = [
 
 export type Project = {
   id: string;
+  slug: string;
   index: string;
   eyebrow: string;
   title: string;
@@ -42,6 +43,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: "recon",
+    slug: "reconciliation-platform",
     index: "01",
     eyebrow: "Banking · Reconciliation",
     title: "CMS — Reconciliation Platform",
@@ -64,6 +66,7 @@ export const projects: Project[] = [
   },
   {
     id: "billing",
+    slug: "billing-platform",
     index: "02",
     eyebrow: "Banking · Enterprise Billing",
     title: "CMS — Enterprise Billing Platform",
@@ -87,6 +90,7 @@ export const projects: Project[] = [
   },
   {
     id: "mirae",
+    slug: "bond-custodian",
     index: "03",
     eyebrow: "Capital Markets · Securities Settlement",
     title: "Mirae Asset — Bond Custodian Platform",
@@ -109,6 +113,7 @@ export const projects: Project[] = [
   },
   {
     id: "aster",
+    slug: "aster",
     index: "04",
     eyebrow: "Personal · AI Product",
     title: "Aster — AI Project Management",

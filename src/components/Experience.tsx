@@ -57,7 +57,7 @@ export default function Experience() {
     >
       <div className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:py-28">
         <div className="mb-16 flex items-end justify-between border-b border-ink/15 pb-5">
-          <h2 className="label text-muted">Experience</h2>
+          <h2 className="label text-muted">02 / Experience</h2>
           <span className="label text-muted">2022 — Present</span>
         </div>
 
