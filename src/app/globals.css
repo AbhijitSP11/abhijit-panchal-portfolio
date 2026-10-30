@@ -1,17 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-  --color-paper: #efece4;
-  --color-paper-2: #e7e3d9;
-  --color-ink: #121110;
-  --color-ink-2: #1b1917;
-  --color-ink-3: #2a2724;
-  --color-accent: #e0502a;
-  --color-muted: #6f6962;
-  --color-muted-dark: #8a8279;
+  --color-paper: #f1f0eb;
+  --color-paper-2: #e8e6df;
+  --color-ink: #242620;
+  --color-ink-2: #2e3129;
+  --color-ink-3: #3b3f36;
+  /* jade — replaces the earlier orange */
+  --color-accent: #0e7c66;
+  --color-accent-soft: #14a085;
+  --color-muted: #6b6d64;
+  --color-muted-dark: #8d8f84;
 
   --font-display: var(--font-display), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-serif), ui-serif, Georgia, serif;
+  --font-hand: var(--font-hand), "Bradley Hand", cursive;
   --font-mono: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
 }
 
@@ -55,10 +58,9 @@ html.lenis body {
   overflow: hidden;
 }
 
-/* Lock scroll while the preloader runs */
-body[data-loading="true"] {
-  overflow: hidden;
-}
+/* The preloader locks scrolling by setting overflow on <html> imperatively —
+   see src/lib/preloader-state.ts. It is deliberately not a React-rendered
+   attribute, because re-renders reset those. */
 
 /* ---- Utilities ----
    These sit in the components layer so Tailwind utilities still override them.
@@ -74,7 +76,7 @@ body[data-loading="true"] {
 
   .dotgrid {
     background-image: radial-gradient(
-      rgba(18, 17, 16, 0.16) 1px,
+      rgba(36, 38, 32, 0.16) 1px,
       transparent 1px
     );
     background-size: 22px 22px;
@@ -82,10 +84,14 @@ body[data-loading="true"] {
 
   .dotgrid-dark {
     background-image: radial-gradient(
-      rgba(239, 236, 228, 0.12) 1px,
+      rgba(241, 240, 235, 0.12) 1px,
       transparent 1px
     );
     background-size: 22px 22px;
+  }
+
+  .hand {
+    font-family: var(--font-hand);
   }
 
   .grain::after {

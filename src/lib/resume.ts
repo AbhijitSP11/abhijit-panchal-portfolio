@@ -47,7 +47,7 @@ export const projects: Project[] = [
     title: "CMS — Reconciliation Platform",
     org: "Oneture Technologies · UBI Bank",
     year: "2025 — Present",
-    accent: "#e0502a",
+    accent: "#0e7c66",
     blurb:
       "A reconciliation platform whose matching logic pairs transaction records across three independent sources and flags every mismatch across lakhs of rows.",
     stack: ["Python", "PostgreSQL", "Binary parsing", "Excel"],
@@ -69,7 +69,7 @@ export const projects: Project[] = [
     title: "CMS — Enterprise Billing Platform",
     org: "Oneture Technologies · Axis Bank, SBI",
     year: "2025",
-    accent: "#2f6f5e",
+    accent: "#2f6f9f",
     blurb:
       "Calculates what each bank owes every month for cash management and cash van services, issues the invoice, and evidences every line — replacing a spreadsheet-and-email process.",
     stack: ["Python", "FastAPI", "Celery", "PostgreSQL", "React", "Vite"],
@@ -92,7 +92,7 @@ export const projects: Project[] = [
     title: "Mirae Asset — Bond Custodian Platform",
     org: "Oneture Technologies · South Korea & Brazil",
     year: "2024 — 2025",
-    accent: "#3b5bdb",
+    accent: "#6b5bb8",
     blurb:
       "A bond custodian platform that safekeeps bonds for investors and settles their trades, delivered by a small cross-functional team spread across three countries.",
     stack: ["React", "Redux", "AG Grid", "C# / .NET", "SWIFT MT/MX"],
@@ -114,7 +114,7 @@ export const projects: Project[] = [
     title: "Aster — AI Project Management",
     org: "github.com/abhijitsp11",
     year: "Personal project",
-    accent: "#8b5cf6",
+    accent: "#b05a7a",
     blurb:
       "A full stack platform with real-time data dashboards and a Groq-backed assistant that converts natural-language questions into SQL.",
     stack: ["Next.js", "TypeScript", "Express", "Prisma", "PostgreSQL", "AWS", "Groq"],
@@ -259,6 +259,13 @@ export const education = {
 export const achievements = [
   "Nominated for Team of the Year at Oneture as part of a 4-developer Mirae Asset team.",
   "Drove an 84% API latency cut at Taiyo.AI and a 26% page-speed gain at My Next Film.",
+];
+
+/** Tilted cards under the hero name, each with a handwritten caption. */
+export const heroCards = [
+  { scene: "city" as const, caption: "based in mumbai", tilt: -3.5 },
+  { scene: "grid" as const, caption: "banks & capital markets", tilt: 2.5 },
+  { scene: "terminal" as const, caption: "3.5 years in, still shipping", tilt: -1.5 },
 ];
 
 export const marqueeWords = [

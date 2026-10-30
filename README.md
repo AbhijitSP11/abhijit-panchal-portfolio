@@ -12,7 +12,7 @@ fintech. Content comes from `src/lib/resume.ts`.
 | Styling    | Tailwind CSS v4 (CSS-first `@theme` tokens) |
 | Animation  | GSAP 3.13 + ScrollTrigger                   |
 | Scrolling  | Lenis (smooth scroll, drives ScrollTrigger) |
-| Fonts      | Space Grotesk, Instrument Serif, JetBrains Mono |
+| Fonts      | DM Sans, Instrument Serif, Caveat, JetBrains Mono |
 
 The page is fully static — no server runtime, so it deploys anywhere (Vercel,
 Netlify, GitHub Pages with an export, any static host).
@@ -39,9 +39,10 @@ that file and the whole site follows — no component edits needed.
 
 | Component          | What it does                                                        |
 | ------------------ | ------------------------------------------------------------------- |
-| `Preloader`        | Counting percentage, blueprint rules, name fills from its outline, curtain lift |
+| `Preloader`        | Counting percentage on the paper background, name filling from its outline, curtain lift. Kept under ~2.5s. |
 | `SmoothScroll`     | Lenis loop wired into the GSAP ticker; owns in-page anchor scrolling |
-| `Hero`             | Parallax cards (mouse + scroll), ghosted name, masked word reveal    |
+| `Hero`             | Drawn underline, name revealed letter by letter, tilted cards        |
+| `Character`        | Original chibi ninja perched on the name — idle bob, fluttering ties, blink, waves on hover |
 | `Marquee`          | Ticker that reverses with scroll direction and shears with velocity  |
 | `Statement`        | Masked word reveal plus a hand-drawn rule that strokes on            |
 | `Stats`            | Counters that run up when scrolled into view                         |
@@ -56,6 +57,13 @@ Lenis stays off, and every reveal renders in its final state.
 ## Notes
 
 - Section backgrounds marked `data-nav="dark"` tell the nav to invert itself.
+- `src/lib/preloader-state.ts` is the single source of truth for "intro
+  finished". It is a module-level flag on purpose: this used to be a
+  React-rendered `<body data-loading>` attribute, and re-renders reset it,
+  which re-locked scrolling through CSS. It also carries a failsafe timeout so
+  an interrupted intro can never strand the page behind a locked overlay.
+- The character is drawn from scratch. It is not, and should not be replaced
+  with, a copyrighted character.
 - Custom classes live in `@layer components` in `globals.css` so Tailwind
   utilities keep winning over them.
 - The project "screenshots" are CSS mockups in `ProjectMock.tsx`. Swap them for

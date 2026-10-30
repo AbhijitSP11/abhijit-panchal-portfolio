@@ -2,135 +2,130 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap, registerGsap, prefersReducedMotion } from "@/lib/anim";
+import { isPreloaderDone, lockScroll, markPreloaderDone } from "@/lib/preloader-state";
 import { profile } from "@/lib/resume";
 
 /**
- * Full-bleed intro: a counting percentage, blueprint rules that draw across the
- * screen, and the name filling in from its outline. Lifts away as a curtain.
+ * Quiet intro on the paper background — no full-bleed colour wash. The name
+ * fills in from its outline over a thin accent progress rule, then the whole
+ * panel lifts away.
  */
 export default function Preloader() {
   const root = useRef<HTMLDivElement>(null);
   const outline = useRef<SVGTextElement>(null);
   const wipe = useRef<SVGRectElement>(null);
+  const bar = useRef<HTMLDivElement>(null);
   const [pct, setPct] = useState(0);
-  const [gone, setGone] = useState(false);
+  // if the intro already ran this session, never show it again
+  const [gone, setGone] = useState(() => isPreloaderDone());
 
   useEffect(() => {
     registerGsap();
 
     const finish = () => {
-      document.body.dataset.loading = "false";
-      window.dispatchEvent(new Event("preloader:done"));
+      markPreloaderDone();
       setGone(true);
     };
 
-    if (prefersReducedMotion()) {
+    if (prefersReducedMotion() || isPreloaderDone()) {
       setPct(100);
       finish();
       return;
     }
 
+    lockScroll();
+
+    // Failsafe: if the timeline is interrupted for any reason, never leave the
+    // page stranded behind a locked overlay.
+    const failsafe = window.setTimeout(finish, 6000);
+
     const counter = { v: 0 };
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
 
-      tl.from(".pre-meta", { opacity: 0, y: 10, duration: 0.6, stagger: 0.08 })
-        .from(
-          ".pre-rule-h",
-          { scaleX: 0, duration: 1.2, ease: "power3.inOut", stagger: 0.12 },
-          0.1
-        )
-        .from(
-          ".pre-rule-v",
-          { scaleY: 0, duration: 1.2, ease: "power3.inOut", stagger: 0.12 },
-          0.1
-        )
-        // outline appears, then the fill wipes across it
-        .to(outline.current, { opacity: 0.5, duration: 0.7 }, 0.25)
+      // Kept deliberately brief — the intro runs on top of however long
+      // hydration takes, and nobody should wait on a splash screen.
+      tl.from(".pre-meta", { opacity: 0, y: 8, duration: 0.4, stagger: 0.05 })
+        .to(outline.current, { opacity: 0.22, duration: 0.35 }, 0.1)
         .to(
           wipe.current,
-          { attr: { width: 800 }, duration: 2, ease: "power2.inOut" },
-          0.6
+          { attr: { width: 800 }, duration: 1.05, ease: "power2.inOut" },
+          0.28
         )
-        .to(outline.current, { opacity: 0.18, duration: 0.6 }, 2.2)
+        .to(bar.current, { scaleX: 1, duration: 1.05, ease: "power2.inOut" }, 0.28)
         .to(
           counter,
           {
             v: 100,
-            duration: 2.4,
+            duration: 1.25,
             ease: "power1.inOut",
             onUpdate: () => setPct(Math.round(counter.v)),
           },
-          0
+          0.15
         )
-        // curtain up
-        .to(".pre-inner", { opacity: 0, duration: 0.5, ease: "power2.in" }, "+=0.3")
+        .to(".pre-inner", { opacity: 0, duration: 0.35, ease: "power2.in" }, "+=0.12")
         .to(
           root.current,
           {
             yPercent: -100,
-            duration: 1.1,
+            duration: 0.8,
             ease: "expo.inOut",
             onComplete: finish,
           },
-          "<0.15"
+          "<0.08"
         );
     }, root);
 
-    return () => ctx.revert();
+    return () => {
+      window.clearTimeout(failsafe);
+      ctx.revert();
+    };
   }, []);
 
   if (gone) return null;
 
   const nameStyle = {
     fontFamily: "var(--font-display)",
-    fontSize: "128px",
+    fontSize: "132px",
     fontWeight: 500,
-    letterSpacing: "-0.04em",
+    letterSpacing: "-0.045em",
   } as const;
 
   return (
     <div
       ref={root}
-      className="fixed inset-0 z-[100] flex flex-col justify-between overflow-hidden bg-accent px-5 py-5 text-paper sm:px-8 sm:py-7"
+      className="fixed inset-0 z-[100] flex flex-col justify-between overflow-hidden bg-paper px-5 py-5 text-ink sm:px-8 sm:py-7"
       aria-hidden="true"
     >
       {/* top meta */}
       <div className="pre-inner flex items-start justify-between">
-        <div className="label space-y-1 leading-relaxed opacity-80">
+        <div className="label space-y-1 leading-relaxed text-muted">
           <div className="pre-meta">{profile.name}</div>
           <div className="pre-meta">Mumbai · Full Stack Engineer</div>
         </div>
-        <div className="label space-y-1 text-right leading-relaxed opacity-80">
+        <div className="label space-y-1 text-right leading-relaxed text-muted">
           <div className="pre-meta">Loading portfolio</div>
           <div className="pre-meta">Glad you dropped by</div>
         </div>
       </div>
 
-      {/* centre: blueprint rules + name */}
-      <div className="pre-inner relative flex flex-1 items-center justify-center">
-        <div className="pointer-events-none absolute inset-0">
-          <div className="pre-rule-h absolute left-0 top-[38%] h-px w-full origin-left bg-paper/35" />
-          <div className="pre-rule-h absolute left-0 top-[62%] h-px w-full origin-right bg-paper/35" />
-          <div className="pre-rule-v absolute left-[22%] top-0 h-full w-px origin-top bg-paper/35" />
-          <div className="pre-rule-v absolute right-[22%] top-0 h-full w-px origin-bottom bg-paper/35" />
-        </div>
-
+      {/* centre: the name filling in over a progress rule */}
+      <div className="pre-inner relative flex flex-1 flex-col items-center justify-center">
         <svg
-          viewBox="0 0 800 200"
-          className="relative w-[92%] max-w-5xl"
+          viewBox="0 0 800 190"
+          className="relative w-[92%] max-w-4xl"
           role="presentation"
         >
           <defs>
             <clipPath id="name-wipe">
-              <rect ref={wipe} x="0" y="0" width="0" height="200" />
+              <rect ref={wipe} x="0" y="0" width="0" height="190" />
             </clipPath>
           </defs>
 
           <text
             ref={outline}
             x="400"
-            y="130"
+            y="128"
             textAnchor="middle"
             fill="none"
             stroke="currentColor"
@@ -138,21 +133,26 @@ export default function Preloader() {
             opacity="0"
             style={nameStyle}
           >
-            abhijit.
+            Abhijit.
           </text>
 
+          {/* one text node so the stop stays kerned against the name */}
           <g clipPath="url(#name-wipe)">
-            <text
-              x="400"
-              y="130"
-              textAnchor="middle"
-              fill="currentColor"
-              style={nameStyle}
-            >
-              abhijit.
+            <text x="400" y="128" textAnchor="middle" style={nameStyle}>
+              <tspan fill="currentColor">Abhijit</tspan>
+              <tspan fill="var(--color-accent)">.</tspan>
             </text>
           </g>
         </svg>
+
+        {/* progress rule */}
+        <div className="mt-6 h-px w-[92%] max-w-4xl bg-ink/12">
+          <div
+            ref={bar}
+            className="h-full w-full origin-left bg-accent"
+            style={{ transform: "scaleX(0)" }}
+          />
+        </div>
       </div>
 
       {/* bottom meta */}
@@ -160,7 +160,7 @@ export default function Preloader() {
         <div className="font-mono text-4xl font-medium tabular-nums sm:text-6xl">
           {String(pct).padStart(3, "0")}%
         </div>
-        <div className="label pre-meta text-right opacity-80">
+        <div className="label pre-meta text-right text-muted">
           Software Development Engineer
         </div>
       </div>

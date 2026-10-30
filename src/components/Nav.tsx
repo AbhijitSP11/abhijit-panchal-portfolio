@@ -5,10 +5,10 @@ import { gsap, registerGsap, ScrollTrigger, onPreloaderDone } from "@/lib/anim";
 import { profile } from "@/lib/resume";
 
 const links = [
-  { href: "#work", label: "Work" },
-  { href: "#experience", label: "Experience" },
-  { href: "#about", label: "About" },
-  { href: "#contact", label: "Contact" },
+  { href: "#work", label: "work" },
+  { href: "#experience", label: "experience" },
+  { href: "#about", label: "about me" },
+  { href: "#contact", label: "say hey" },
 ];
 
 const BAR = 64; // height of the nav band, in px
@@ -16,7 +16,7 @@ const BAR = 64; // height of the nav band, in px
 export default function Nav() {
   const nav = useRef<HTMLElement>(null);
   const menu = useRef<HTMLDivElement>(null);
-  const [onDark, setOnDark] = useState(true);
+  const [onDark, setOnDark] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -85,12 +85,13 @@ export default function Nav() {
   }, [open]);
 
   const shell = !scrolled
-    ? "border-transparent bg-transparent text-paper"
+    ? "border-transparent bg-transparent text-ink"
     : onDark
       ? "border-paper/10 bg-ink/80 text-paper backdrop-blur-md"
       : "border-ink/10 bg-paper/85 text-ink backdrop-blur-md";
 
-  const lightPill = onDark || !scrolled;
+  // a light pill only makes sense against a dark bar
+  const lightPill = onDark && scrolled;
 
   return (
     <>
@@ -129,7 +130,7 @@ export default function Nav() {
                   : "bg-ink text-paper hover:bg-accent"
               }`}
             >
-              Email me
+              email me
             </a>
 
             {/* mobile toggle */}

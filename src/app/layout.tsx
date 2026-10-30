@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { DM_Sans, Instrument_Serif, Caveat, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/lib/resume";
 
-const display = Space_Grotesk({
+const display = DM_Sans({
   subsets: ["latin"],
   variable: "--font-display",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "700"],
 });
 
 const serif = Instrument_Serif({
@@ -14,6 +14,12 @@ const serif = Instrument_Serif({
   variable: "--font-serif",
   weight: ["400"],
   style: ["normal", "italic"],
+});
+
+const hand = Caveat({
+  subsets: ["latin"],
+  variable: "--font-hand",
+  weight: ["400", "600"],
 });
 
 const mono = JetBrains_Mono({
@@ -38,8 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${display.variable} ${serif.variable} ${mono.variable} antialiased`}
-        data-loading="true"
+        className={`${display.variable} ${serif.variable} ${hand.variable} ${mono.variable} antialiased`}
       >
         {children}
       </body>

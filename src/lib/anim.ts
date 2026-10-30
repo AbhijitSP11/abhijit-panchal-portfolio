@@ -18,19 +18,7 @@ export function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-/**
- * Runs `cb` once the preloader has lifted — immediately if it already has, so a
- * component that mounts late (or a reduced-motion run, where the preloader
- * finishes before the rest of the tree subscribes) never misses the signal.
- */
-export function onPreloaderDone(cb: () => void) {
-  if (typeof document !== "undefined" && document.body.dataset.loading === "false") {
-    cb();
-    return () => {};
-  }
-  window.addEventListener("preloader:done", cb);
-  return () => window.removeEventListener("preloader:done", cb);
-}
+export { onPreloaderDone } from "./preloader-state";
 
 /**
  * Wraps every word of `el` in a masked span so the words can be animated up
