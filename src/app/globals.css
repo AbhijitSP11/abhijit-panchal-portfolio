@@ -94,6 +94,24 @@ html.lenis body {
     font-family: var(--font-hand);
   }
 
+  /* Panel swap inside the browser window. A CSS animation on mount rather
+     than a GSAP tween, so a fast scroll through several tabs cannot leave
+     two tweens fighting over the same element. */
+  .panel-in {
+    animation: panel-in 0.42s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+
+  @keyframes panel-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   .grain::after {
     content: "";
     position: absolute;

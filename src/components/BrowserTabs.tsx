@@ -2,33 +2,57 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion, revealUp } from "@/lib/anim";
-import {
-  offTheClockIntro,
-  interests,
-  films,
-  artworks,
-  photos,
-  travel,
-  markets,
-  type Interest,
-} from "@/lib/personal";
-import { profile } from "@/lib/resume";
+import { profile, experience, skills, education, achievements } from "@/lib/resume";
+import { interests, films, artworks, photos, travel, markets } from "@/lib/personal";
 import Placeholder from "./Placeholder";
 import PolaroidLineCarousel from "@/components/ui/polaroid-line-carousel";
 
 /**
- * The off-the-clock half of the site, in a browser window that stays stuck to
- * the viewport while you scroll past it. Each scroll band switches to the next
- * tab, so the section is read by scrolling rather than by clicking — though
- * the tabs are still buttons.
+ * One browser window for the whole of "about me" — the professional tabs and
+ * the off-the-clock ones in a single strip, because two identical windows on
+ * one page was the same idea told twice.
  *
- * The run is `interests.length` bands tall; `sticky` pins the window for
- * exactly that distance and releases it at the end.
+ * The window sticks to the viewport for the length of the section and each
+ * scroll band advances a tab. Smoothness comes from three things: the panel
+ * is a fixed height so swapping content never resizes the window, the swap is
+ * a CSS animation rather than a tween that can be interrupted mid-flight, and
+ * the band has a dead zone at its edges so a scroll that hovers on a boundary
+ * cannot flicker between two tabs.
  */
-const BAND_VH = 85;
 
-export default function LifeTabs() {
+type Tab = {
+  key: string;
+  icon: string;
+  label: string;
+  path: string;
+  dot?: string;
+};
+
+const workTabs: Tab[] = [
+  { key: "about", icon: "🙂", label: "about me", path: "about" },
+  { key: "work-log", icon: "🗂️", label: "work log", path: "work-log" },
+  { key: "stack", icon: "🧰", label: "stack", path: "stack" },
+  { key: "schooling", icon: "🎓", label: "schooling", path: "schooling" },
+];
+
+const lifeTabs: Tab[] = interests.map((i) => ({
+  key: i.id,
+  icon: "",
+  label: i.tab,
+  path: `life/${i.path}`,
+  dot: i.tint,
+}));
+
+const tabs: Tab[] = [...workTabs, ...lifeTabs];
+
+/** Scroll distance per tab. */
+const BAND_VH = 58;
+/** Fraction of a band ignored at each edge before the tab flips. */
+const DEADZONE = 0.18;
+
+export default function BrowserTabs() {
   const root = useRef<HTMLElement>(null);
+  const strip = useRef<HTMLDivElement>(null);
   const urlRef = useRef<HTMLSpanElement>(null);
   const [index, setIndex] = useState(0);
   const last = useRef(0);
@@ -37,111 +61,137 @@ export default function LifeTabs() {
     registerGsap();
 
     const ctx = gsap.context(() => {
-      revealUp(root.current!.querySelectorAll(".lt-head"), {
+      revealUp(root.current!.querySelectorAll(".bt-head"), {
         trigger: root.current!,
         stagger: 0.06,
       });
 
       if (prefersReducedMotion()) return;
 
+      let settle = 0;
+      const commit = (i: number) => {
+        if (i === last.current) return;
+        last.current = i;
+        setIndex(i);
+      };
+
       const st = ScrollTrigger.create({
         trigger: root.current,
         start: "top top",
         end: "bottom bottom",
         onUpdate: (self) => {
-          const i = Math.min(
-            interests.length - 1,
-            Math.floor(self.progress * interests.length)
-          );
-          if (i !== last.current) {
-            last.current = i;
-            setIndex(i);
+          const pos = self.progress * tabs.length;
+          const i = Math.min(tabs.length - 1, Math.floor(pos));
+          if (i === last.current) return;
+
+          window.clearTimeout(settle);
+          // Clear of the band edge: switch straight away. Sitting on a
+          // boundary otherwise flips back and forth on the smallest movement.
+          const within = pos - i;
+          if (within > DEADZONE && within < 1 - DEADZONE) {
+            commit(i);
+            return;
           }
+          // Still inside the dead zone — if the scroll stops here, settle on
+          // the band we are actually in rather than leaving the wrong tab up.
+          settle = window.setTimeout(() => commit(i), 140);
         },
       });
 
-      return () => st.kill();
+      return () => {
+        window.clearTimeout(settle);
+        st.kill();
+      };
     }, root);
 
     return () => ctx.revert();
   }, []);
 
-  // retype the address bar and swap the panel on every change
+  // keep the active tab in view in the strip, and retype the address bar
   useEffect(() => {
-    if (prefersReducedMotion()) return;
-    gsap.fromTo(
-      urlRef.current,
-      { opacity: 0, x: -6 },
-      { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }
-    );
-    gsap.fromTo(
-      ".lt-panel",
-      { opacity: 0, y: 16 },
-      { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }
-    );
+    if (urlRef.current && !prefersReducedMotion()) {
+      gsap.fromTo(
+        urlRef.current,
+        { opacity: 0, x: -6 },
+        { opacity: 1, x: 0, duration: 0.3, ease: "power2.out" }
+      );
+    }
+
+    const el = strip.current?.querySelector<HTMLElement>(`[data-tab="${index}"]`);
+    const box = strip.current;
+    if (!el || !box) return;
+    const target = el.offsetLeft - box.clientWidth / 2 + el.clientWidth / 2;
+    box.scrollTo({
+      left: Math.max(0, target),
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
   }, [index]);
 
-  const active = interests[index];
-  const next = interests[(index + 1) % interests.length];
-  const isLast = index === interests.length - 1;
+  const active = tabs[index];
+  const next = tabs[(index + 1) % tabs.length];
+  const isLast = index === tabs.length - 1;
 
   return (
     <section
       ref={root}
-      id="life"
-      style={{ height: `${interests.length * BAND_VH}vh` }}
+      id="about"
+      style={{ height: `${tabs.length * BAND_VH}vh` }}
       className="relative border-t border-ink/10 bg-paper"
     >
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden px-5 py-16 sm:px-8">
-        <div className="mx-auto w-full max-w-[1400px]">
+      <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden px-5 py-10 sm:px-8">
+        <div className="mx-auto flex w-full max-w-[1500px] flex-col">
           {/* heading */}
-          <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <div className="lt-head reveal-ready label text-muted">
-                {offTheClockIntro.kicker}
-              </div>
-              <h2 className="lt-head reveal-ready mt-3 text-3xl font-medium leading-[1.05] tracking-tight sm:text-4xl lg:text-5xl">
-                {offTheClockIntro.heading}{" "}
-                <span className="font-serif italic text-accent">
-                  {offTheClockIntro.headingAccent}
-                </span>
+              <div className="bt-head reveal-ready label text-muted">03 / About me</div>
+              <h2 className="bt-head reveal-ready mt-2 text-3xl font-medium leading-[1.05] tracking-tight sm:text-4xl">
+                a little more{" "}
+                <span className="font-serif italic text-accent">about me.</span>
               </h2>
             </div>
-            <p className="lt-head reveal-ready hand text-lg text-ink/50">
-              keep scrolling — the tabs change themselves
+            <p className="bt-head reveal-ready hand text-lg text-ink/50">
+              yes, I have too many tabs open — keep scrolling
             </p>
           </div>
 
           {/* ── browser window ── */}
-          <div className="overflow-hidden rounded-2xl bg-ink shadow-[0_40px_90px_-50px_rgba(36,38,32,0.8)]">
+          <div className="flex h-[min(74svh,780px)] flex-col overflow-hidden rounded-2xl bg-ink shadow-[0_40px_90px_-50px_rgba(36,38,32,0.8)]">
             {/* tab strip */}
-            <div className="flex items-end gap-1 overflow-x-auto px-3 pt-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div
+              ref={strip}
+              className="flex shrink-0 items-end gap-1 overflow-x-auto scroll-smooth px-3 pt-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            >
               <span className="flex h-9 shrink-0 items-center rounded-t-lg bg-accent px-3.5 text-sm font-medium text-paper">
                 {profile.first.toLowerCase()}
               </span>
 
-              {interests.map((it, i) => {
+              {tabs.map((t, i) => {
                 const on = i === index;
                 return (
                   <button
-                    key={it.id}
+                    key={t.key}
                     type="button"
+                    data-tab={i}
                     onClick={() => {
                       setIndex(i);
                       last.current = i;
                     }}
-                    className={`flex h-9 shrink-0 items-center gap-2 rounded-t-lg px-3.5 text-sm transition-colors ${
+                    className={`flex h-9 shrink-0 items-center gap-2 rounded-t-lg px-3.5 text-sm transition-colors duration-300 ${
                       on
                         ? "bg-paper text-ink"
                         : "bg-paper/[0.06] text-paper/60 hover:bg-paper/[0.12]"
                     }`}
                   >
-                    <span
-                      className="h-2 w-2 rounded-full"
-                      style={{ backgroundColor: it.tint }}
-                      aria-hidden="true"
-                    />
-                    <span className="whitespace-nowrap">{it.tab}</span>
+                    {t.dot ? (
+                      <span
+                        className="h-2 w-2 rounded-full"
+                        style={{ backgroundColor: t.dot }}
+                        aria-hidden="true"
+                      />
+                    ) : (
+                      <span aria-hidden="true">{t.icon}</span>
+                    )}
+                    <span className="whitespace-nowrap">{t.label}</span>
                   </button>
                 );
               })}
@@ -155,7 +205,7 @@ export default function LifeTabs() {
             </div>
 
             {/* address bar */}
-            <div className="flex items-center gap-2 bg-paper px-3 pb-3 pt-3 sm:gap-3">
+            <div className="flex shrink-0 items-center gap-2 bg-paper px-3 pb-3 pt-3 sm:gap-3">
               <div className="hidden items-center gap-1 pl-1 text-ink/35 sm:flex" aria-hidden="true">
                 <NavIcon d="M15 18l-6-6 6-6" />
                 <NavIcon d="M9 18l6-6-6-6" />
@@ -166,7 +216,7 @@ export default function LifeTabs() {
                   <path d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z" />
                 </svg>
                 <span className="truncate font-mono text-xs text-muted">
-                  {profile.githubLabel}.dev/life/
+                  {profile.githubLabel}.dev/
                   <span ref={urlRef} className="inline-block font-medium text-ink">
                     {active.path}
                   </span>
@@ -180,12 +230,17 @@ export default function LifeTabs() {
               </span>
             </div>
 
-            {/* panel */}
-            <div className="lt-panel relative bg-paper px-5 pb-16 pt-5 sm:px-8">
-              <Panel interest={active} />
+            {/* panel — grows to fill, so swapping content never resizes the window */}
+            <div className="relative min-h-0 flex-1 bg-paper">
+              <div
+                key={index}
+                className="panel-in absolute inset-0 overflow-y-auto px-5 pb-16 pt-3 sm:px-8"
+              >
+                <Panel tabKey={active.key} />
+              </div>
 
               {/* next-tab nudge */}
-              <div className="pointer-events-none absolute bottom-5 right-5 sm:right-8">
+              <div className="pointer-events-none absolute bottom-4 right-5 z-10 sm:right-8">
                 <div className="flex items-center gap-3 rounded-full bg-ink px-4 py-2.5 text-paper shadow-lg">
                   <span className="label whitespace-nowrap opacity-60">
                     {isLast ? "that's the lot" : "keep scrolling"}
@@ -194,7 +249,7 @@ export default function LifeTabs() {
                     <>
                       <span className="h-4 w-px bg-paper/25" />
                       <span className="label whitespace-nowrap">
-                        next: {next.tab}{" "}
+                        next: {next.label}{" "}
                         <span className="inline-block animate-bounce" aria-hidden="true">
                           ↓
                         </span>
@@ -206,12 +261,12 @@ export default function LifeTabs() {
             </div>
 
             {/* position dashes */}
-            <div className="flex justify-center gap-2 bg-paper pb-5" aria-hidden="true">
-              {interests.map((it, i) => (
+            <div className="flex shrink-0 justify-center gap-1.5 bg-paper pb-4" aria-hidden="true">
+              {tabs.map((t, i) => (
                 <span
-                  key={it.id}
+                  key={t.key}
                   className={`h-1 rounded-full transition-all duration-500 ${
-                    i === index ? "w-10 bg-accent" : "w-5 bg-ink/15"
+                    i === index ? "w-8 bg-accent" : "w-4 bg-ink/15"
                   }`}
                 />
               ))}
@@ -260,9 +315,177 @@ function Squiggle({ className = "", flip = false }: { className?: string; flip?:
   );
 }
 
-/** Copy column, shared by every tab. */
-function Copy({ interest, children }: { interest: Interest; children?: React.ReactNode }) {
+function Heading({ kicker, lead, accent }: { kicker: string; lead: string; accent: string }) {
   return (
+    <>
+      <div className="label text-muted">{kicker}</div>
+      <h3 className="mt-2 text-2xl font-medium leading-tight tracking-tight sm:text-3xl">
+        {lead}
+        <span className="font-serif italic text-accent"> {accent}</span>
+      </h3>
+    </>
+  );
+}
+
+function Panel({ tabKey }: { tabKey: string }) {
+  const interest = interests.find((i) => i.id === tabKey);
+
+  // ── professional tabs ────────────────────────────────────────────────
+  if (tabKey === "about") {
+    return (
+      <div className="grid gap-8 lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <Heading kicker="About me" lead="hello, I'm" accent={profile.name} />
+          <p className="mt-5 text-base leading-relaxed text-ink/75 sm:text-lg">
+            {profile.summary}
+          </p>
+          <p className="mt-4 text-base leading-relaxed text-muted">{profile.summary2}</p>
+        </div>
+        <div className="lg:col-span-5 lg:pt-10">
+          <div className="space-y-3">
+            {[
+              "currently building at Oneture",
+              `based in ${profile.location}`,
+              "banks, payments & settlement",
+              "open to full stack roles",
+            ].map((line) => (
+              <div
+                key={line}
+                className="flex items-center gap-3 rounded-xl border border-ink/10 bg-paper-2/50 px-4 py-3 text-sm"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                {line}
+              </div>
+            ))}
+          </div>
+          <div className="mt-5 flex items-start gap-2">
+            <Squiggle className="mt-1 h-7 w-12 shrink-0" flip />
+            <p className="hand text-lg leading-snug text-ink/55">
+              the short version — the tabs have the rest
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (tabKey === "work-log") {
+    return (
+      <div>
+        <Heading kicker="Work log" lead="where I've" accent="been building." />
+        <div className="mt-6 divide-y divide-ink/10 border-t border-ink/10">
+          {experience.map((job, i) => (
+            <div key={job.company} className="flex items-center gap-4 py-4 sm:gap-6">
+              <span className="label w-6 shrink-0 text-muted">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-semibold text-paper"
+                style={{ backgroundColor: ["#1d4ed8", "#4f46e5", "#7c3aed"][i % 3] }}
+                aria-hidden="true"
+              >
+                {job.company.slice(0, 1)}
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="text-lg font-medium tracking-tight sm:text-xl">
+                  {job.company}
+                </div>
+                <div className="label mt-0.5 text-muted">{job.period}</div>
+              </div>
+              <div className="hidden text-sm text-muted sm:block">{job.role}</div>
+              <span
+                className={`label shrink-0 rounded-full px-3 py-1.5 ${
+                  job.current ? "bg-accent text-paper" : "border border-ink/15 text-muted"
+                }`}
+              >
+                {job.current ? "now" : "before"}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <p className="hand text-lg text-ink/55">the serious bit, in one PDF</p>
+            <Squiggle className="h-7 w-12 shrink-0" />
+          </div>
+          <a
+            href="/Abhijit_Panchal_Resume.pdf"
+            download
+            className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-accent"
+          >
+            open resume
+            <span className="transition-transform group-hover:-translate-y-0.5" aria-hidden="true">
+              ↗
+            </span>
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  if (tabKey === "stack") {
+    return (
+      <div>
+        <Heading kicker="Stack" lead="what I build" accent="things with." />
+        <div className="mt-6 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-4">
+          {skills.map((s) => (
+            <div key={s.group}>
+              <div className="label mb-2.5 text-accent">{s.group}</div>
+              <div className="flex flex-wrap gap-1.5">
+                {s.items.map((it) => (
+                  <span
+                    key={it}
+                    className="rounded-full border border-ink/15 px-2.5 py-1 text-xs text-ink/70 transition-colors hover:border-accent hover:text-accent"
+                  >
+                    {it}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 flex items-center gap-2">
+          <Squiggle className="h-7 w-12 shrink-0" flip />
+          <p className="hand text-lg text-ink/55">
+            most days: Python on one screen, React on the other
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (tabKey === "schooling") {
+    return (
+      <div className="grid gap-8 lg:grid-cols-12">
+        <div className="lg:col-span-6">
+          <Heading kicker="Schooling" lead="where it" accent="started." />
+          <div className="mt-6 rounded-xl border border-ink/10 bg-paper-2/50 p-6">
+            <div className="text-xl font-medium tracking-tight">{education.school}</div>
+            <div className="mt-1 text-sm text-ink/70">{education.degree}</div>
+            <div className="label mt-3 text-muted">
+              {education.period} · {education.location}
+            </div>
+          </div>
+        </div>
+        <div className="lg:col-span-6 lg:pt-12">
+          <div className="label text-muted">Key achievements</div>
+          <ul className="mt-3 space-y-3.5">
+            {achievements.map((a, i) => (
+              <li key={i} className="flex gap-3 text-sm leading-relaxed text-ink/75">
+                <span className="mt-2 h-px w-4 shrink-0 bg-accent" />
+                <span>{a}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
+  if (!interest) return null;
+
+  // ── off-the-clock tabs ───────────────────────────────────────────────
+  const copy = (
     <div className="flex flex-col justify-center">
       <h3 className="text-2xl font-medium leading-tight tracking-tight sm:text-3xl">
         {interest.title}
@@ -271,19 +494,16 @@ function Copy({ interest, children }: { interest: Interest; children?: React.Rea
       <p className="mt-4 max-w-lg text-sm leading-relaxed text-ink/75 sm:text-base">
         {interest.detail}
       </p>
-      {children}
     </div>
   );
-}
 
-const PANEL = "grid items-stretch gap-7 lg:grid-cols-2";
-const MEDIA = "h-[220px] overflow-hidden rounded-xl border border-ink/10 sm:h-[260px]";
+  const panel = "grid items-stretch gap-7 lg:grid-cols-2";
+  const media = "h-[240px] overflow-hidden rounded-xl border border-ink/10 sm:h-[300px]";
 
-function Panel({ interest }: { interest: Interest }) {
   if (interest.id === "cook") {
     return (
-      <div className={PANEL}>
-        <div className={MEDIA}>
+      <div className={panel}>
+        <div className={media}>
           {interest.image ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={interest.image} alt={interest.title} className="h-full w-full object-cover" />
@@ -291,7 +511,8 @@ function Panel({ interest }: { interest: Interest }) {
             <Placeholder label="kitchen" tint={interest.tint} />
           )}
         </div>
-        <Copy interest={interest}>
+        <div>
+          {copy}
           <div className="mt-6 flex flex-wrap gap-2">
             {interest.chips?.map((c) => (
               <span
@@ -302,20 +523,20 @@ function Panel({ interest }: { interest: Interest }) {
               </span>
             ))}
           </div>
-        </Copy>
+        </div>
       </div>
     );
   }
 
   if (interest.id === "photo") {
     return (
-      <div className={PANEL}>
+      <div className={panel}>
         <div className="grid grid-cols-3 gap-3">
           {photos.map((p) => (
             <figure
               key={p.caption}
               tabIndex={0}
-              className="group relative h-[220px] cursor-pointer overflow-hidden rounded-xl border border-ink/10 outline-none transition-transform duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-accent sm:h-[260px]"
+              className="group relative h-[240px] cursor-pointer overflow-hidden rounded-xl border border-ink/10 outline-none transition-transform duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-accent sm:h-[300px]"
             >
               <div className="h-full w-full transition-transform duration-700 group-hover:scale-105">
                 {p.src ? (
@@ -331,12 +552,13 @@ function Panel({ interest }: { interest: Interest }) {
             </figure>
           ))}
         </div>
-        <Copy interest={interest}>
+        <div>
+          {copy}
           <div className="mt-6 flex items-center gap-2">
             <Squiggle className="h-7 w-12 shrink-0" flip />
             <p className="hand text-lg text-ink/50">hover one</p>
           </div>
-        </Copy>
+        </div>
       </div>
     );
   }
@@ -345,25 +567,26 @@ function Panel({ interest }: { interest: Interest }) {
     return (
       <div className="grid gap-7 lg:grid-cols-[1.15fr_1fr]">
         <FilmStrip />
-        <Copy interest={interest}>
+        <div>
+          {copy}
           <div className="mt-6 flex items-center gap-2">
             <Squiggle className="h-7 w-12 shrink-0" flip />
             <p className="hand text-lg text-ink/50">hover to open one</p>
           </div>
-        </Copy>
+        </div>
       </div>
     );
   }
 
   if (interest.id === "paint") {
     return (
-      <div className={PANEL}>
+      <div className={panel}>
         <div className="grid grid-cols-4 gap-2.5">
           {artworks.map((a) => (
             <figure
               key={a.title}
               tabIndex={0}
-              className="group relative h-[220px] cursor-pointer overflow-hidden rounded-xl border border-ink/10 outline-none transition-transform duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-accent sm:h-[260px]"
+              className="group relative h-[240px] cursor-pointer overflow-hidden rounded-xl border border-ink/10 outline-none transition-transform duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-accent sm:h-[300px]"
             >
               <div className="h-full w-full transition-transform duration-700 group-hover:scale-105">
                 {a.src ? (
@@ -380,12 +603,13 @@ function Panel({ interest }: { interest: Interest }) {
             </figure>
           ))}
         </div>
-        <Copy interest={interest}>
+        <div>
+          {copy}
           <div className="mt-6 flex items-center gap-2">
             <Squiggle className="h-7 w-12 shrink-0" flip />
             <p className="hand text-lg text-ink/50">hover for the medium</p>
           </div>
-        </Copy>
+        </div>
       </div>
     );
   }
@@ -400,17 +624,12 @@ function Panel({ interest }: { interest: Interest }) {
           </h3>
           <p className="hand text-lg text-ink/50">drag the line, or use the arrows</p>
         </div>
-
-        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink/75">
-          {travel.note}
-        </p>
-
-        {/* prints pegged to a sagging line; each one swings as it moves */}
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink/75">{travel.note}</p>
         <PolaroidLineCarousel
-          className="mt-2 rounded-xl"
-          height={300}
-          cardWidth={190}
-          sag={26}
+          className="mt-1 rounded-xl"
+          height={340}
+          cardWidth={210}
+          sag={28}
           autoplay={5200}
           string="var(--color-muted)"
           background="transparent"
@@ -430,11 +649,12 @@ function Panel({ interest }: { interest: Interest }) {
   }
 
   return (
-    <div className={PANEL}>
-      <div className={`${MEDIA} grid place-items-center bg-paper-2/50 p-5`}>
+    <div className={panel}>
+      <div className={`${media} grid place-items-center bg-paper-2/50 p-5`}>
         <Sparkline />
       </div>
-      <Copy interest={interest}>
+      <div>
+        {copy}
         <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted">{markets.body}</p>
         <div className="mt-6 flex flex-wrap gap-2">
           {markets.tags.map((t) => (
@@ -446,7 +666,7 @@ function Panel({ interest }: { interest: Interest }) {
             </span>
           ))}
         </div>
-      </Copy>
+      </div>
     </div>
   );
 }
@@ -456,7 +676,7 @@ function FilmStrip() {
   const [open, setOpen] = useState(0);
 
   return (
-    <div className="flex h-[220px] gap-2 sm:h-[260px]">
+    <div className="flex h-[240px] gap-2 sm:h-[300px]">
       {films.map((f, i) => {
         const isOpen = i === open;
         return (
@@ -477,7 +697,6 @@ function FilmStrip() {
               style={{ background: `linear-gradient(to top, ${f.tint}26, transparent)` }}
               aria-hidden="true"
             />
-
             <span
               className={`absolute inset-0 flex items-end justify-center pb-5 transition-opacity duration-300 ${
                 isOpen ? "pointer-events-none opacity-0" : "opacity-100"
@@ -490,7 +709,6 @@ function FilmStrip() {
                 {f.title}
               </span>
             </span>
-
             <span
               className={`absolute inset-0 flex flex-col justify-end p-5 transition-opacity duration-500 ${
                 isOpen ? "opacity-100" : "pointer-events-none opacity-0"
@@ -524,7 +742,7 @@ function Sparkline() {
   return (
     <svg viewBox="0 0 320 160" className="h-full w-full" fill="none" aria-hidden="true">
       <defs>
-        <linearGradient id="lt-spark" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="bt-spark" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.28" />
           <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
         </linearGradient>
@@ -534,7 +752,7 @@ function Sparkline() {
       ))}
       <path
         d="M0 132 L40 118 L80 126 L120 92 L160 104 L200 62 L240 74 L280 38 L320 48 L320 160 L0 160 Z"
-        fill="url(#lt-spark)"
+        fill="url(#bt-spark)"
       />
       <path
         d="M0 132 L40 118 L80 126 L120 92 L160 104 L200 62 L240 74 L280 38 L320 48"
