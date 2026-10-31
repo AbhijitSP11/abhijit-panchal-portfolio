@@ -73,7 +73,7 @@ export const projects: Project[] = [
       "Matching logic pairs records across the ATM switch, ATM electronic journals and the core banking system, flagging every mismatch across 100,000+ rows.",
       "Python parsers decode binary-format machine files into structured records — turning raw data into input that can be matched and audited at scale.",
       "Maintain the multi-source ingestion pipeline and keep each format handler working as upstream files change, then load results and produce formatted Excel output for operations.",
-      "Built to be reused rather than tied to one bank — planned for rollout to Yes Bank and others.",
+      "Built to be reused rather than tied to one bank — being extended to more banks.",
     ],
     metrics: [
       { value: "100K+", label: "rows per run" },

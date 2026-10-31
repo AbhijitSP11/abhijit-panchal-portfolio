@@ -32,7 +32,7 @@ export const caseStudies: CaseStudy[] = [
   {
     slug: "reconciliation-platform",
     title: "CMS — Reconciliation Platform",
-    lede: "Three sources, one truth. Across lakhs of rows a night.",
+    lede: "Three sources, one truth. Across lakhs of rows.",
     blurb:
       "A bank reconciliation platform that pairs transaction records across three independent systems and flags every mismatch.",
     accent: "#7c3aed",
@@ -40,70 +40,54 @@ export const caseStudies: CaseStudy[] = [
       { label: "Role", value: "Full stack engineer" },
       { label: "Client", value: "UBI Bank" },
       { label: "At", value: "Oneture Technologies" },
-      { label: "Scale", value: "100,000+ rows per run" },
+      { label: "Scale", value: "Lakhs of rows" },
       { label: "Year", value: "2025 — present" },
     ],
     overview: {
       heading: "What reconciliation actually means here.",
       body: [
-        "Every ATM transaction leaves a trace in three different places: the ATM switch that authorised it, the electronic journal on the machine itself, and the core banking system that moved the money.",
-        "In a perfect night all three agree. In a real night they do not — a machine reboots mid-dispense, a switch times out, a journal file arrives truncated. Reconciliation is the process of pairing those three records and surfacing every row where they disagree, because each disagreement is somebody's money.",
+        "Every ATM transaction leaves a trace in three places: the switch that authorised it, the electronic journal on the machine, and the core banking system that moved the money.",
+        "When all three agree, nothing needs doing. When they do not, someone has to find the row and explain it, because each disagreement is somebody’s money.",
       ],
     },
     problem: {
       heading: "The problem",
-      question: "How do you match records that were never designed to be matched?",
-      body: "The three sources share no common identifier, no shared format and no shared clock. One of them is not even text — the electronic journals arrive as a binary format the machines write directly.",
+      question: "How do you compare records that were never designed to be compared?",
+      body: "The three sources arrive in different shapes, and the machine journals are binary files that no one can read by eye.",
     },
     insights: [
-      { n: "01", text: "No shared key — matches have to be inferred from amount, terminal and a time window." },
-      { n: "02", text: "Formats drift. Upstream files change shape without warning, so parsing has to fail loudly rather than silently mis-read." },
-      { n: "03", text: "Operations live in Excel. Whatever the system concludes has to arrive in a sheet they can work from." },
+      { n: "01", text: "Binary machine files have to become structured data before anything can be matched." },
+      { n: "02", text: "Three feeds, three formats, all kept current by hand until now." },
+      { n: "03", text: "Operations work in Excel, so the result has to land in a sheet they can use." },
     ],
     iterations: [
       {
         label: "Pass 01",
-        title: "Decode the binary journals",
+        title: "Make the files readable",
         points: [
-          "Wrote Python parsers that read the machine files byte by byte into structured records.",
-          "Treated an unrecognised record as an error to surface, never a row to skip.",
+          "Python scripts that turn the binary files into formatted, structured data.",
         ],
-        outcome:
-          "Raw machine output became something that could be matched and audited at all.",
+        outcome: "Raw machine output became something that could be checked at all.",
         outcomeKind: "win",
       },
       {
         label: "Pass 02",
-        title: "A single ingestion pipeline",
+        title: "One flow for all three sources",
         points: [
-          "One pipeline, three format handlers — switch files, electronic journals and core banking extracts.",
-          "Each handler is isolated, so an upstream change breaks one handler rather than the night's run.",
+          "Switch files, electronic journals and core banking data kept running through the same process.",
+          "Formatted Excel output for operations, and the same data loaded into the database.",
         ],
-        outcome:
-          "Format drift stopped being an outage and became a contained, visible failure.",
-        outcomeKind: "win",
-      },
-      {
-        label: "Pass 03",
-        title: "Matching, then the long tail",
-        points: [
-          "Pair on amount, terminal and time window, then narrow with the fields each source does carry.",
-          "Everything unmatched is escalated rather than dropped — a silent miss is worse than a false flag.",
-          "Results load to the database and out to formatted Excel for operations.",
-        ],
-        outcome:
-          "Every mismatch across 100,000+ rows is accounted for and traceable back to its source record.",
+        outcome: "Operations get one place to work from instead of three feeds.",
         outcomeKind: "win",
       },
     ],
     results: [
-      { value: "100K+", label: "rows reconciled per run" },
+      { value: "Lakhs", label: "of data rows handled" },
       { value: "3", label: "independent sources paired" },
-      { value: "0", label: "rows silently dropped", note: "unmatched rows escalate" },
     ],
     closing:
-      "The ingestion and matching layers were built to be configured rather than rewritten, so the platform is being rolled out to Yes Bank and others rather than rebuilt for each one.",
-    stack: ["Python", "PostgreSQL", "Binary file parsing", "Excel"],
+      "Built to be reused: the same approach is being extended to more banks rather than rebuilt for each one.",
+    stack: ["Python", "Excel", "Database"],
   },
   {
     slug: "billing-platform",
