@@ -8,9 +8,9 @@ import ProjectMock from "./ProjectMock";
 import CountUp from "./CountUp";
 
 /**
- * A compact index. The detail lives in the case studies, so a card carries
- * only what decides whether you open one: a live status, the phrase that
- * says what the system does, the pull-outs and the numbers.
+ * Two cards to a row, each one sized to be read in place rather than scrolled
+ * through. Led by the client and the engagement rather than the product name,
+ * because this is professional work, not a shelf of side projects.
  */
 export default function Work() {
   const root = useRef<HTMLElement>(null);
@@ -27,7 +27,7 @@ export default function Work() {
       const cards = gsap.utils.toArray<HTMLElement>(".w-card");
       revealUp(cards, {
         trigger: root.current!.querySelector(".w-grid")!,
-        stagger: 0.08,
+        stagger: 0.1,
         y: 30,
       });
 
@@ -67,11 +67,11 @@ export default function Work() {
         <div className="mb-10 flex items-end justify-between border-b border-ink/15 pb-5">
           <h2 className="w-head reveal-ready label text-ink/70">01 / Selected work</h2>
           <span className="w-head reveal-ready label text-ink/70">
-            {String(projects.length).padStart(2, "0")} case studies
+            Banks &amp; capital markets · {String(projects.length).padStart(2, "0")} engagements
           </span>
         </div>
 
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-4">
           <p className="w-head reveal-ready max-w-2xl text-balance text-2xl font-medium leading-snug tracking-tight sm:text-3xl">
             Systems that move other people&rsquo;s money, each one
             <span className="font-serif italic text-accent"> written up in full.</span>
@@ -81,11 +81,11 @@ export default function Work() {
           </p>
         </div>
 
-        <div className="w-grid grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="w-grid grid gap-6 lg:grid-cols-2">
           {projects.map((p) => (
             <article
               key={p.id}
-              className="w-card reveal-ready group relative flex flex-col overflow-hidden border border-ink/12 bg-paper transition-all duration-500 hover:-translate-y-1.5 hover:border-ink/30 hover:shadow-[0_34px_60px_-38px_rgba(36,38,32,0.55)]"
+              className="w-card reveal-ready group relative flex flex-col border border-ink/12 bg-paper transition-all duration-500 hover:-translate-y-1 hover:border-ink/30 hover:shadow-[0_34px_60px_-38px_rgba(36,38,32,0.5)]"
             >
               <span
                 className="absolute inset-x-0 top-0 z-20 h-[3px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
@@ -93,115 +93,158 @@ export default function Work() {
                 aria-hidden="true"
               />
 
-              {/* preview, just a sliver */}
-              <div className="relative h-[84px] shrink-0 overflow-hidden border-b border-ink/10 bg-paper-2/60 px-4 pt-4">
-                <div className="origin-top scale-[0.8] opacity-75 transition-all duration-700 group-hover:scale-[0.84] group-hover:opacity-100">
-                  <ProjectMock accent={p.accent} />
-                </div>
-                <span
-                  className="pointer-events-none absolute inset-x-0 bottom-0 h-8"
-                  style={{
-                    background:
-                      "linear-gradient(to top, var(--color-paper), transparent)",
-                  }}
-                  aria-hidden="true"
-                />
-                <span className="absolute right-3 top-3 z-10 inline-flex items-center gap-1.5 border border-ink/15 bg-paper/90 px-2 py-0.5 backdrop-blur-sm">
-                  <span className="relative flex h-1.5 w-1.5">
-                    {p.status !== "Delivered" && (
-                      <span
-                        className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-70"
-                        style={{ backgroundColor: p.accent }}
-                      />
-                    )}
+              {/* engagement header */}
+              <header className="flex items-start justify-between gap-4 border-b border-ink/10 px-7 pb-5 pt-7">
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2.5">
                     <span
-                      className="relative inline-flex h-1.5 w-1.5 rounded-full"
+                      className="h-1.5 w-1.5 shrink-0 rounded-full"
                       style={{ backgroundColor: p.accent }}
                     />
-                  </span>
-                  <span className="label text-ink/70">{p.status}</span>
-                </span>
-                <span
-                  className="pointer-events-none absolute left-4 top-2 select-none text-3xl font-semibold leading-none tracking-tighter text-ink/[0.09]"
-                  aria-hidden="true"
-                >
-                  {p.index}
-                </span>
-              </div>
+                    <span className="label text-ink/60">{p.eyebrow}</span>
+                  </div>
+                  <h3 className="mt-3 text-2xl font-semibold leading-tight tracking-tight text-ink">
+                    {p.title}
+                  </h3>
+                  <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-ink/60">
+                    <span className="font-medium text-ink/75">{p.org}</span>
+                    <span className="text-ink/25">·</span>
+                    <span>{p.year}</span>
+                  </div>
+                </div>
 
-              <div className="flex flex-1 flex-col p-5">
-                <div className="flex items-center gap-2">
+                <div className="flex shrink-0 flex-col items-end gap-2">
                   <span
-                    className="h-1.5 w-1.5 shrink-0 rounded-full"
-                    style={{ backgroundColor: p.accent }}
-                  />
-                  <span className="label text-ink/60">{p.eyebrow}</span>
-                </div>
-
-                <h3 className="mt-2.5 text-xl font-semibold leading-tight tracking-tight text-ink">
-                  {p.title}
-                </h3>
-
-                <p className="mt-3 text-sm leading-relaxed text-ink/70">
-                  <Marked text={p.blurb} marks={p.marks} tint={p.accent} />
-                </p>
-
-                <div className="mt-4 flex flex-wrap gap-1.5">
-                  {p.highlights.map((h) => (
-                    <span
-                      key={h}
-                      className="w-tag border px-2 py-0.5 text-[0.7rem] font-medium"
-                      style={{
-                        color: p.accent,
-                        borderColor: `${p.accent}44`,
-                        backgroundColor: `${p.accent}0f`,
-                      }}
-                    >
-                      {h}
+                    className="select-none text-4xl font-semibold leading-none tracking-tighter text-ink/[0.1]"
+                    aria-hidden="true"
+                  >
+                    {p.index}
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 border border-ink/15 px-2 py-0.5">
+                    <span className="relative flex h-1.5 w-1.5">
+                      {p.status !== "Delivered" && (
+                        <span
+                          className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-70"
+                          style={{ backgroundColor: p.accent }}
+                        />
+                      )}
+                      <span
+                        className="relative inline-flex h-1.5 w-1.5 rounded-full"
+                        style={{ backgroundColor: p.accent }}
+                      />
                     </span>
-                  ))}
+                    <span className="label text-ink/70">{p.status}</span>
+                  </span>
+                </div>
+              </header>
+
+              {/* body: what it is, next to what it looks like */}
+              <div className="grid flex-1 gap-6 px-7 py-6 sm:grid-cols-5">
+                <div className="sm:col-span-3">
+                  <p className="text-sm leading-relaxed text-ink/75">
+                    <Marked text={p.blurb} marks={p.marks} tint={p.accent} />
+                  </p>
+
+                  <div className="mt-4 flex flex-wrap gap-1.5">
+                    {p.highlights.map((h) => (
+                      <span
+                        key={h}
+                        className="w-tag border px-2.5 py-1 text-xs font-medium"
+                        style={{
+                          color: p.accent,
+                          borderColor: `${p.accent}44`,
+                          backgroundColor: `${p.accent}0f`,
+                        }}
+                      >
+                        {h}
+                      </span>
+                    ))}
+                  </div>
+
+                  <ul
+                    className="mt-5 space-y-2.5 border-l-2 pl-4"
+                    style={{ borderColor: `${p.accent}33` }}
+                  >
+                    {p.points.slice(0, 2).map((pt, j) => (
+                      <li key={j} className="text-sm leading-relaxed text-ink/70">
+                        {pt}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
 
-                {/* numbers, with a note pointing at them */}
-                <div className="mt-5">
-                  <div className="flex items-end gap-1.5">
+                {/* preview + numbers */}
+                <div className="sm:col-span-2">
+                  <div className="relative h-[120px] overflow-hidden border border-ink/10 bg-paper-2/60 px-3 pt-3">
+                    <div className="origin-top scale-[0.62] opacity-80 transition-all duration-700 group-hover:scale-[0.66] group-hover:opacity-100">
+                      <ProjectMock accent={p.accent} />
+                    </div>
+                    <span
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-10"
+                      style={{
+                        background:
+                          "linear-gradient(to top, var(--color-paper-2), transparent)",
+                      }}
+                      aria-hidden="true"
+                    />
+                  </div>
+
+                  <div className="mt-4 flex items-end gap-1.5">
                     <Arrow className="h-6 w-10 shrink-0 -scale-x-100" tint={p.accent} />
                     <span className="hand pb-0.5 text-sm leading-none text-ink/45">
                       {p.note}
                     </span>
                   </div>
-                  <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2.5">
+
+                  <dl className="mt-3 space-y-2.5">
                     {p.metrics.slice(0, 3).map((m) => (
                       <div key={m.label}>
-                        <div
-                          className="text-base font-semibold tracking-tight"
+                        <dt className="label text-ink/55">{m.label}</dt>
+                        <dd
+                          className="text-lg font-semibold leading-tight tracking-tight"
                           style={{ color: p.accent }}
                         >
                           <CountUp value={m.value} />
-                        </div>
-                        <div className="label mt-0.5 text-ink/55">{m.label}</div>
+                        </dd>
                       </div>
                     ))}
-                  </div>
-                </div>
-
-                <div className="mt-auto pt-5">
-                  <div className="label mb-3 text-ink/55">{p.year}</div>
-                  <Link
-                    href={`/work/${p.slug}`}
-                    className="btn-fill w-full justify-center !px-4 !py-3 text-sm font-medium"
-                    style={
-                      {
-                        color: p.accent,
-                        "--btn-fill": p.accent,
-                      } as React.CSSProperties
-                    }
-                  >
-                    Read the case study
-                    <span className="btn-sep" aria-hidden="true">→</span>
-                  </Link>
+                  </dl>
                 </div>
               </div>
+
+              {/* footer */}
+              <footer className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-ink/10 px-7 py-5">
+                <div className="flex flex-wrap gap-1.5">
+                  {p.stack.slice(0, 4).map((s) => (
+                    <span
+                      key={s}
+                      className="label border border-ink/15 px-2 py-1 text-ink/55"
+                    >
+                      {s}
+                    </span>
+                  ))}
+                  {p.stack.length > 4 && (
+                    <span className="label border border-ink/15 px-2 py-1 text-ink/35">
+                      +{p.stack.length - 4}
+                    </span>
+                  )}
+                </div>
+
+                <Link
+                  href={`/work/${p.slug}`}
+                  className="btn-fill !px-5 !py-2.5 text-sm font-medium"
+                  style={
+                    {
+                      color: p.accent,
+                      "--btn-fill": p.accent,
+                      "--btn-text": "#ffffff",
+                    } as React.CSSProperties
+                  }
+                >
+                  Read the case study
+                  <span className="btn-sep" aria-hidden="true">→</span>
+                </Link>
+              </footer>
             </article>
           ))}
         </div>
@@ -222,7 +265,6 @@ function Marked({
 }) {
   if (!marks.length) return <>{text}</>;
 
-  // split on the phrases, keeping them, longest first so one cannot eat another
   const ordered = [...marks].sort((a, b) => b.length - a.length);
   const escaped = ordered.map((m) => m.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
   const parts = text.split(new RegExp(`(${escaped.join("|")})`, "gi"));
@@ -234,10 +276,7 @@ function Marked({
           <strong
             key={i}
             className="font-semibold"
-            style={{
-              color: tint,
-              boxShadow: `inset 0 -0.42em 0 ${tint}1f`,
-            }}
+            style={{ color: tint, boxShadow: `inset 0 -0.42em 0 ${tint}1f` }}
           >
             {part}
           </strong>

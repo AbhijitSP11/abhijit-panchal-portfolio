@@ -12,7 +12,6 @@ import {
   travel,
   markets,
   portrait,
-  sideProject,
 } from "@/lib/personal";
 import { scrollToY } from "@/lib/smooth";
 import Placeholder from "./Placeholder";
@@ -54,17 +53,25 @@ const lifeTabs: Tab[] = interests.map((i) => ({
   dot: i.tint,
 }));
 
-const tabs: Tab[] = [
-  ...workTabs,
-  { key: "side", icon: "🧪", label: "side project", path: "aster" },
-  ...lifeTabs,
-];
+/** The side project moved to its own section, so it is no longer a tab. */
+const tabs: Tab[] = [...workTabs, ...lifeTabs];
 
 /**
  * Scroll distance per tab. Kept short on purpose: a tab should turn over
  * within one flick of the wheel, not three.
  */
 const BAND_VH = 24;
+
+/**
+ * One extra viewport of section beyond the bands.
+ *
+ * The sticky panel is one viewport tall, so a section of exactly N bands only
+ * scrolls for (N × BAND − 100vh) — the last tab became active at the very
+ * instant the panel unpinned, which is why trips and markets flashed past and
+ * the page scrolled on. The tail gives every band, including the last, its
+ * full share of scroll while the panel is still pinned.
+ */
+const TAIL_VH = 100;
 
 export default function BrowserTabs() {
   const root = useRef<HTMLElement>(null);
@@ -151,7 +158,7 @@ export default function BrowserTabs() {
     <section
       ref={root}
       id="about"
-      style={{ height: `${tabs.length * BAND_VH}vh` }}
+      style={{ height: `${tabs.length * BAND_VH + TAIL_VH}vh` }}
       className="relative border-t border-ink/10 bg-paper"
     >
       <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden px-5 py-10 sm:px-8">
@@ -159,7 +166,7 @@ export default function BrowserTabs() {
           {/* heading */}
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <div className="bt-head reveal-ready label text-muted">03 / About me</div>
+              <div className="bt-head reveal-ready label text-muted">04 / About me</div>
               <h2 className="bt-head reveal-ready mt-2 text-3xl font-medium leading-[1.05] tracking-tight sm:text-4xl">
                 a little more{" "}
                 <span className="font-serif italic text-accent">about me.</span>
@@ -171,7 +178,7 @@ export default function BrowserTabs() {
           </div>
 
           {/* ── browser window ── */}
-          <div className="flex h-[min(74svh,780px)] flex-col overflow-hidden rounded-2xl bg-ink shadow-[0_40px_90px_-50px_rgba(36,38,32,0.8)]">
+          <div className="flex h-[min(84svh,900px)] flex-col overflow-hidden rounded-2xl bg-ink shadow-[0_40px_90px_-50px_rgba(36,38,32,0.8)]">
             {/* tab strip */}
             <div
               ref={strip}
@@ -400,74 +407,6 @@ function Panel({ tabKey }: { tabKey: string }) {
             <p className="hand text-lg leading-snug text-ink/55">
               the short version — the tabs have the rest
             </p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (tabKey === "side") {
-    return (
-      <div className="grid gap-7 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          <div className="overflow-hidden border border-ink/15 shadow-[0_24px_50px_-30px_rgba(36,38,32,0.5)]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={sideProject.image}
-              alt={`${sideProject.name} dashboard`}
-              className="block h-full w-full object-cover"
-            />
-          </div>
-        </div>
-
-        <div className="lg:col-span-5">
-          <div className="label text-muted">Side project</div>
-          <h3 className="mt-2 text-2xl font-medium leading-tight tracking-tight sm:text-3xl">
-            {sideProject.name}
-            <span className="font-serif italic text-accent">
-              {" "}
-              — {sideProject.tagline}
-            </span>
-          </h3>
-          <p className="mt-4 text-sm leading-relaxed text-ink/75">{sideProject.body}</p>
-
-          <div className="mt-5 flex flex-wrap gap-x-7 gap-y-3">
-            {sideProject.metrics.map((m) => (
-              <div key={m.label}>
-                <div className="text-xl font-medium tracking-tight text-accent">
-                  {m.value}
-                </div>
-                <div className="label mt-0.5 text-muted">{m.label}</div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-5 flex flex-wrap gap-1.5">
-            {sideProject.stack.map((s) => (
-              <span key={s} className="label border border-ink/15 px-2 py-1 text-ink/55">
-                {s}
-              </span>
-            ))}
-          </div>
-
-          <div className="mt-6 flex flex-wrap gap-3">
-            <a
-              href={sideProject.repo}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-fill text-sm font-medium text-ink"
-            >
-              View on GitHub
-              <span className="btn-sep" aria-hidden="true">↗</span>
-            </a>
-            <Link
-              href="/work/aster"
-              className="btn-fill text-sm font-medium text-accent"
-              style={{ "--btn-fill": "var(--color-accent)" } as React.CSSProperties}
-            >
-              Read the case study
-              <span className="btn-sep" aria-hidden="true">→</span>
-            </Link>
           </div>
         </div>
       </div>
@@ -735,24 +674,71 @@ function Panel({ tabKey }: { tabKey: string }) {
     );
   }
 
+  // markets
   return (
-    <div className={panel}>
-      <div className={`${media} grid place-items-center bg-paper-2/50 p-5`}>
-        <Sparkline />
-      </div>
-      <div>
+    <div className="grid gap-7 lg:grid-cols-12">
+      <div className="lg:col-span-5">
         {copy}
-        <p className="mt-4 max-w-lg text-sm leading-relaxed text-muted">{markets.body}</p>
-        <div className="mt-6 flex flex-wrap gap-2">
-          {markets.tags.map((t) => (
-            <span
-              key={t}
-              className="label rounded-full border border-ink/15 px-3 py-1.5 text-ink/65"
+        <p className="mt-3 max-w-lg text-sm leading-relaxed text-muted">{markets.body}</p>
+
+        <div className="mt-5 border border-ink/10 bg-paper-2/50 p-4">
+          <Sparkline />
+          <div className="mt-2 flex items-center justify-between">
+            <span className="label text-ink/50">equity curve · illustrative</span>
+            <span className="label text-accent">journal kept per trade</span>
+          </div>
+        </div>
+      </div>
+
+      {/* how a position actually gets taken */}
+      <div className="lg:col-span-7">
+        <div className="label text-ink/60">How a position gets taken</div>
+
+        <ol className="mt-4 grid gap-3 sm:grid-cols-2">
+          {markets.process.map((s) => (
+            <li
+              key={s.n}
+              className="group/step relative border border-ink/12 bg-paper p-4 transition-colors hover:border-accent/50"
             >
+              <span className="absolute right-3 top-2 select-none text-2xl font-semibold leading-none text-ink/[0.07]">
+                {s.n}
+              </span>
+              <div className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                <span className="text-base font-semibold tracking-tight">{s.title}</span>
+              </div>
+              <p className="mt-1.5 text-xs leading-relaxed text-ink/65">{s.text}</p>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-4 flex flex-wrap gap-1.5">
+          {markets.tags.map((t) => (
+            <span key={t} className="label border border-ink/15 px-2.5 py-1 text-ink/55">
               {t}
             </span>
           ))}
         </div>
+
+        {/* the interest that turned into a tool */}
+        <a
+          href={markets.built.href}
+          className="group mt-4 flex items-center justify-between gap-4 border border-accent/35 bg-accent/[0.06] px-4 py-3 transition-colors hover:bg-accent/[0.12]"
+        >
+          <span className="min-w-0">
+            <span className="label text-accent">Built from this</span>
+            <span className="mt-1 block text-sm text-ink/75">
+              <strong className="font-semibold text-ink">{markets.built.name}</strong>{" "}
+              — {markets.built.line}
+            </span>
+          </span>
+          <span
+            className="shrink-0 text-accent transition-transform group-hover:translate-x-1"
+            aria-hidden="true"
+          >
+            →
+          </span>
+        </a>
       </div>
     </div>
   );

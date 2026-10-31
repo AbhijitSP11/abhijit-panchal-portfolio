@@ -6,6 +6,7 @@ import { profile } from "@/lib/resume";
 
 const links = [
   { href: "#work", label: "work" },
+  { href: "#building", label: "building" },
   { href: "#experience", label: "experience" },
   { href: "#about", label: "about me" },
   { href: "#contact", label: "say hey" },

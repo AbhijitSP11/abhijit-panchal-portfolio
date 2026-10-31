@@ -116,7 +116,7 @@ function mixRgb(a: string, b: string, t: number): string {
 
 // A layered-ridge landscape: sky, a low sun, five ridges fading into haze with
 // mist between them, a tree line on the nearest, film grain. Painted once.
-function paintLandscape(seed: number, palette: LandPalette, w = 1600, h = 1000): string {
+function paintLandscape(seed: number, palette: LandPalette, w = 800, h = 500): string {
   if (typeof document === "undefined") return ""
   const c = document.createElement("canvas")
   c.width = w

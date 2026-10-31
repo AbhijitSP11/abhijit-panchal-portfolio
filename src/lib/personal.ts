@@ -236,28 +236,37 @@ export const travel = {
   note: "Almost every trip ends up pointed at a beach. The treks happen when the Sahyadris are green and somebody talks me into waking up at four.",
 };
 
-/**
- * Kept out of Selected work — that section is client systems. This is the
- * one built for its own sake. Screenshot pulled from the repo itself
- * (AbhijitSP11/aster → client/public/thumbnail.png).
- */
-export const sideProject = {
-  name: "Aster",
-  tagline: "AI project management",
-  repo: "https://github.com/AbhijitSP11/aster",
-  repoLabel: "github.com/AbhijitSP11/aster",
-  image: "/projects/aster-thumbnail.png",
-  logo: "/projects/aster-logo.png",
-  body: "A project management tool with real-time dashboards and an assistant that turns a plain-English question into SQL, runs it, and shows you the rows. Built end to end — schema, API, infrastructure and interface.",
-  stack: ["Next.js", "TypeScript", "Express", "Prisma", "PostgreSQL", "AWS", "Groq"],
-  metrics: [
-    { value: "92%", label: "natural language → SQL" },
-    { value: "99.9%", label: "uptime" },
-  ],
-};
-
 export const markets = {
   line: "markets, on the other screen",
   body: "Writing settlement and reconciliation systems made me curious about what the trades actually are. Now I research, trade, and keep a running set of notes on what I got wrong.",
   tags: ["Equity research", "Technical setups", "Position sizing", "Post-trade journals"],
+  /** How a position actually gets taken, start to finish. */
+  process: [
+    {
+      n: "01",
+      title: "Screen",
+      text: "Filter the universe on fundamentals before a chart is ever opened.",
+    },
+    {
+      n: "02",
+      title: "Read",
+      text: "Filings, concalls and the news around them — the story behind the ratio.",
+    },
+    {
+      n: "03",
+      title: "Size",
+      text: "Decide the loss I am willing to take before deciding the entry.",
+    },
+    {
+      n: "04",
+      title: "Journal",
+      text: "Write down the thesis. Revisit it when it is wrong, which is the useful half.",
+    },
+  ],
+  /** Where the interest turned into something built. */
+  built: {
+    name: "Quantsieve",
+    line: "I got tired of doing step one and two by hand, so I built a tool that does them.",
+    href: "#building",
+  },
 };

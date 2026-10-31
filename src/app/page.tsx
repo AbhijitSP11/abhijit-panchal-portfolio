@@ -8,6 +8,7 @@ import WordScroll from "@/components/WordScroll";
 import BlurIn from "@/components/BlurIn";
 import Stats from "@/components/Stats";
 import Work from "@/components/Work";
+import Building from "@/components/Building";
 import Experience from "@/components/Experience";
 import BrowserTabs from "@/components/BrowserTabs";
 import Contact from "@/components/Contact";
@@ -47,6 +48,10 @@ export default function Home() {
 
         <BlurIn>
           <Work />
+        </BlurIn>
+
+        <BlurIn>
+          <Building />
         </BlurIn>
 
         <BlurIn>
