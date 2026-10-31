@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { gsap, registerGsap, prefersReducedMotion } from "@/lib/anim";
 import { projects } from "@/lib/resume";
 import ProjectMock from "./ProjectMock";
 import CountUp from "./CountUp";
 import Logo, { logoName } from "./Logo";
+import MiraeCaseStudy from "./MiraeCaseStudy";
 
 /**
  * Two cards to a row. Each leads with who built it and who it was built for —
@@ -16,6 +17,8 @@ import Logo, { logoName } from "./Logo";
  */
 export default function Work() {
   const root = useRef<HTMLElement>(null);
+  const [miraeOpen, setMiraeOpen] = useState(false);
+  const closeMirae = useCallback(() => setMiraeOpen(false), []);
 
   useEffect(() => {
     registerGsap();
@@ -281,26 +284,46 @@ export default function Work() {
                     )}
                   </div>
 
-                  <Link
-                    href={`/work/${p.slug}`}
-                    className="btn-fill !px-5 !py-3 text-base font-medium"
-                    style={
+                  {p.slug === "bond-custodian" ? (
+                    <button
+                      type="button"
+                      onClick={() => setMiraeOpen(true)}
+                      aria-haspopup="dialog"
+                      className="btn-fill !px-5 !py-3 text-base font-medium"
+                      style={
                       {
                         "--btn-ink": p.accent,
                         "--btn-fill": p.accent,
                         "--btn-text": "#ffffff",
                       } as React.CSSProperties
                     }
-                  >
-                    Read the case study
-                    <span className="btn-sep" aria-hidden="true">→</span>
-                  </Link>
+                    >
+                      Read the case study
+                      <span className="btn-sep" aria-hidden="true">→</span>
+                    </button>
+                  ) : (
+                    <Link
+                      href={`/work/${p.slug}`}
+                      className="btn-fill !px-5 !py-3 text-base font-medium"
+                      style={
+                        {
+                          "--btn-ink": p.accent,
+                          "--btn-fill": p.accent,
+                          "--btn-text": "#ffffff",
+                        } as React.CSSProperties
+                      }
+                    >
+                      Read the case study
+                      <span className="btn-sep" aria-hidden="true">→</span>
+                    </Link>
+                  )}
                 </footer>
               </article>
             );
           })}
         </div>
       </div>
+      {miraeOpen && <MiraeCaseStudy onClose={closeMirae} />}
     </section>
   );
 }
