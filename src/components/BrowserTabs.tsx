@@ -550,94 +550,52 @@ function Panel({ tabKey }: { tabKey: string }) {
           </p>
         </div>
 
-        {/* the same row anatomy as the work log, alternating black and white */}
-        <div className="mt-6 space-y-3.5">
-          {builds.map((b, i) => {
-            const dark = i % 2 === 0;
-            const live = b.status === "Live";
-            return (
-              <article
-                key={b.id}
-                className={`group flex items-center gap-4 px-5 py-4 shadow-[0_22px_38px_-20px_rgba(0,0,0,0.55)] transition-transform duration-300 hover:-translate-y-0.5 sm:gap-6 ${
-                  dark ? "bg-ink text-paper" : "border border-ink/10 bg-white text-ink"
-                }`}
+        {/* the work-log row anatomy, kept light */}
+        <div className="mt-6 divide-y divide-ink/10 border-y border-ink/10">
+          {builds.map((b, i) => (
+            <article
+              key={b.id}
+              className="group flex items-center gap-4 px-3 py-5 transition-colors duration-300 hover:bg-white sm:gap-6"
+            >
+              <span className="label w-6 shrink-0 text-muted">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+
+              <span
+                className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-base font-semibold text-white"
+                style={{ backgroundColor: b.accent }}
+                aria-hidden="true"
               >
-                <span className="label w-6 shrink-0 opacity-55">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+                {b.name.slice(0, 1)}
+              </span>
 
-                <span
-                  className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-base font-semibold text-white"
-                  style={{ backgroundColor: b.accent }}
-                  aria-hidden="true"
+              <div className="min-w-0 flex-1">
+                <div className="text-lg font-medium tracking-tight sm:text-xl">{b.name}</div>
+                <div className="mt-0.5 font-serif text-base italic leading-snug text-muted">
+                  {b.tagline}
+                </div>
+              </div>
+
+              <div className="hidden max-w-[260px] flex-wrap justify-end gap-1 lg:flex">
+                {b.stack.slice(0, 4).map((t) => (
+                  <span key={t} className="label text-[0.62rem] text-muted">
+                    {t}
+                  </span>
+                ))}
+              </div>
+
+              {b.caseStudy ? (
+                <Link
+                  href={b.caseStudy}
+                  className="btn-fill shrink-0 !px-3 !py-2 text-xs font-medium"
+                  style={{ "--btn-fill": b.accent } as React.CSSProperties}
                 >
-                  {b.name.slice(0, 1)}
-                </span>
-
-                <div className="min-w-0 flex-1">
-                  <div className="text-lg font-medium tracking-tight sm:text-xl">
-                    {b.name}
-                  </div>
-                  <div className="mt-0.5 font-serif text-base italic leading-snug opacity-70">
-                    {b.tagline}
-                  </div>
-                </div>
-
-                <div className="hidden max-w-[260px] flex-wrap gap-1 lg:flex">
-                  {b.stack.slice(0, 4).map((t) => (
-                    <span
-                      key={t}
-                      className={`label border px-1.5 py-0.5 text-[0.62rem] ${
-                        dark ? "border-paper/25 text-paper/65" : "border-ink/20 text-ink/60"
-                      }`}
-                    >
-                      {t}
-                    </span>
-                  ))}
-                </div>
-
-                <span
-                  className={`label inline-flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 ${
-                    live ? "bg-accent text-white" : dark ? "border border-paper/30 text-paper/75" : "border border-ink/20 text-ink/65"
-                  }`}
-                >
-                  {live && (
-                    <span className="relative flex h-1.5 w-1.5">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-70" />
-                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-white" />
-                    </span>
-                  )}
-                  {b.status.toLowerCase()}
-                </span>
-
-                <div className="flex shrink-0 gap-2">
-                  {b.repo ? (
-                    <a
-                      href={b.repo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`${b.name} on GitHub`}
-                      className="btn-fill !px-3 !py-2 text-xs font-medium"
-                      style={{ "--btn-fill": b.accent } as React.CSSProperties}
-                    >
-                      GitHub
-                      <span className="btn-sep !pl-2" aria-hidden="true">↗</span>
-                    </a>
-                  ) : null}
-                  {b.caseStudy ? (
-                    <Link
-                      href={b.caseStudy}
-                      className="btn-fill !px-3 !py-2 text-xs font-medium"
-                      style={{ "--btn-fill": b.accent } as React.CSSProperties}
-                    >
-                      Case study
-                      <span className="btn-sep !pl-2" aria-hidden="true">→</span>
-                    </Link>
-                  ) : null}
-                </div>
-              </article>
-            );
-          })}
+                  Case study
+                  <span className="btn-sep !pl-2" aria-hidden="true">→</span>
+                </Link>
+              ) : null}
+            </article>
+          ))}
         </div>
       </div>
     );
@@ -917,6 +875,16 @@ function FilmStrip() {
             }`}
             style={{ backgroundColor: isOpen ? `${f.tint}12` : "transparent" }}
           >
+            {f.poster ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={f.poster}
+                alt=""
+                aria-hidden="true"
+                draggable={false}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${isOpen ? "opacity-100" : "opacity-40"}`}
+              />
+            ) : null}
             <span
               className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 opacity-40"
               style={{ background: `linear-gradient(to top, ${f.tint}26, transparent)` }}

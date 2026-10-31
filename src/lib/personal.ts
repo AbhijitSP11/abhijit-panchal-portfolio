@@ -36,8 +36,8 @@ export const interests: Interest[] = [
   {
     id: "cook",
     icon: "pan",
-    tab: "kitchen",
-    path: "kitchen",
+    tab: "being chef",
+    path: "chef",
     title: "I cook",
     line: "dal khichdi & uttapam",
     detail:
@@ -117,14 +117,17 @@ export type Film = {
   year: string;
   note: string;
   tint: string;
+  /** Poster under /public/posters. */
+  poster?: string;
 };
 
 export const films: Film[] = [
-  { title: "Your pick 01", year: "—", note: "The one you rewatch every year.", tint: "#d62d46" },
-  { title: "Your pick 02", year: "—", note: "The one that changed how you see films.", tint: "#c9584a" },
-  { title: "Your pick 03", year: "—", note: "The comfort watch.", tint: "#a8324a" },
-  { title: "Your pick 04", year: "—", note: "The one nobody else liked.", tint: "#9c4a6e" },
-  { title: "Your pick 05", year: "—", note: "The one you recommend first.", tint: "#8a5a5e" },
+  { title: "Business Proposal", year: "2022", note: "The comfort watch: a rom-com that never takes itself seriously.", tint: "#d62d46" },
+  { title: "Musafir Cafe", year: "—", note: "Slow, warm and easy to rewatch.", tint: "#c9584a" },
+  { title: "Jubilee", year: "2023", note: "Old Bollywood, and the craft behind building it.", tint: "#a8324a" },
+  { title: "Goblin", year: "2016", note: "Fantasy, grief and a long wait, all in one drama.", tint: "#9c4a6e" },
+  { title: "Naruto", year: "2002", note: "The one I grew up on, and still the one I recommend first.", tint: "#d9680c" },
+  { title: "The Hangover", year: "2009", note: "Switch your brain off and laugh.", tint: "#8a5a5e" },
 ];
 
 export type Artwork = {
