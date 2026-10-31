@@ -99,7 +99,7 @@ const MARKS = [
   {
     at: 0.66,
     side: "below" as const,
-    text: "month-end billing: 3 days → 20 minutes",
+    text: "bank bills generated on a schedule, not by hand",
   },
   {
     at: 0.97,

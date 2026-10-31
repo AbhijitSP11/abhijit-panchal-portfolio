@@ -22,8 +22,8 @@ export const profile = {
 export const stats = [
   { value: 3.5, suffix: "+", label: "Years building for finance", decimals: 1 },
   { value: 25, suffix: "M+", label: "Records searched at scale", decimals: 0 },
-  { value: 73, suffix: "+", label: "Data-dense screens shipped", decimals: 0 },
-  { value: 4000, suffix: "+", label: "Invoices per billing cycle", decimals: 0 },
+  { value: 33, suffix: "+", label: "Data-dense screens shipped", decimals: 0 },
+  { value: 3, suffix: "", label: "Countries, one team", decimals: 0 },
 ];
 
 export type Project = {
@@ -85,7 +85,7 @@ export const projects: Project[] = [
     marks: ["what each bank owes","evidences every line"],
     status: "In production",
     highlights: ["multi-tenant","idempotent","maker-checker"],
-    note: "this one replaced a spreadsheet",
+    note: "bills that generate themselves",
     slug: "billing-platform",
     index: "02",
     eyebrow: "Banking · Enterprise Billing",
@@ -95,18 +95,17 @@ export const projects: Project[] = [
     accent: "#2563eb",
     logos: ["oneture","cms"],
     blurb:
-      "Calculates what each bank owes every month for cash management and cash van services, issues the invoice, and evidences every line — replacing a spreadsheet-and-email process.",
+      "Generates the bills banks such as Axis and SBI owe for cash management and cash van services, across multiple states, on a schedule and without manual effort.",
     stack: ["Python", "FastAPI", "Celery", "PostgreSQL", "React", "Vite"],
     points: [
-      "Automated the month-end workflow with Celery workers and Python cron jobs: runs that took 3 days of manual effort now finish unattended in under 20 minutes.",
-      "Retries and idempotency mean a re-run never double-bills. Generates 4,000+ invoices per cycle across 12 states.",
+      "Bill generation runs on Celery workers and Python cron jobs, so billing cycles run on a schedule instead of by hand.",
+      "Retries and idempotency mean a re-run never double-bills. Bills are generated for banks like Axis and SBI across multiple states.",
       "Configuration-driven, multi-tenant rate engine — object-oriented rate-card, SLA and deduction models — so a new bank, state or provider is onboarded through configuration rather than code.",
-      "Designed the complete application UI and built 40+ responsive screens across Operations, Finance and Admin, with maker-checker approval enforced via JWT and RBAC.",
+      "Designed the complete application UI and the workflow for cash management and cash van billing, and built the Python backend, with maker-checker approval enforced via JWT and RBAC.",
     ],
     metrics: [
-      { value: "3d → 20m", label: "month-end run" },
-      { value: "40+", label: "screens designed" },
-      { value: "<1s", label: "API response" },
+      { value: "2+", label: "banks billed" },
+      { value: "2", label: "billing services" },
     ],
   },
   {
