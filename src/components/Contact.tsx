@@ -39,8 +39,9 @@ export default function Contact() {
         </h2>
 
         <p className="ct-fade reveal-ready mt-8 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-          I am open to full stack engineering roles and consulting work,
-          especially in fintech, payments and data-heavy products.
+          I am open to full stack developer and software engineer roles in Mumbai
+          and Bengaluru, and to consulting work — especially in banking, fintech,
+          payments, e-commerce and startup products.
         </p>
 
         <div className="ct-fade reveal-ready mt-12 flex flex-wrap items-center gap-4">

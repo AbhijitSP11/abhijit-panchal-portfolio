@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import SmoothScroll from "@/components/SmoothScroll";
 import CaseStudyView from "@/components/CaseStudyView";
 import { caseStudies, getCaseStudy } from "@/lib/case-studies";
-import { profile } from "@/lib/resume";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -16,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const study = getCaseStudy(slug);
   if (!study) return { title: "Not found" };
   return {
-    title: `${study.title} — case study | ${profile.name}`,
+    title: `${study.title} — case study`,
     description: study.blurb,
   };
 }

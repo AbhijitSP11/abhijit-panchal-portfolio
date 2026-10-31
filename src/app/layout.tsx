@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import { DM_Sans, Instrument_Serif, Caveat, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { profile } from "@/lib/resume";
+import {
+  allKeywords,
+  personJsonLd,
+  siteDescription,
+  siteTitle,
+  siteUrl,
+} from "@/lib/seo";
 
 const display = DM_Sans({
   subsets: ["latin"],
@@ -29,12 +36,32 @@ const mono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: `${profile.name} — ${profile.shortRole}`,
-  description: profile.summary,
+  metadataBase: new URL(siteUrl),
+  title: { default: siteTitle, template: `%s | ${siteTitle}` },
+  description: siteDescription,
+  keywords: allKeywords,
+  applicationName: "Abhijit. | SP",
+  authors: [{ name: profile.name, url: siteUrl }],
+  creator: profile.name,
+  alternates: { canonical: "/" },
+  category: "technology",
   openGraph: {
-    title: `${profile.name} — ${profile.shortRole}`,
-    description: profile.tagline,
+    title: siteTitle,
+    description: siteDescription,
+    url: siteUrl,
+    siteName: "Abhijit. | SP",
+    locale: "en_IN",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
 };
 
@@ -46,6 +73,10 @@ export default function RootLayout({
       <body
         className={`${display.variable} ${serif.variable} ${hand.variable} ${mono.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         {children}
       </body>
     </html>
