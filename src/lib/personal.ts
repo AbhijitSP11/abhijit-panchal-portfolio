@@ -253,7 +253,7 @@ export const markets = {
   ],
   /** Where the interest turned into something built. */
   built: {
-    name: "Quantsieve",
+    name: "Market AI",
     line: "I got tired of doing step one and two by hand, so I built a tool that does them.",
     href: "#building",
   },

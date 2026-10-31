@@ -47,7 +47,7 @@ export default function Home() {
             "securities settlement",
             "SWIFT MT/MX",
             "markets & trading",
-            "Quantsieve",
+            "Market AI",
           ]}
           footnote="keep scrolling ↓"
           length={1.9}

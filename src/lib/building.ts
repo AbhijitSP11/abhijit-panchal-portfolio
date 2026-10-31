@@ -2,9 +2,7 @@
  * Independent work — things built for their own sake, separate from the
  * client systems in Selected work.
  *
- * Quantsieve's detail comes from the repo's own brief; Aster's from its
- * README and thumbnail. ListKaro has no public repo yet, so its copy is a
- * placeholder — replace `blurb` and `points` with your own words.
+ * Market AI (the Quantsieve repo) and Aster draw their detail from the repos' own briefs.
  */
 
 export type BuildStatus = "Live" | "Building" | "Early";
@@ -28,8 +26,23 @@ export type Build = {
 
 export const builds: Build[] = [
   {
-    id: "quantsieve",
-    name: "Quantsieve",
+    id: "prop-ai",
+    name: "Prop AI",
+    tagline: "WhatsApp photos in, a broker’s property page out",
+    status: "Building",
+    year: "2026",
+    blurb:
+      "A WhatsApp-to-property-page service for Mumbai brokers. Send photos and details on WhatsApp and get back an Airbnb-style page with your name, RERA number and a WhatsApp button, plus a link per client that alerts you when they open it.",
+    points: [
+      "Next.js 16 and Supabase, with an admin panel, broker storefronts and share images for link previews and WhatsApp Status.",
+      "Next: a 20-broker pilot in Mumbai, then the WhatsApp bot, deployment and payments.",
+    ],
+    stack: ["Next.js 16", "Supabase", "WhatsApp"],
+    accent: "#9c4a6e",
+  },
+  {
+    id: "market-ai",
+    name: "Market AI",
     tagline: "Reads a company, then tells you what it thinks",
     status: "Live",
     year: "2026",
@@ -61,21 +74,5 @@ export const builds: Build[] = [
     accent: "#a8324a",
     repo: "https://github.com/AbhijitSP11/aster",
     caseStudy: "/work/aster",
-  },
-  {
-    id: "listkaro",
-    name: "ListKaro",
-    tagline: "Lists, shared — without the group chat",
-    status: "Building",
-    year: "In progress",
-    blurb:
-      "Placeholder copy — tell me what ListKaro actually does and I will write this properly.",
-    points: [
-      "No public repo yet, so nothing here is drawn from the source.",
-      "Replace this entry in src/lib/building.ts with the real description.",
-    ],
-    stack: ["TBC"],
-    accent: "#9c4a6e",
-    placeholder: true,
   },
 ];
