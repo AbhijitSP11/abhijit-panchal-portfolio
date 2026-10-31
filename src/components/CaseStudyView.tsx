@@ -126,7 +126,7 @@ export default function CaseStudyView({
           <span className="label text-muted">Project case study</span>
           <Link
             href="/#work"
-            className="label flex items-center gap-2 rounded-full border border-ink/20 px-4 py-2 transition-colors hover:border-accent hover:text-accent"
+            className="btn-fill label !px-4 !py-2 text-ink"
           >
             Close <span aria-hidden="true">×</span>
           </Link>

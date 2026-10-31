@@ -1,9 +1,20 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion, revealUp } from "@/lib/anim";
 import { profile, experience, skills, education, achievements } from "@/lib/resume";
-import { interests, films, artworks, photos, travel, markets } from "@/lib/personal";
+import {
+  interests,
+  films,
+  artworks,
+  photos,
+  travel,
+  markets,
+  portrait,
+  sideProject,
+} from "@/lib/personal";
+import { scrollToY } from "@/lib/smooth";
 import Placeholder from "./Placeholder";
 import PolaroidLineCarousel from "@/components/ui/polaroid-line-carousel";
 
@@ -43,12 +54,17 @@ const lifeTabs: Tab[] = interests.map((i) => ({
   dot: i.tint,
 }));
 
-const tabs: Tab[] = [...workTabs, ...lifeTabs];
+const tabs: Tab[] = [
+  ...workTabs,
+  { key: "side", icon: "🧪", label: "side project", path: "aster" },
+  ...lifeTabs,
+];
 
-/** Scroll distance per tab. */
-const BAND_VH = 58;
-/** Fraction of a band ignored at each edge before the tab flips. */
-const DEADZONE = 0.18;
+/**
+ * Scroll distance per tab. Kept short on purpose: a tab should turn over
+ * within one flick of the wheel, not three.
+ */
+const BAND_VH = 24;
 
 export default function BrowserTabs() {
   const root = useRef<HTMLElement>(null);
@@ -56,6 +72,21 @@ export default function BrowserTabs() {
   const urlRef = useRef<HTMLSpanElement>(null);
   const [index, setIndex] = useState(0);
   const last = useRef(0);
+  const band = useRef<ScrollTrigger | null>(null);
+
+  /**
+   * Clicking a tab moves the page to that tab's scroll band rather than only
+   * setting state. If it only set state, the very next scroll event would
+   * recompute the band and snap back to whatever the scroll position says.
+   */
+  const selectTab = (i: number) => {
+    last.current = i;
+    setIndex(i);
+    const st = band.current;
+    if (!st) return;
+    const span = st.end - st.start;
+    scrollToY(st.start + (span * (i + 0.5)) / tabs.length, 0.6);
+  };
 
   useEffect(() => {
     registerGsap();
@@ -68,40 +99,25 @@ export default function BrowserTabs() {
 
       if (prefersReducedMotion()) return;
 
-      let settle = 0;
-      const commit = (i: number) => {
-        if (i === last.current) return;
-        last.current = i;
-        setIndex(i);
-      };
-
+      // No hysteresis and no settle delay — the band flips the moment the
+      // scroll crosses it, which is what makes it feel instant.
       const st = ScrollTrigger.create({
         trigger: root.current,
         start: "top top",
         end: "bottom bottom",
         onUpdate: (self) => {
-          const pos = self.progress * tabs.length;
-          const i = Math.min(tabs.length - 1, Math.floor(pos));
+          const i = Math.min(
+            tabs.length - 1,
+            Math.floor(self.progress * tabs.length)
+          );
           if (i === last.current) return;
-
-          window.clearTimeout(settle);
-          // Clear of the band edge: switch straight away. Sitting on a
-          // boundary otherwise flips back and forth on the smallest movement.
-          const within = pos - i;
-          if (within > DEADZONE && within < 1 - DEADZONE) {
-            commit(i);
-            return;
-          }
-          // Still inside the dead zone — if the scroll stops here, settle on
-          // the band we are actually in rather than leaving the wrong tab up.
-          settle = window.setTimeout(() => commit(i), 140);
+          last.current = i;
+          setIndex(i);
         },
       });
+      band.current = st;
 
-      return () => {
-        window.clearTimeout(settle);
-        st.kill();
-      };
+      return () => st.kill();
     }, root);
 
     return () => ctx.revert();
@@ -172,10 +188,7 @@ export default function BrowserTabs() {
                     key={t.key}
                     type="button"
                     data-tab={i}
-                    onClick={() => {
-                      setIndex(i);
-                      last.current = i;
-                    }}
+                    onClick={() => selectTab(i)}
                     className={`flex h-9 shrink-0 items-center gap-2 rounded-t-lg px-3.5 text-sm transition-colors duration-300 ${
                       on
                         ? "bg-paper text-ink"
@@ -232,9 +245,11 @@ export default function BrowserTabs() {
 
             {/* panel — grows to fill, so swapping content never resizes the window */}
             <div className="relative min-h-0 flex-1 bg-paper">
+              {/* overflow-hidden, not auto: nothing inside the window scrolls
+                  on its own — every panel is written to fit */}
               <div
                 key={index}
-                className="panel-in absolute inset-0 overflow-y-auto px-5 pb-16 pt-3 sm:px-8"
+                className="panel-in absolute inset-0 overflow-hidden px-5 pb-14 pt-3 sm:px-8"
               >
                 <Panel tabKey={active.key} />
               </div>
@@ -333,16 +348,38 @@ function Panel({ tabKey }: { tabKey: string }) {
   // ── professional tabs ────────────────────────────────────────────────
   if (tabKey === "about") {
     return (
-      <div className="grid gap-8 lg:grid-cols-12">
-        <div className="lg:col-span-7">
+      <div className="grid gap-7 lg:grid-cols-12">
+        {/* portrait, in a frame */}
+        <div className="lg:col-span-3">
+          <figure className="w-full max-w-[220px] rotate-[-2.5deg] bg-white p-2.5 pb-3 shadow-[0_18px_40px_-22px_rgba(36,38,32,0.6)] transition-transform duration-500 hover:rotate-0">
+            <div className="aspect-[4/5] w-full overflow-hidden bg-paper-2">
+              {portrait.src ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={portrait.src}
+                  alt={profile.name}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <Placeholder label="portrait" tint={portrait.tint} />
+              )}
+            </div>
+            <figcaption className="hand mt-1.5 px-1 text-lg leading-tight text-ink/60">
+              {portrait.caption}
+            </figcaption>
+          </figure>
+        </div>
+
+        <div className="lg:col-span-5">
           <Heading kicker="About me" lead="hello, I'm" accent={profile.name} />
-          <p className="mt-5 text-base leading-relaxed text-ink/75 sm:text-lg">
+          <p className="mt-4 text-sm leading-relaxed text-ink/75 sm:text-base">
             {profile.summary}
           </p>
-          <p className="mt-4 text-base leading-relaxed text-muted">{profile.summary2}</p>
+          <p className="mt-3 text-sm leading-relaxed text-muted">{profile.summary2}</p>
         </div>
-        <div className="lg:col-span-5 lg:pt-10">
-          <div className="space-y-3">
+
+        <div className="lg:col-span-4 lg:pt-8">
+          <div className="space-y-2.5">
             {[
               "currently building at Oneture",
               `based in ${profile.location}`,
@@ -351,18 +388,86 @@ function Panel({ tabKey }: { tabKey: string }) {
             ].map((line) => (
               <div
                 key={line}
-                className="flex items-center gap-3 rounded-xl border border-ink/10 bg-paper-2/50 px-4 py-3 text-sm"
+                className="flex items-center gap-3 border border-ink/10 bg-paper-2/50 px-4 py-2.5 text-sm"
               >
                 <span className="h-1.5 w-1.5 rounded-full bg-accent" />
                 {line}
               </div>
             ))}
           </div>
-          <div className="mt-5 flex items-start gap-2">
+          <div className="mt-4 flex items-start gap-2">
             <Squiggle className="mt-1 h-7 w-12 shrink-0" flip />
             <p className="hand text-lg leading-snug text-ink/55">
               the short version — the tabs have the rest
             </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (tabKey === "side") {
+    return (
+      <div className="grid gap-7 lg:grid-cols-12">
+        <div className="lg:col-span-7">
+          <div className="overflow-hidden border border-ink/15 shadow-[0_24px_50px_-30px_rgba(36,38,32,0.5)]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={sideProject.image}
+              alt={`${sideProject.name} dashboard`}
+              className="block h-full w-full object-cover"
+            />
+          </div>
+        </div>
+
+        <div className="lg:col-span-5">
+          <div className="label text-muted">Side project</div>
+          <h3 className="mt-2 text-2xl font-medium leading-tight tracking-tight sm:text-3xl">
+            {sideProject.name}
+            <span className="font-serif italic text-accent">
+              {" "}
+              — {sideProject.tagline}
+            </span>
+          </h3>
+          <p className="mt-4 text-sm leading-relaxed text-ink/75">{sideProject.body}</p>
+
+          <div className="mt-5 flex flex-wrap gap-x-7 gap-y-3">
+            {sideProject.metrics.map((m) => (
+              <div key={m.label}>
+                <div className="text-xl font-medium tracking-tight text-accent">
+                  {m.value}
+                </div>
+                <div className="label mt-0.5 text-muted">{m.label}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-1.5">
+            {sideProject.stack.map((s) => (
+              <span key={s} className="label border border-ink/15 px-2 py-1 text-ink/55">
+                {s}
+              </span>
+            ))}
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href={sideProject.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-fill text-sm font-medium text-ink"
+            >
+              View on GitHub
+              <span aria-hidden="true">↗</span>
+            </a>
+            <Link
+              href="/work/aster"
+              className="btn-fill text-sm font-medium text-accent"
+              style={{ "--btn-fill": "var(--color-accent)" } as React.CSSProperties}
+            >
+              Read the case study
+              <span aria-hidden="true">→</span>
+            </Link>
           </div>
         </div>
       </div>
@@ -411,7 +516,7 @@ function Panel({ tabKey }: { tabKey: string }) {
           <a
             href="/Abhijit_Panchal_Resume.pdf"
             download
-            className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors hover:bg-accent"
+            className="btn-fill group !py-2.5 text-sm font-medium text-ink"
           >
             open resume
             <span className="transition-transform group-hover:-translate-y-0.5" aria-hidden="true">
@@ -625,25 +730,7 @@ function Panel({ tabKey }: { tabKey: string }) {
           <p className="hand text-lg text-ink/50">drag the line, or use the arrows</p>
         </div>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink/75">{travel.note}</p>
-        <PolaroidLineCarousel
-          className="mt-1 rounded-xl"
-          height={340}
-          cardWidth={210}
-          sag={28}
-          autoplay={5200}
-          string="var(--color-muted)"
-          background="transparent"
-          ink="var(--color-ink)"
-          ariaLabel="Places I have travelled"
-          slides={travel.places.map((p) => ({
-            image: p.image ?? undefined,
-            palette: p.palette,
-            seed: p.seed,
-            title: p.name,
-            caption: `${p.kind} · ${p.near} — ${p.caption}`,
-            alt: `${p.name}, ${p.near}`,
-          }))}
-        />
+        <TravelLine />
       </div>
     );
   }
@@ -667,6 +754,49 @@ function Panel({ tabKey }: { tabKey: string }) {
           ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * The travel line. It is mounted fresh whenever the tab becomes active, and
+ * a print is advanced shortly after so the line actually moves and the prints
+ * swing on arrival, rather than hanging still until autoplay first fires.
+ */
+function TravelLine() {
+  const wrap = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (prefersReducedMotion()) return;
+    const t = window.setTimeout(() => {
+      wrap.current
+        ?.querySelector<HTMLButtonElement>('button[aria-label="Next"]')
+        ?.click();
+    }, 450);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  return (
+    <div ref={wrap}>
+      <PolaroidLineCarousel
+        className="mt-1"
+        height={330}
+        cardWidth={205}
+        sag={26}
+        autoplay={3400}
+        string="var(--color-muted)"
+        background="transparent"
+        ink="var(--color-ink)"
+        ariaLabel="Places I have travelled"
+        slides={travel.places.map((p) => ({
+          image: p.image ?? undefined,
+          palette: p.palette,
+          seed: p.seed,
+          title: p.name,
+          caption: `${p.kind} · ${p.near} — ${p.caption}`,
+          alt: `${p.name}, ${p.near}`,
+        }))}
+      />
     </div>
   );
 }

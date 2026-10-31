@@ -132,7 +132,7 @@ export default function Nav() {
 
             <a
               href={`mailto:${profile.email}`}
-              className={`label hidden whitespace-nowrap rounded-full px-4 py-2 transition-colors sm:inline-block ${
+              className={`label hidden whitespace-nowrap border px-4 py-2 transition-colors sm:inline-block ${
                 lightPill
                   ? "bg-paper text-ink hover:bg-accent hover:text-paper"
                   : "bg-ink text-paper hover:bg-accent"
@@ -181,7 +181,7 @@ export default function Nav() {
           href="/Abhijit_Panchal_Resume.pdf"
           download
           onClick={() => setOpen(false)}
-          className="m-item mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-5 py-3 text-base font-medium text-paper"
+          className="m-item btn-fill mt-8 w-fit text-base font-medium text-paper"
         >
           Download resume <span aria-hidden="true">↓</span>
         </a>

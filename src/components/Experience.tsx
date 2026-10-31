@@ -4,8 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap, registerGsap, prefersReducedMotion, revealUp } from "@/lib/anim";
 import { experience } from "@/lib/resume";
 
-/** Same row treatment as the work log tab, with the detail kept underneath. */
-const chipTints = ["#1d4ed8", "#4f46e5", "#7c3aed"];
+const tints = ["#1d4ed8", "#4f46e5", "#7c3aed"];
 
 export default function Experience() {
   const root = useRef<HTMLElement>(null);
@@ -21,10 +20,7 @@ export default function Experience() {
 
       const rows = gsap.utils.toArray<HTMLElement>(".xp-row");
       rows.forEach((row) => {
-        revealUp(row.querySelectorAll(".xp-fade"), {
-          trigger: row,
-          stagger: 0.05,
-        });
+        revealUp(row.querySelectorAll(".xp-fade"), { trigger: row, stagger: 0.05 });
       });
 
       if (prefersReducedMotion()) return;
@@ -33,13 +29,29 @@ export default function Experience() {
         scale: 0,
         duration: 0.55,
         ease: "back.out(2)",
-        stagger: 0.1,
+        stagger: 0.12,
         scrollTrigger: {
           trigger: root.current!.querySelector(".xp-list")!,
           start: "top 78%",
           once: true,
         },
       });
+
+      // the spine fills as you read down the section
+      gsap.fromTo(
+        ".xp-spine-fill",
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: root.current!.querySelector(".xp-list")!,
+            start: "top 65%",
+            end: "bottom 70%",
+            scrub: 0.5,
+          },
+        }
+      );
     }, root);
 
     return () => ctx.revert();
@@ -53,74 +65,113 @@ export default function Experience() {
           <span className="xp-head reveal-ready label text-muted">2022 — Present</span>
         </div>
 
-        <h3 className="xp-head reveal-ready mb-12 text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl">
-          where I&rsquo;ve
-          <br />
-          <span className="font-serif italic text-accent">been building.</span>
-        </h3>
+        <div className="mb-14 flex flex-wrap items-end justify-between gap-4">
+          <h3 className="xp-head reveal-ready text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl">
+            where I&rsquo;ve
+            <br />
+            <span className="font-serif italic text-accent">been building.</span>
+          </h3>
+          <p className="xp-head reveal-ready hand text-lg text-ink/50">
+            three and a half years, three teams
+          </p>
+        </div>
 
-        <div className="xp-list divide-y divide-ink/10 border-t border-ink/10">
-          {experience.map((job, i) => (
-            <article key={job.company} className="xp-row py-7 sm:py-9">
-              {/* row header, mirroring the work log */}
-              <div className="flex items-center gap-4 sm:gap-6">
-                <span className="label w-6 shrink-0 text-muted">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
+        <div className="xp-list relative">
+          {/* spine */}
+          <div className="absolute left-[19px] top-4 hidden h-[calc(100%-2rem)] w-px bg-ink/12 sm:block">
+            <div className="xp-spine-fill h-full w-full origin-top bg-accent" />
+          </div>
 
+          <div className="space-y-5">
+            {experience.map((job, i) => (
+              <article
+                key={job.company}
+                className="xp-row group relative border border-ink/12 bg-paper p-6 transition-all duration-500 hover:border-ink/30 hover:shadow-[0_30px_55px_-38px_rgba(36,38,32,0.5)] sm:ml-14 sm:p-7"
+              >
+                {/* node on the spine */}
                 <span
-                  className="xp-chip grid h-11 w-11 shrink-0 place-items-center rounded-full text-base font-semibold text-paper"
-                  style={{ backgroundColor: chipTints[i % chipTints.length] }}
+                  className="xp-chip absolute -left-14 top-7 hidden h-10 w-10 place-items-center rounded-full text-sm font-semibold text-paper sm:grid"
+                  style={{ backgroundColor: tints[i % tints.length] }}
                   aria-hidden="true"
                 >
                   {job.company.slice(0, 1)}
                 </span>
 
-                <div className="min-w-0 flex-1">
-                  <h4 className="truncate text-xl font-medium tracking-tight sm:text-2xl">
-                    {job.company}
-                  </h4>
-                  <div className="label mt-1 text-muted sm:hidden">{job.role}</div>
-                </div>
-
-                <div className="hidden text-right sm:block">
-                  <div className="text-sm font-medium">{job.role}</div>
-                  <div className="label mt-1 text-muted">{job.period}</div>
-                </div>
-
                 <span
-                  className={`label shrink-0 rounded-full px-3 py-1.5 ${
-                    job.current
-                      ? "bg-accent text-paper"
-                      : "border border-ink/15 text-muted"
-                  }`}
-                >
-                  {job.current ? "now" : "before"}
-                </span>
-              </div>
+                  className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
+                  style={{ backgroundColor: tints[i % tints.length] }}
+                  aria-hidden="true"
+                />
 
-              {/* detail, aligned under the company name */}
-              <div className="mt-5 sm:pl-[5.5rem]">
-                <div className="label mb-4 text-muted sm:hidden">
-                  {job.period} · {job.location}
+                <div className="grid gap-6 lg:grid-cols-12">
+                  {/* who and when */}
+                  <div className="lg:col-span-4">
+                    <div className="flex items-center gap-3">
+                      <h4 className="text-xl font-medium tracking-tight sm:text-2xl">
+                        {job.company}
+                      </h4>
+                      <span
+                        className={`label shrink-0 px-2.5 py-1 ${
+                          job.current
+                            ? "bg-accent text-paper"
+                            : "border border-ink/15 text-muted"
+                        }`}
+                      >
+                        {job.current ? "now" : "before"}
+                      </span>
+                    </div>
+                    <div className="mt-2 text-sm font-medium text-ink/80">
+                      {job.role}
+                    </div>
+                    <div className="label mt-2 text-muted">{job.period}</div>
+                    <div className="label mt-1 text-muted">{job.location}</div>
+
+                    {/* headline number for the stint */}
+                    <div className="mt-5 border-t border-ink/10 pt-4">
+                      <div
+                        className="text-2xl font-medium tracking-tight"
+                        style={{ color: tints[i % tints.length] }}
+                      >
+                        {job.metric}
+                      </div>
+                      <div className="label mt-1 max-w-[20ch] leading-relaxed text-muted">
+                        {job.metricLabel}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* what happened */}
+                  <div className="lg:col-span-8">
+                    <ul className="space-y-3">
+                      {job.points.map((p, j) => (
+                        <li
+                          key={j}
+                          className="xp-fade reveal-ready flex gap-3 text-sm leading-relaxed text-ink/75 sm:text-base"
+                        >
+                          <span
+                            className="mt-2.5 h-px w-4 shrink-0"
+                            style={{ backgroundColor: `${tints[i % tints.length]}66` }}
+                          />
+                          <span>{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-6 flex flex-wrap gap-1.5">
+                      {job.tech.map((t) => (
+                        <span
+                          key={t}
+                          className="label border border-ink/15 px-2.5 py-1 text-ink/55 transition-colors group-hover:border-ink/25"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <div className="label mb-4 hidden text-muted sm:block">
-                  {job.location}
-                </div>
-                <ul className="space-y-3">
-                  {job.points.map((p, j) => (
-                    <li
-                      key={j}
-                      className="xp-fade reveal-ready flex gap-3 text-sm leading-relaxed text-ink/75 sm:text-base"
-                    >
-                      <span className="mt-2.5 h-px w-4 shrink-0 bg-ink/25" />
-                      <span>{p}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </article>
-          ))}
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

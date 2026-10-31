@@ -131,7 +131,7 @@ export default function Hero() {
               <a
                 href="/Abhijit_Panchal_Resume.pdf"
                 download
-                className="hero-fade group inline-flex items-center gap-2.5 rounded-full bg-ink px-6 py-3.5 text-sm font-medium text-paper transition-colors hover:bg-accent"
+                className="hero-fade btn-fill group text-sm font-medium text-ink"
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -151,7 +151,7 @@ export default function Hero() {
               </a>
               <a
                 href="#work"
-                className="hero-fade inline-flex items-center gap-2 rounded-full border border-ink/20 px-6 py-3.5 text-sm font-medium transition-colors hover:border-accent hover:text-accent"
+                className="hero-fade btn-fill text-sm font-medium text-ink"
               >
                 See the work
                 <span aria-hidden="true">↓</span>

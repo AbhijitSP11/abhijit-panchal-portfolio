@@ -132,6 +132,44 @@ html.lenis body {
     will-change: transform;
   }
 
+  /* Square, transparent, bordered. On hover the colour wipes in from the
+     left behind the label. The fill is a pseudo-element rather than a
+     background-position trick so the text never shifts. */
+  .btn-fill {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    overflow: hidden;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    padding: 0.875rem 1.5rem;
+    isolation: isolate;
+    transition: color 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-fill::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--btn-fill, var(--color-ink));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-fill:hover::before,
+  .btn-fill:focus-visible::before {
+    transform: scaleX(1);
+  }
+  .btn-fill:hover,
+  .btn-fill:focus-visible {
+    color: var(--btn-text, var(--color-paper));
+  }
+  .btn-fill:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
   .link-sweep {
     position: relative;
   }

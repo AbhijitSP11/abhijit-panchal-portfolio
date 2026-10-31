@@ -141,6 +141,13 @@ export const artworks: Artwork[] = [
   { title: "Untitled 04", medium: "Acrylic on canvas", src: null, tint: "#7c3aed" },
 ];
 
+/** Portrait in the about tab. Drop a file in /public/photos and set `src`. */
+export const portrait = {
+  src: null as string | null,
+  caption: "that's me",
+  tint: "#1d4ed8",
+};
+
 export type Photo = {
   caption: string;
   src: string | null;
@@ -227,6 +234,26 @@ export const travel = {
     },
   ] satisfies Place[],
   note: "Almost every trip ends up pointed at a beach. The treks happen when the Sahyadris are green and somebody talks me into waking up at four.",
+};
+
+/**
+ * Kept out of Selected work — that section is client systems. This is the
+ * one built for its own sake. Screenshot pulled from the repo itself
+ * (AbhijitSP11/aster → client/public/thumbnail.png).
+ */
+export const sideProject = {
+  name: "Aster",
+  tagline: "AI project management",
+  repo: "https://github.com/AbhijitSP11/aster",
+  repoLabel: "github.com/AbhijitSP11/aster",
+  image: "/projects/aster-thumbnail.png",
+  logo: "/projects/aster-logo.png",
+  body: "A project management tool with real-time dashboards and an assistant that turns a plain-English question into SQL, runs it, and shows you the rows. Built end to end — schema, API, infrastructure and interface.",
+  stack: ["Next.js", "TypeScript", "Express", "Prisma", "PostgreSQL", "AWS", "Groq"],
+  metrics: [
+    { value: "92%", label: "natural language → SQL" },
+    { value: "99.9%", label: "uptime" },
+  ],
 };
 
 export const markets = {

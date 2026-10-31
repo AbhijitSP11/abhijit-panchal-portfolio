@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { setLenis } from "@/lib/smooth";
 import {
   gsap,
   ScrollTrigger,
@@ -34,6 +35,7 @@ export default function SmoothScroll({
       touchMultiplier: 1.6,
     });
 
+    setLenis(lenis);
     lenis.on("scroll", ScrollTrigger.update);
 
     const raf = (time: number) => lenis.raf(time * 1000);
@@ -89,6 +91,7 @@ export default function SmoothScroll({
       window.removeEventListener("load", onLoad);
       document.removeEventListener("click", onClick);
       gsap.ticker.remove(raf);
+      setLenis(null);
       lenis.destroy();
     };
   }, [waitForIntro]);

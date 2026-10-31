@@ -38,11 +38,20 @@ export type Project = {
   org: string;
   year: string;
   accent: string;
+  /** Shown as a live indicator on the card. */
+  status: "In production" | "Rolling out" | "Delivered";
+  /** Short pull-outs the eye can land on before reading anything. */
+  highlights: string[];
+  /** The handwritten note pointing at the card's numbers. */
+  note: string;
 };
 
 export const projects: Project[] = [
   {
     id: "recon",
+    status: "In production",
+    highlights: ["3 sources","binary parsers","zero silent drops"],
+    note: "every mismatch, accounted for",
     slug: "reconciliation-platform",
     index: "01",
     eyebrow: "Banking · Reconciliation",
@@ -66,6 +75,9 @@ export const projects: Project[] = [
   },
   {
     id: "billing",
+    status: "In production",
+    highlights: ["multi-tenant","idempotent","maker-checker"],
+    note: "this one replaced a spreadsheet",
     slug: "billing-platform",
     index: "02",
     eyebrow: "Banking · Enterprise Billing",
@@ -90,6 +102,9 @@ export const projects: Project[] = [
   },
   {
     id: "mirae",
+    status: "Delivered",
+    highlights: ["SWIFT MT/MX","2 regulators","AG Grid"],
+    note: "shipped across three time zones",
     slug: "bond-custodian",
     index: "03",
     eyebrow: "Capital Markets · Securities Settlement",
@@ -111,33 +126,15 @@ export const projects: Project[] = [
       { value: "3", label: "countries, one team" },
     ],
   },
-  {
-    id: "aster",
-    slug: "aster",
-    index: "04",
-    eyebrow: "Personal · AI Product",
-    title: "Aster — AI Project Management",
-    org: "github.com/abhijitsp11",
-    year: "Personal project",
-    accent: "#b05a7a",
-    blurb:
-      "A full stack platform with real-time data dashboards and a Groq-backed assistant that converts natural-language questions into SQL.",
-    stack: ["Next.js", "TypeScript", "Express", "Prisma", "PostgreSQL", "AWS", "Groq"],
-    points: [
-      "Groq-backed assistant converts natural-language questions to SQL at 92% accuracy.",
-      "Provisioned production AWS infrastructure — VPC, EC2, RDS, Cognito — with RBAC, sustaining 99.9% uptime.",
-    ],
-    metrics: [
-      { value: "92%", label: "NL → SQL accuracy" },
-      { value: "99.9%", label: "uptime" },
-    ],
-  },
 ];
 
 export const experience = [
   {
     role: "Full Stack Software Engineer",
     company: "Oneture Technologies",
+    tech: ["Python","FastAPI","React","C# / .NET","PostgreSQL","AWS"],
+    metric: "4 platforms",
+    metricLabel: "banks and capital markets",
     location: "Mumbai, India",
     period: "Dec 2024 — Present",
     current: true,
@@ -150,6 +147,9 @@ export const experience = [
   {
     role: "Frontend Engineer",
     company: "Taiyo.AI",
+    tech: ["React","Elasticsearch","Redis","OpenAI"],
+    metric: "5s → 0.8s",
+    metricLabel: "API latency, after caching",
     location: "San Francisco, USA (Remote)",
     period: "Jul 2023 — Sep 2024",
     current: false,
@@ -162,6 +162,9 @@ export const experience = [
   {
     role: "Frontend Developer",
     company: "My Next Film",
+    tech: ["React","Python","Django"],
+    metric: "4.2s → 3.1s",
+    metricLabel: "homepage load",
     location: "Delhi, India (Remote)",
     period: "Oct 2022 — Apr 2023",
     current: false,

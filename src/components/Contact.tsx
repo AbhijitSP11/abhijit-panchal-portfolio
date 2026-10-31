@@ -70,7 +70,7 @@ export default function Contact() {
         <div className="ct-fade reveal-ready mt-12 flex flex-wrap items-center gap-4">
           <a
             href={`mailto:${profile.email}`}
-            className="magnetic inline-flex items-center gap-3 rounded-full bg-ink px-7 py-4 text-base font-medium text-paper transition-colors hover:bg-accent"
+            className="magnetic btn-fill text-base font-medium text-ink"
           >
             {profile.email}
             <span aria-hidden="true">→</span>
@@ -78,7 +78,7 @@ export default function Contact() {
           <a
             href="/Abhijit_Panchal_Resume.pdf"
             download
-            className="group inline-flex items-center gap-2.5 rounded-full border border-ink/20 px-6 py-4 text-base font-medium transition-colors hover:border-accent hover:text-accent"
+            className="btn-fill group text-base font-medium text-ink"
           >
             <svg
               viewBox="0 0 24 24"
