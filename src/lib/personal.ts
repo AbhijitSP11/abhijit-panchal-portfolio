@@ -153,16 +153,79 @@ export const photos: Photo[] = [
   { caption: "the city, from a train window", src: null, tint: "#2e5f8a" },
 ];
 
+/**
+ * Travel prints on the hanging line. `image` is null until you drop a photo
+ * into /public/photos and fill the path; until then the carousel paints a
+ * landscape from `palette` and `seed`, so the line is never empty.
+ */
+export type Place = {
+  name: string;
+  kind: "Beach" | "Trek";
+  near: string;
+  caption: string;
+  palette: "dawn" | "alpine" | "dusk" | "mist";
+  seed: number;
+  image: string | null;
+};
+
 export const travel = {
   line: "beaches first, hills second",
   places: [
-    { name: "Alibaug", kind: "Beach", near: "Raigad" },
-    { name: "Kashid", kind: "Beach", near: "Raigad" },
-    { name: "Gokarna", kind: "Beach", near: "Karnataka" },
-    { name: "Rajmachi", kind: "Trek", near: "Pune" },
-    { name: "Kalsubai", kind: "Trek", near: "Nashik" },
-    { name: "Sandhan Valley", kind: "Trek", near: "Pune" },
-  ],
+    {
+      name: "Alibaug",
+      kind: "Beach",
+      near: "Raigad",
+      caption: "The default weekend. Ferry across, and the week is gone.",
+      palette: "dawn",
+      seed: 3,
+      image: null,
+    },
+    {
+      name: "Kashid",
+      kind: "Beach",
+      near: "Raigad",
+      caption: "Quieter sand than Alibaug, if you leave early enough.",
+      palette: "dusk",
+      seed: 8,
+      image: null,
+    },
+    {
+      name: "Gokarna",
+      kind: "Beach",
+      near: "Karnataka",
+      caption: "Worth the overnight. Four beaches, one long walk.",
+      palette: "dawn",
+      seed: 14,
+      image: null,
+    },
+    {
+      name: "Rajmachi",
+      kind: "Trek",
+      near: "Pune",
+      caption: "Monsoon green, and the fort still up there in the cloud.",
+      palette: "alpine",
+      seed: 21,
+      image: null,
+    },
+    {
+      name: "Kalsubai",
+      kind: "Trek",
+      near: "Nashik",
+      caption: "The highest point in Maharashtra. Ladders near the top.",
+      palette: "mist",
+      seed: 34,
+      image: null,
+    },
+    {
+      name: "Sandhan Valley",
+      kind: "Trek",
+      near: "Pune",
+      caption: "A canyon you walk down into. Cold, narrow, no phone signal.",
+      palette: "alpine",
+      seed: 55,
+      image: null,
+    },
+  ] satisfies Place[],
   note: "Almost every trip ends up pointed at a beach. The treks happen when the Sahyadris are green and somebody talks me into waking up at four.",
 };
 

@@ -14,6 +14,7 @@ import {
 } from "@/lib/personal";
 import { profile } from "@/lib/resume";
 import Placeholder from "./Placeholder";
+import PolaroidLineCarousel from "@/components/ui/polaroid-line-carousel";
 
 /**
  * The off-the-clock half of the site, in a browser window that stays stuck to
@@ -391,34 +392,39 @@ function Panel({ interest }: { interest: Interest }) {
 
   if (interest.id === "travel") {
     return (
-      <div className={PANEL}>
-        <div className={MEDIA}>
-          {interest.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={interest.image} alt={interest.title} className="h-full w-full object-cover" />
-          ) : (
-            <Placeholder label="trips" tint={interest.tint} />
-          )}
+      <div>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <h3 className="text-2xl font-medium leading-tight tracking-tight sm:text-3xl">
+            {interest.title}
+            <span className="font-serif italic text-accent"> — {interest.line}</span>
+          </h3>
+          <p className="hand text-lg text-ink/50">drag the line, or use the arrows</p>
         </div>
-        <Copy interest={interest}>
-          <div className="mt-6 flex flex-wrap gap-2">
-            {travel.places.map((p) => (
-              <span
-                key={p.name}
-                className="flex items-center gap-2 rounded-full border border-ink/15 py-1.5 pl-1.5 pr-4"
-              >
-                <span
-                  className={`label grid h-6 place-items-center rounded-full px-2.5 text-paper ${
-                    p.kind === "Beach" ? "bg-accent" : "bg-ink"
-                  }`}
-                >
-                  {p.kind}
-                </span>
-                <span className="text-xs font-medium">{p.name}</span>
-              </span>
-            ))}
-          </div>
-        </Copy>
+
+        <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink/75">
+          {travel.note}
+        </p>
+
+        {/* prints pegged to a sagging line; each one swings as it moves */}
+        <PolaroidLineCarousel
+          className="mt-2 rounded-xl"
+          height={300}
+          cardWidth={190}
+          sag={26}
+          autoplay={5200}
+          string="var(--color-muted)"
+          background="transparent"
+          ink="var(--color-ink)"
+          ariaLabel="Places I have travelled"
+          slides={travel.places.map((p) => ({
+            image: p.image ?? undefined,
+            palette: p.palette,
+            seed: p.seed,
+            title: p.name,
+            caption: `${p.kind} · ${p.near} — ${p.caption}`,
+            alt: `${p.name}, ${p.near}`,
+          }))}
+        />
       </div>
     );
   }
