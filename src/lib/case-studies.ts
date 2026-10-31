@@ -106,7 +106,7 @@ export const caseStudies: CaseStudy[] = [
     overview: {
       heading: "Billing for moving cash.",
       body: [
-        "Banks pay a provider to manage their cash and to move it by van. Every cycle, someone has to work out what each bank owes, in each state, and produce a bill.",
+        "Banks pay a provider to manage their cash and to move it by van, the cash-in-transit side of banking. Every cycle, someone has to work out what each bank owes, in each state, and produce a bill.",
         "The platform generates those bills, with one workflow for cash management and one for cash van billing.",
       ],
     },
@@ -127,6 +127,7 @@ export const caseStudies: CaseStudy[] = [
         points: [
           "Object-oriented rate-card, SLA and deduction models.",
           "A new bank, state or provider is added through configuration, not a release.",
+          "The billing schema covers GST and FASTag charges.",
         ],
         outcome: "Onboarding another bank stopped needing new code.",
         outcomeKind: "win",
@@ -135,7 +136,7 @@ export const caseStudies: CaseStudy[] = [
         label: "Pass 02",
         title: "Bills that run themselves",
         points: [
-          "Celery workers and Python cron jobs generate bills on a schedule.",
+          "Celery workers, Redis and Python cron jobs generate bills on a schedule, in batches.",
           "Retries and idempotency keys mean a re-run recomputes rather than re-bills.",
         ],
         outcome: "Billing cycles run without someone driving each step.",
@@ -160,7 +161,7 @@ export const caseStudies: CaseStudy[] = [
     ],
     closing:
       "The interesting part was never the bill itself. It was making sure a re-run at 2am gives the same answer as the first run.",
-    stack: ["Python", "FastAPI", "Celery", "PostgreSQL", "React", "Vite"],
+    stack: ["Python", "FastAPI", "Celery", "Redis", "PostgreSQL", "React", "Vite"],
   },
   {
     slug: "bond-custodian",
