@@ -83,9 +83,9 @@ export default function Hero() {
             </h1>
 
             <p className="hero-fade mt-6 flex items-center gap-3 text-lg tracking-tight sm:text-xl">
-              <span className="font-medium">Abhijit Panchal</span>
+              <span className="font-medium">Software Engineer</span>
               <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
-              <span className="text-muted">Software Engineer</span>
+              <span className="text-muted">{profile.tagline}</span>
             </p>
 
             <UntangleGraph className="mt-8 w-full max-w-[400px]" />
