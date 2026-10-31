@@ -1,10 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 
 /**
- * Company logos, on a white tile. The supplied files sit on white, lavender or
- * grey squares, so rather than fight the page colour they are shown as tiles,
- * and the square ones are zoomed inside the clipped box to cut away the empty
- * margin the files carry.
+ * Company logos, sitting straight on the page. The supplied files came on
+ * white, lavender and grey squares, so those backgrounds were cut out of the
+ * PNGs themselves (see public/logos); here the square ones are only zoomed
+ * inside a clipped box to trim the empty margin the files carry.
  */
 export type LogoKey = "oneture" | "cms" | "mirae" | "taiyo";
 
@@ -39,7 +39,7 @@ export default function Logo({
 
   return (
     <span
-      className={`relative inline-block shrink-0 overflow-hidden border border-ink/10 bg-white ${className}`}
+      className={`relative inline-block shrink-0 overflow-hidden ${className}`}
       style={{ width, height: size }}
       title={l.name}
     >
