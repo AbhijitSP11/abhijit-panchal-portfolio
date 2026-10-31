@@ -59,6 +59,10 @@ export const metadata: Metadata = {
     title: shareTitle,
     description: siteDescription,
   },
+  // Paste the token from Search Console into NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION in Vercel.
+  verification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }
+    : undefined,
   robots: {
     index: true,
     follow: true,
