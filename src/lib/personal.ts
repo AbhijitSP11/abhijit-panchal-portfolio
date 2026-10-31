@@ -43,7 +43,7 @@ export const interests: Interest[] = [
     detail:
       "A properly good bowl of dal khichdi is my house speciality, and I will argue about the tempering. Uttapam is the other one I have got down.",
     image: null,
-    tint: "#b05a7a",
+    tint: "#a9607a",
     chips: ["Dal khichdi", "Uttapam", "Opinions about tempering"],
   },
   {
@@ -56,7 +56,7 @@ export const interests: Interest[] = [
     detail:
       "I take the pictures; my friends post them. A fair trade, mostly. Faces, streets, and whatever the light is doing that evening.",
     image: null,
-    tint: "#4f46e5",
+    tint: "#c08344",
   },
   {
     id: "film",
@@ -68,7 +68,7 @@ export const interests: Interest[] = [
     detail:
       "Not background noise — phone away, lights off. I will happily lose an evening to something slow if the craft is there.",
     image: null,
-    tint: "#1d4ed8",
+    tint: "#e0702f",
   },
   {
     id: "paint",
@@ -80,7 +80,7 @@ export const interests: Interest[] = [
     detail:
       "The one hobby with no keyboard. It is the closest thing I have to switching the analytical part off for a few hours.",
     image: null,
-    tint: "#7c3aed",
+    tint: "#a8584f",
   },
   {
     id: "travel",
@@ -92,7 +92,7 @@ export const interests: Interest[] = [
     detail:
       "Give me a free weekend and I am on a beach somewhere within reach. In between, the Sahyadris around Mumbai and Pune.",
     image: null,
-    tint: "#2e5f8a",
+    tint: "#8a6a52",
   },
   {
     id: "markets",
@@ -104,7 +104,7 @@ export const interests: Interest[] = [
     detail:
       "Building for banks all day turned into an actual interest in markets. I research, I take positions, and I keep notes on both.",
     image: null,
-    tint: "#166534",
+    tint: "#9c6b3f",
   },
 ];
 
@@ -120,11 +120,11 @@ export type Film = {
 };
 
 export const films: Film[] = [
-  { title: "Your pick 01", year: "—", note: "The one you rewatch every year.", tint: "#1d4ed8" },
-  { title: "Your pick 02", year: "—", note: "The one that changed how you see films.", tint: "#4f46e5" },
-  { title: "Your pick 03", year: "—", note: "The comfort watch.", tint: "#7c3aed" },
-  { title: "Your pick 04", year: "—", note: "The one nobody else liked.", tint: "#b05a7a" },
-  { title: "Your pick 05", year: "—", note: "The one you recommend first.", tint: "#2e5f8a" },
+  { title: "Your pick 01", year: "—", note: "The one you rewatch every year.", tint: "#e0702f" },
+  { title: "Your pick 02", year: "—", note: "The one that changed how you see films.", tint: "#c08344" },
+  { title: "Your pick 03", year: "—", note: "The comfort watch.", tint: "#a8584f" },
+  { title: "Your pick 04", year: "—", note: "The one nobody else liked.", tint: "#a9607a" },
+  { title: "Your pick 05", year: "—", note: "The one you recommend first.", tint: "#8a6a52" },
 ];
 
 export type Artwork = {
@@ -135,17 +135,17 @@ export type Artwork = {
 };
 
 export const artworks: Artwork[] = [
-  { title: "Untitled 01", medium: "Acrylic on canvas", src: null, tint: "#1d4ed8" },
-  { title: "Untitled 02", medium: "Watercolour", src: null, tint: "#b05a7a" },
+  { title: "Untitled 01", medium: "Acrylic on canvas", src: null, tint: "#e0702f" },
+  { title: "Untitled 02", medium: "Watercolour", src: null, tint: "#a9607a" },
   { title: "Untitled 03", medium: "Ink on paper", src: null, tint: "#2e3129" },
-  { title: "Untitled 04", medium: "Acrylic on canvas", src: null, tint: "#7c3aed" },
+  { title: "Untitled 04", medium: "Acrylic on canvas", src: null, tint: "#a8584f" },
 ];
 
 /** Portrait in the about tab. Drop a file in /public/photos and set `src`. */
 export const portrait = {
   src: null as string | null,
   caption: "that's me",
-  tint: "#1d4ed8",
+  tint: "#e0702f",
 };
 
 export type Photo = {
@@ -155,9 +155,9 @@ export type Photo = {
 };
 
 export const photos: Photo[] = [
-  { caption: "somebody's new profile picture", src: null, tint: "#4f46e5" },
-  { caption: "golden hour, somewhere coastal", src: null, tint: "#b05a7a" },
-  { caption: "the city, from a train window", src: null, tint: "#2e5f8a" },
+  { caption: "somebody's new profile picture", src: null, tint: "#c08344" },
+  { caption: "golden hour, somewhere coastal", src: null, tint: "#a9607a" },
+  { caption: "the city, from a train window", src: null, tint: "#8a6a52" },
 ];
 
 /**

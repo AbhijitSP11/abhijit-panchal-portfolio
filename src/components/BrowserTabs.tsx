@@ -438,7 +438,7 @@ function Panel({ tabKey }: { tabKey: string }) {
               </span>
               <span
                 className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-semibold text-paper"
-                style={{ backgroundColor: ["#1d4ed8", "#4f46e5", "#7c3aed"][i % 3] }}
+                style={{ backgroundColor: ["#e0702f", "#c08344", "#a8584f"][i % 3] }}
                 aria-hidden="true"
               >
                 {job.company.slice(0, 1)}

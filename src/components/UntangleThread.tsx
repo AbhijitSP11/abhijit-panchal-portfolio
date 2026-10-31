@@ -86,7 +86,6 @@ function wavePoints(phase: number, amp: number): Pt[] {
 
 const KNOT = toPath(knotPoints());
 const RESOLVED = toPath(wavePoints(0, 34));
-const BREATHE = toPath(wavePoints(0.55, 26));
 
 export default function UntangleThread({ className = "" }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
@@ -107,34 +106,59 @@ export default function UntangleThread({ className = "" }: { className?: string 
       const len = el.getTotalLength();
       gsap.set(el, { strokeDasharray: len, strokeDashoffset: len });
 
-      gsap
-        .timeline({
-          scrollTrigger: { trigger: root.current, start: "top 92%", once: true },
-        })
-        // the knot draws itself
-        .to(el, { strokeDashoffset: 0, duration: 1.5, ease: "power2.inOut" })
-        // then works loose
-        .to(
-          el,
-          { attr: { d: RESOLVED }, duration: 1.9, ease: "power3.inOut" },
-          "+=0.25"
-        )
-        // and keeps breathing, so the resolved state is not a dead image
-        .to(el, {
-          attr: { d: BREATHE },
-          duration: 4.5,
-          ease: "sine.inOut",
-          repeat: -1,
-          yoyo: true,
-        });
+      const dim = { opacity: 0.3, duration: 0.4, ease: "power2.out" };
+      const lit = { opacity: 1, duration: 0.4, ease: "power2.out" };
+
+      /**
+       * Three seconds end to end — 1.5s tangling, 1.5s arranging — then a
+       * short hold so the resolved line can be read before it runs again.
+       */
+      const tl = gsap.timeline({
+        repeat: -1,
+        repeatDelay: 1.1,
+        scrollTrigger: { trigger: root.current, start: "top 92%", once: true },
+      });
+
+      tl
+        // back to the knot, hidden, ready to draw
+        .set(el, { attr: { d: KNOT }, strokeDashoffset: len })
+        .set(".ut-in", { opacity: 0.3 })
+        .set(".ut-out", { opacity: 0.3 })
+        // 1.5s: the knot draws itself
+        .to(el, { strokeDashoffset: 0, duration: 1.5, ease: "power1.inOut" })
+        .to(".ut-in", lit, "<0.35")
+        // 1.5s: it works loose
+        .to(el, { attr: { d: RESOLVED }, duration: 1.5, ease: "power3.inOut" })
+        .to(".ut-in", dim, "<")
+        .to(".ut-out", lit, "<0.8")
+        // hold, then round again
+        .to(".ut-out", dim, "+=0.7");
     }, root);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <div ref={root} className={className} aria-hidden="true">
-      <svg viewBox={`0 0 ${W} ${H}`} className="h-full w-full overflow-visible" fill="none">
+    <div ref={root} className={className}>
+      {/* what the thread is saying, in case it is not obvious */}
+      <div className="mb-1 flex items-center justify-between gap-4">
+        <span className="ut-in label flex items-center gap-2 text-ink/70" style={{ opacity: 0.3 }}>
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          complex problem
+        </span>
+        <span className="hidden h-px flex-1 bg-ink/12 sm:block" aria-hidden="true" />
+        <span className="ut-out label flex items-center gap-2 text-ink/70" style={{ opacity: 0.3 }}>
+          working system
+          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+        </span>
+      </div>
+
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        className="h-full w-full overflow-visible"
+        fill="none"
+        aria-hidden="true"
+      >
         <defs>
           <linearGradient id="thread" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="currentColor" stopOpacity="0.22" />
