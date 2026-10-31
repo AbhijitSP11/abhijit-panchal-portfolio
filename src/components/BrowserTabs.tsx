@@ -16,6 +16,7 @@ import {
 import { builds } from "@/lib/building";
 import { scrollToY } from "@/lib/smooth";
 import Placeholder from "./Placeholder";
+import Logo from "./Logo";
 import PolaroidLineCarousel from "@/components/ui/polaroid-line-carousel";
 
 /**
@@ -437,11 +438,11 @@ function Panel({ tabKey }: { tabKey: string }) {
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span
-                className="grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-semibold text-paper"
-                style={{ backgroundColor: ["#d62d46", "#c9584a", "#a8324a"][i % 3] }}
+                className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full border border-ink/15 bg-paper text-sm font-semibold text-paper"
+                style={job.logo ? undefined : { backgroundColor: ["#d62d46", "#c9584a", "#a8324a"][i % 3] }}
                 aria-hidden="true"
               >
-                {job.company.slice(0, 1)}
+                {job.logo ? <Logo logo={job.logo} size={44} /> : job.company.slice(0, 1)}
               </span>
               <div className="min-w-0 flex-1">
                 <div className="text-lg font-medium tracking-tight sm:text-xl">

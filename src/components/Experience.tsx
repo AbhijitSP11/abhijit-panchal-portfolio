@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap, registerGsap, prefersReducedMotion, revealUp } from "@/lib/anim";
 import { experience } from "@/lib/resume";
 import CountUp from "./CountUp";
+import Logo from "./Logo";
 
 const tints = ["#d62d46", "#c9584a", "#a8324a"];
 
@@ -91,11 +92,11 @@ export default function Experience() {
               >
                 {/* node on the spine */}
                 <span
-                  className="xp-chip absolute -left-14 top-7 hidden h-10 w-10 place-items-center rounded-full text-sm font-semibold text-paper sm:grid"
-                  style={{ backgroundColor: tints[i % tints.length] }}
+                  className="xp-chip absolute -left-14 top-6 hidden h-11 w-11 place-items-center overflow-hidden rounded-full border border-ink/15 bg-paper text-sm font-semibold text-paper sm:grid"
+                  style={job.logo ? undefined : { backgroundColor: tints[i % tints.length] }}
                   aria-hidden="true"
                 >
-                  {job.company.slice(0, 1)}
+                  {job.logo ? <Logo logo={job.logo} size={44} /> : job.company.slice(0, 1)}
                 </span>
 
                 <span

@@ -1,3 +1,4 @@
+import type { LogoKey } from "@/components/Logo";
 export const profile = {
   name: "Abhijit Panchal",
   first: "Abhijit",
@@ -42,6 +43,8 @@ export type Project = {
   status: "In production" | "Rolling out" | "Delivered";
   /** Short pull-outs the eye can land on before reading anything. */
   highlights: string[];
+  /** Company marks shown on the card: the builder first, then the client. */
+  logos: LogoKey[];
   /** Phrases inside the blurb to pick out. */
   marks: string[];
   /** The handwritten note pointing at the card's numbers. */
@@ -61,7 +64,8 @@ export const projects: Project[] = [
     title: "CMS — Reconciliation Platform",
     org: "Oneture Technologies · UBI Bank",
     year: "2025 — Present",
-    accent: "#d62d46",
+    accent: "#7c3aed",
+    logos: ["oneture","cms"],
     blurb:
       "A reconciliation platform whose matching logic pairs transaction records across three independent sources and flags every mismatch across lakhs of rows.",
     stack: ["Python", "PostgreSQL", "Binary parsing", "Excel"],
@@ -88,7 +92,8 @@ export const projects: Project[] = [
     title: "CMS — Enterprise Billing Platform",
     org: "Oneture Technologies · Axis Bank, SBI",
     year: "2025",
-    accent: "#c9584a",
+    accent: "#2563eb",
+    logos: ["oneture","cms"],
     blurb:
       "Calculates what each bank owes every month for cash management and cash van services, issues the invoice, and evidences every line — replacing a spreadsheet-and-email process.",
     stack: ["Python", "FastAPI", "Celery", "PostgreSQL", "React", "Vite"],
@@ -116,7 +121,8 @@ export const projects: Project[] = [
     title: "Mirae Asset — Bond Custodian Platform",
     org: "Oneture Technologies · South Korea & Brazil",
     year: "2024 — 2025",
-    accent: "#a8324a",
+    accent: "#d9680c",
+    logos: ["oneture","mirae"],
     blurb:
       "A bond custodian platform that safekeeps bonds for investors and settles their trades, delivered by a small cross-functional team spread across three countries.",
     stack: ["React", "Redux", "AG Grid", "C# / .NET", "SWIFT MT/MX"],
@@ -143,7 +149,8 @@ export const projects: Project[] = [
     title: "Taiyo.AI — AI Infrastructure Platform",
     org: "Taiyo.AI · San Francisco",
     year: "2023 — 2024",
-    accent: "#9c4a6e",
+    accent: "#dc2626",
+    logos: ["taiyo"],
     blurb:
       "An infrastructure-intelligence platform over 25M+ records, with an AI agent that plans a question, calls the right tools and comes back with an answer.",
     stack: ["React", "Elasticsearch", "Redis", "OpenAI", "Python"],
@@ -163,6 +170,7 @@ export const experience = [
   {
     role: "Full Stack Software Engineer",
     company: "Oneture Technologies",
+    logo: "oneture" as LogoKey | undefined,
     tech: ["Python","FastAPI","React","C# / .NET","PostgreSQL","AWS"],
     metric: "4 platforms",
     metricLabel: "banks and capital markets",
@@ -178,6 +186,7 @@ export const experience = [
   {
     role: "Frontend Engineer",
     company: "Taiyo.AI",
+    logo: "taiyo" as LogoKey | undefined,
     tech: ["React","Elasticsearch","Redis","OpenAI"],
     metric: "5s → 0.8s",
     metricLabel: "API latency, after caching",
@@ -193,6 +202,7 @@ export const experience = [
   {
     role: "Frontend Developer",
     company: "My Next Film",
+    logo: undefined as LogoKey | undefined,
     tech: ["React","Python","Django"],
     metric: "4.2s → 3.1s",
     metricLabel: "homepage load",

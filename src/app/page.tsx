@@ -25,16 +25,29 @@ export default function Home() {
         <Marquee />
 
         <WordScroll
-          kicker="The job, in one line"
-          words={["every", "rupee", "has", "to", "land", "where", "it", "should."]}
-          accentAt={[5, 6, 7]}
+          kicker="Why fintech"
+          words={[
+            "I",
+            "like",
+            "the",
+            "part",
+            "of",
+            "fintech",
+            "where",
+            "money",
+            "has",
+            "to",
+            "be",
+            "right.",
+          ]}
+          accentAt={[7, 8, 9, 10, 11]}
           tags={[
+            "payments",
             "reconciliation",
-            "billing",
             "securities settlement",
-            "100,000+ rows a night",
-            "maker-checker",
             "SWIFT MT/MX",
+            "markets & trading",
+            "Quantsieve",
           ]}
           footnote="keep scrolling ↓"
           length={1.9}
@@ -45,9 +58,7 @@ export default function Home() {
           <Stats />
         </BlurIn>
 
-        <BlurIn>
-          <Work />
-        </BlurIn>
+        <Work />
 
 
         <BlurIn>

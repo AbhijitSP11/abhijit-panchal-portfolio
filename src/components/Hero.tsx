@@ -9,7 +9,7 @@ import {
 } from "@/lib/anim";
 import { profile } from "@/lib/resume";
 import HeroFrames from "./HeroFrames";
-import UntangleThread from "./UntangleThread";
+import UntangleGraph from "./UntangleGraph";
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -117,8 +117,6 @@ export default function Hero() {
               Abhijit<span className="text-accent">.</span>
             </h1>
 
-            {/* a knot that sorts itself out, in place of a sentence */}
-            <UntangleThread className="mt-6 h-[130px] w-full max-w-xl text-ink sm:h-[160px]" />
 
             <div className="mt-7 flex flex-wrap items-center gap-3">
               <a
@@ -154,9 +152,12 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* the cube sorts itself out, then the frames below it */}
+          {/* the knot that resolves into a graph, with a single frame below it */}
           <div className="lg:col-span-5">
-            <HeroFrames />
+            <UntangleGraph className="w-full" />
+            <div className="mt-6">
+              <HeroFrames only={2} />
+            </div>
           </div>
         </div>
       </div>

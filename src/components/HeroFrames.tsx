@@ -9,7 +9,7 @@ import HeroScene from "./HeroScene";
  * Three frames fanned beside the name. They drift with the cursor, lift and
  * straighten on hover, and clicking one brings it to the front of the stack.
  */
-export default function HeroFrames() {
+export default function HeroFrames({ only }: { only?: number } = {}) {
   const root = useRef<HTMLDivElement>(null);
   const [order, setOrder] = useState([0, 1, 2]);
 
@@ -46,12 +46,13 @@ export default function HeroFrames() {
   return (
     <div
       ref={root}
-      className="relative mx-auto h-[330px] w-full max-w-[380px] sm:h-[380px] lg:h-[460px] lg:max-w-none"
+      className={only !== undefined ? "relative mx-auto h-[230px] w-full max-w-[380px] sm:h-[250px] lg:max-w-none" : "relative mx-auto h-[330px] w-full max-w-[380px] sm:h-[380px] lg:h-[460px] lg:max-w-none"}
     >
       {heroCards.map((c, i) => {
+        if (only !== undefined && i !== only) return null;
         const z = order.indexOf(i);
         // staggered so no card lands on the caption of the one behind it
-        const layout = [
+        const layout = only !== undefined ? { left: "4%", top: "0%", rotate: -3 } : [
           { left: "0%", top: "0%", rotate: -7 },
           { left: "26%", top: "50%", rotate: 4 },
           { left: "50%", top: "11%", rotate: 9 },
@@ -88,9 +89,11 @@ export default function HeroFrames() {
         );
       })}
 
-      <span className="hand pointer-events-none absolute bottom-1 left-0 z-[60] text-lg text-ink/45">
-        ← click one
-      </span>
+      {only === undefined && (
+        <span className="hand pointer-events-none absolute bottom-1 left-0 z-[60] text-lg text-ink/45">
+          ← click one
+        </span>
+      )}
     </div>
   );
 }
