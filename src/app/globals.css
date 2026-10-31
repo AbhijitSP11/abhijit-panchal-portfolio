@@ -234,3 +234,28 @@ html.lenis body {
     animation: none !important;
   }
 }
+
+/* ---- Cursor ----------------------------------------------------------------
+   A tail-less arrow in the accent colour: just the head, tip at the hotspot.
+   A native CSS cursor rather than a div chasing the pointer, so it never
+   lags and costs no JavaScript. The white keyline keeps it visible on the dark
+   sections. Written unlayered so it beats the `cursor-pointer` utilities and the
+   browser's hand on links; component rules that set their own cursor, such as
+   the carousel's grab hand, still win on specificity.
+   Interactive things get a slightly larger arrow. */
+html,
+html * {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 3 L19 10 L11.5 12 L9.5 20 Z' fill='%23d62d46' stroke='white' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E")
+      3 3,
+    auto;
+}
+
+a[href],
+button,
+[role="button"],
+summary,
+label[for] {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 24 24'%3E%3Cpath d='M3 3 L19 10 L11.5 12 L9.5 20 Z' fill='%23d62d46' stroke='white' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E")
+      4 4,
+    pointer;
+}
