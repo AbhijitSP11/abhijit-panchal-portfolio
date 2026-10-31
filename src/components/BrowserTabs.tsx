@@ -379,6 +379,7 @@ function Panel({ tabKey }: { tabKey: string }) {
                   src={portrait.src}
                   alt={profile.name}
                   className="h-full w-full object-cover"
+                  style={{ objectPosition: portrait.position }}
                 />
               ) : (
                 <Placeholder label="portrait" tint={portrait.tint} />

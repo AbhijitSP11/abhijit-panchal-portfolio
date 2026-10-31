@@ -143,7 +143,9 @@ export const artworks: Artwork[] = [
 
 /** Portrait in the about tab. Drop a file in /public/photos and set `src`. */
 export const portrait = {
-  src: null as string | null,
+  src: "/photos/self.jpeg" as string | null,
+  /** The photo is a tall beach shot with the subject low in the frame, so the crop leans down. */
+  position: "50% 82%",
   caption: "that's me",
   tint: "#d62d46",
 };

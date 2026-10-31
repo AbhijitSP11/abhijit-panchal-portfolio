@@ -21,6 +21,7 @@ export default function HeroPortrait({ className = "" }: { className?: string })
             src={portrait.src}
             alt={profile.name}
             className="h-full w-full object-cover"
+            style={{ objectPosition: portrait.position }}
           />
         ) : (
           <Placeholder label="portrait" tint={portrait.tint} />
