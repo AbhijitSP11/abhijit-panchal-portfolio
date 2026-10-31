@@ -83,3 +83,15 @@ Lenis stays off, and every reveal renders in its final state.
   utilities keep winning over them.
 - The project "screenshots" are CSS mockups in `ProjectMock.tsx`. Swap them for
   real images when you have them (these are client systems, so check first).
+
+## Dropping in your own images
+
+Art and photo entries in `src/lib/personal.ts` carry a `src` that is `null`
+until you have a file. While it is null the component draws a styled
+placeholder, so the layout is already final:
+
+1. Put files in `public/art/` or `public/photos/`.
+2. Set the entry's `src`, e.g. `src: "/art/01.jpg"`.
+
+The favourite-films list in the same file is placeholder text — swap the
+titles, years and notes for your real picks.

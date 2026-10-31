@@ -4,7 +4,9 @@ import { useEffect, useRef } from "react";
 import { gsap, registerGsap, prefersReducedMotion, revealUp } from "@/lib/anim";
 import { experience } from "@/lib/resume";
 
-/** Timeline whose spine fills as the section is scrolled through. */
+/** Same row treatment as the work log tab, with the detail kept underneath. */
+const chipTints = ["#1d4ed8", "#4f46e5", "#7c3aed"];
+
 export default function Experience() {
   const root = useRef<HTMLElement>(null);
 
@@ -12,37 +14,31 @@ export default function Experience() {
     registerGsap();
 
     const ctx = gsap.context(() => {
+      revealUp(root.current!.querySelectorAll(".xp-head"), {
+        trigger: root.current!,
+        stagger: 0.06,
+      });
+
       const rows = gsap.utils.toArray<HTMLElement>(".xp-row");
       rows.forEach((row) => {
         revealUp(row.querySelectorAll(".xp-fade"), {
           trigger: row,
-          stagger: 0.06,
+          stagger: 0.05,
         });
       });
 
       if (prefersReducedMotion()) return;
 
-      gsap.fromTo(
-        ".xp-spine-fill",
-        { scaleY: 0 },
-        {
-          scaleY: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".xp-list",
-            start: "top 70%",
-            end: "bottom 75%",
-            scrub: 0.5,
-          },
-        }
-      );
-
-      gsap.from(".xp-dot", {
+      gsap.from(".xp-chip", {
         scale: 0,
-        duration: 0.6,
+        duration: 0.55,
         ease: "back.out(2)",
-        stagger: 0.12,
-        scrollTrigger: { trigger: ".xp-list", start: "top 70%", once: true },
+        stagger: 0.1,
+        scrollTrigger: {
+          trigger: root.current!.querySelector(".xp-list")!,
+          start: "top 78%",
+          once: true,
+        },
       });
     }, root);
 
@@ -50,69 +46,81 @@ export default function Experience() {
   }, []);
 
   return (
-    <section
-      ref={root}
-      id="experience"
-      className="border-t border-ink/10 bg-paper"
-    >
+    <section ref={root} id="experience" className="border-t border-ink/10 bg-paper">
       <div className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:py-28">
-        <div className="mb-16 flex items-end justify-between border-b border-ink/15 pb-5">
-          <h2 className="label text-muted">02 / Experience</h2>
-          <span className="label text-muted">2022 — Present</span>
+        <div className="mb-12 flex items-end justify-between border-b border-ink/15 pb-5">
+          <h2 className="xp-head reveal-ready label text-muted">02 / Experience</h2>
+          <span className="xp-head reveal-ready label text-muted">2022 — Present</span>
         </div>
 
-        <div className="xp-list relative pl-8 sm:pl-12">
-          {/* spine */}
-          <div className="absolute left-1 top-2 h-[calc(100%-1rem)] w-px bg-ink/12 sm:left-2">
-            <div className="xp-spine-fill h-full w-full origin-top bg-accent" />
-          </div>
+        <h3 className="xp-head reveal-ready mb-12 text-4xl font-medium leading-[1.05] tracking-tight sm:text-5xl">
+          where I&rsquo;ve
+          <br />
+          <span className="font-serif italic text-accent">been building.</span>
+        </h3>
 
-          <div className="space-y-16 lg:space-y-24">
-            {experience.map((job) => (
-              <div
-                key={job.company}
-                className="xp-row relative grid gap-5 lg:grid-cols-12 lg:gap-10"
-              >
+        <div className="xp-list divide-y divide-ink/10 border-t border-ink/10">
+          {experience.map((job, i) => (
+            <article key={job.company} className="xp-row py-7 sm:py-9">
+              {/* row header, mirroring the work log */}
+              <div className="flex items-center gap-4 sm:gap-6">
+                <span className="label w-6 shrink-0 text-muted">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+
                 <span
-                  className={`xp-dot absolute -left-8 top-2.5 h-2.5 w-2.5 rounded-full sm:-left-12 ${
-                    job.current ? "bg-accent" : "bg-ink/35"
-                  }`}
-                  style={{ marginLeft: job.current ? "-0.2rem" : "-0.2rem" }}
-                />
+                  className="xp-chip grid h-11 w-11 shrink-0 place-items-center rounded-full text-base font-semibold text-paper"
+                  style={{ backgroundColor: chipTints[i % chipTints.length] }}
+                  aria-hidden="true"
+                >
+                  {job.company.slice(0, 1)}
+                </span>
 
-                <div className="xp-fade reveal-ready lg:col-span-4">
-                  <div className="label text-muted">{job.period}</div>
-                  <h3 className="mt-3 text-2xl font-medium tracking-tight sm:text-3xl">
+                <div className="min-w-0 flex-1">
+                  <h4 className="truncate text-xl font-medium tracking-tight sm:text-2xl">
                     {job.company}
-                  </h3>
-                  <div className="mt-1.5 text-sm text-muted">{job.location}</div>
-                  {job.current ? (
-                    <span className="label mt-4 inline-flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1.5 text-accent">
-                      <span className="h-1.5 w-1.5 rounded-full bg-accent" />
-                      Currently here
-                    </span>
-                  ) : null}
+                  </h4>
+                  <div className="label mt-1 text-muted sm:hidden">{job.role}</div>
                 </div>
 
-                <div className="lg:col-span-8">
-                  <div className="xp-fade reveal-ready text-lg font-medium sm:text-xl">
-                    {job.role}
-                  </div>
-                  <ul className="mt-5 space-y-3.5">
-                    {job.points.map((p, i) => (
-                      <li
-                        key={i}
-                        className="xp-fade reveal-ready flex gap-3 text-sm leading-relaxed text-ink/75 sm:text-base"
-                      >
-                        <span className="mt-2 h-px w-4 shrink-0 bg-ink/25" />
-                        <span>{p}</span>
-                      </li>
-                    ))}
-                  </ul>
+                <div className="hidden text-right sm:block">
+                  <div className="text-sm font-medium">{job.role}</div>
+                  <div className="label mt-1 text-muted">{job.period}</div>
                 </div>
+
+                <span
+                  className={`label shrink-0 rounded-full px-3 py-1.5 ${
+                    job.current
+                      ? "bg-accent text-paper"
+                      : "border border-ink/15 text-muted"
+                  }`}
+                >
+                  {job.current ? "now" : "before"}
+                </span>
               </div>
-            ))}
-          </div>
+
+              {/* detail, aligned under the company name */}
+              <div className="mt-5 sm:pl-[5.5rem]">
+                <div className="label mb-4 text-muted sm:hidden">
+                  {job.period} · {job.location}
+                </div>
+                <div className="label mb-4 hidden text-muted sm:block">
+                  {job.location}
+                </div>
+                <ul className="space-y-3">
+                  {job.points.map((p, j) => (
+                    <li
+                      key={j}
+                      className="xp-fade reveal-ready flex gap-3 text-sm leading-relaxed text-ink/75 sm:text-base"
+                    >
+                      <span className="mt-2.5 h-px w-4 shrink-0 bg-ink/25" />
+                      <span>{p}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))}
         </div>
       </div>
     </section>

@@ -5,13 +5,18 @@ import { gsap, registerGsap, prefersReducedMotion } from "@/lib/anim";
 
 /**
  * Brings a section into focus as it enters the viewport: blurred, dimmed and
- * slightly small, resolving to sharp as you scroll. Scrubbed rather than
- * triggered, so it tracks the scroll both ways.
+ * slightly small, resolving to sharp.
+ *
+ * This is a one-shot eased tween rather than a scrub. A scrub ties progress to
+ * a narrow slice of scroll measured against the element itself — which the
+ * tween then moves by scaling it — so jumping straight to a section (an anchor
+ * link, a refresh deep in the page) could leave it parked half-blurred and
+ * unreadable. Entering once and playing through cannot strand a section.
  */
 export default function BlurIn({
   children,
   /** Maximum blur in px at the start of the transition. */
-  strength = 16,
+  strength = 14,
 }: {
   children: React.ReactNode;
   strength?: number;
@@ -20,28 +25,34 @@ export default function BlurIn({
 
   useEffect(() => {
     registerGsap();
-    if (prefersReducedMotion()) return;
+
+    const el = root.current;
+    if (!el) return;
+
+    if (prefersReducedMotion()) {
+      gsap.set(el, { filter: "none", opacity: 1, scale: 1 });
+      return;
+    }
 
     const ctx = gsap.context(() => {
       gsap.fromTo(
-        root.current,
-        {
-          filter: `blur(${strength}px)`,
-          opacity: 0.25,
-          scale: 0.985,
-        },
+        el,
+        { filter: `blur(${strength}px)`, opacity: 0.2, scale: 0.99 },
         {
           filter: "blur(0px)",
           opacity: 1,
           scale: 1,
-          ease: "none",
+          duration: 1.1,
+          ease: "power2.out",
+          // drop the filter once it lands — leaving one on a tall section
+          // keeps it on its own compositor layer for nothing
+          onComplete: () => {
+            gsap.set(el, { clearProps: "filter,willChange" });
+          },
           scrollTrigger: {
-            trigger: root.current,
-            // starts as the section's top enters the lower third, finishes
-            // once it is comfortably in view
-            start: "top 88%",
-            end: "top 42%",
-            scrub: 0.6,
+            trigger: el,
+            start: "top 85%",
+            once: true,
           },
         }
       );
