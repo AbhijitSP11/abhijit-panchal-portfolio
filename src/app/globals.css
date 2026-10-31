@@ -340,3 +340,19 @@ label[for] {
   .bv-s1,.bv-s2,.bv-s3,.bv-s4,.bv-s5,.bv-s6,.bv-draw,.bv-fill,.bv-grad,.bv-float{animation:none;opacity:1;transform:none;stroke-dashoffset:0}
   .bv-type{animation:none;width:100%}
 }
+
+/* About-me window: panels cross-fade, sliding the way the scroll is going. */
+@keyframes bt-in {
+  from { opacity: 0; transform: translateY(calc(var(--dir, 1) * 26px)) scale(0.985); filter: blur(7px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes bt-out {
+  from { opacity: 1; transform: none; filter: blur(0); }
+  to { opacity: 0; transform: translateY(calc(var(--dir, 1) * -26px)) scale(0.985); filter: blur(7px); }
+}
+.bt-in { animation: bt-in 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.bt-out { animation: bt-out 0.4s cubic-bezier(0.4, 0, 1, 1) both; }
+@media (prefers-reduced-motion: reduce) {
+  .bt-in, .bt-out { animation: none; }
+  .bt-out { display: none; }
+}

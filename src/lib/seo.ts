@@ -8,8 +8,14 @@ export const siteUrl = (
   process.env.NEXT_PUBLIC_SITE_URL ?? "https://abhijit-panchal-portfolio.vercel.app"
 ).replace(/\/$/, "");
 
-/** The browser-tab title: the wordmark with its dot, then the initials. */
-export const siteTitle = "Abhijit. | SP";
+/**
+ * The browser-tab title. A tab title is plain text and cannot be coloured, so
+ * the wordmark's red dot is the red-circle emoji.
+ */
+export const siteTitle = "Abhijit🔴 | SP";
+
+/** Link previews and search results get the plain-text wordmark. */
+export const shareTitle = "Abhijit. | SP";
 
 export const siteDescription =
   "Abhijit Panchal is a full stack developer in Mumbai building banking, fintech and payments systems with React, Next.js, Python and .NET. Open to roles in Mumbai and Bengaluru.";

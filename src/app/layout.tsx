@@ -6,6 +6,7 @@ import {
   allKeywords,
   personJsonLd,
   siteDescription,
+  shareTitle,
   siteTitle,
   siteUrl,
 } from "@/lib/seo";
@@ -46,7 +47,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   category: "technology",
   openGraph: {
-    title: siteTitle,
+    title: shareTitle,
     description: siteDescription,
     url: siteUrl,
     siteName: "Abhijit. | SP",
@@ -55,7 +56,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: siteTitle,
+    title: shareTitle,
     description: siteDescription,
   },
   robots: {

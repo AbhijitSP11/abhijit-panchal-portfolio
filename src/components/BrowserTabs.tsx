@@ -95,6 +95,26 @@ export default function BrowserTabs() {
   const last = useRef(0);
   const band = useRef<ScrollTrigger | null>(null);
 
+  // The panel on show and the one just leaving, so a swap is a cross-fade
+  // rather than a cut. Derived during render (not in an effect) so the old
+  // panel never disappears for a frame before the new one arrives.
+  const [shown, setShown] = useState<{ cur: number; prev: number | null; dir: 1 | -1 }>({
+    cur: 0,
+    prev: null,
+    dir: 1,
+  });
+  if (shown.cur !== index) {
+    setShown({ cur: index, prev: shown.cur, dir: index > shown.cur ? 1 : -1 });
+  }
+  useEffect(() => {
+    if (shown.prev === null) return;
+    const t = window.setTimeout(
+      () => setShown((s) => (s.prev === null ? s : { ...s, prev: null })),
+      460
+    );
+    return () => window.clearTimeout(t);
+  }, [shown.cur, shown.prev]);
+
   /**
    * Clicking a tab moves the page to that tab's scroll band rather than only
    * setting state. If it only set state, the very next scroll event would
@@ -210,7 +230,7 @@ export default function BrowserTabs() {
                     type="button"
                     data-tab={i}
                     onClick={() => selectTab(i)}
-                    className={`flex h-9 shrink-0 items-center gap-2 rounded-t-lg px-3.5 text-sm transition-colors duration-300 ${
+                    className={`flex h-9 shrink-0 items-center gap-2 rounded-t-lg px-3.5 text-sm transition-[background-color,color,transform] duration-300 ease-out ${
                       on
                         ? "bg-paper text-ink"
                         : "bg-paper/[0.06] text-paper/60 hover:bg-paper/[0.12]"
@@ -268,11 +288,22 @@ export default function BrowserTabs() {
             <div className="relative min-h-0 flex-1 bg-paper">
               {/* overflow-hidden, not auto: nothing inside the window scrolls
                   on its own — every panel is written to fit */}
+              {shown.prev !== null && (
+                <div
+                  key={`out-${shown.prev}`}
+                  className="bt-out pointer-events-none absolute inset-0 overflow-hidden px-5 pb-14 pt-3 sm:px-8"
+                  style={{ "--dir": shown.dir } as React.CSSProperties}
+                  aria-hidden="true"
+                >
+                  <Panel tabKey={tabs[shown.prev].key} />
+                </div>
+              )}
               <div
-                key={index}
-                className="panel-in absolute inset-0 overflow-hidden px-5 pb-14 pt-3 sm:px-8"
+                key={`in-${shown.cur}`}
+                className="bt-in absolute inset-0 overflow-hidden px-5 pb-14 pt-3 sm:px-8"
+                style={{ "--dir": shown.dir } as React.CSSProperties}
               >
-                <Panel tabKey={active.key} />
+                <Panel tabKey={tabs[shown.cur].key} />
               </div>
 
               {/* next-tab nudge */}
