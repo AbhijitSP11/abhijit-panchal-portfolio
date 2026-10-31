@@ -778,38 +778,46 @@ function TravelLine() {
 }
 
 /**
- * The independent projects as three colour blocks side by side. The hovered
+ * The independent projects as three folders side by side. The hovered
  * one opens out: what it is, what it is built with, and a looping scene of the
  * product doing its job. The others fold down to a spine and keep glowing, so
  * the row always has something moving in it. Nothing scrolls.
  */
-const BUILD_LOOK: Record<string, { grad: string; text: string; scene: React.ReactNode }> = {
+const BUILD_LOOK: Record<
+  string,
+  { grad: string; tab: string; text: string; scene: React.ReactNode }
+> = {
   "prop-ai": {
     grad: "linear-gradient(135deg,#065f46 0%,#0f9d6b 55%,#34d399 100%)",
+    tab: "#065f46",
     text: "#065f46",
     scene: <PropVisual />,
   },
   "market-ai": {
     grad: "linear-gradient(135deg,#9f1239 0%,#e11d48 50%,#fb923c 100%)",
+    tab: "#9f1239",
     text: "#9f1239",
     scene: <MarketVisual />,
   },
   aster: {
     grad: "linear-gradient(135deg,#3730a3 0%,#4f6bed 55%,#22d3ee 100%)",
+    tab: "#3730a3",
     text: "#3730a3",
     scene: <AsterVisual />,
   },
 };
 
+/** Each project is a folder: a tab on top, the page sticking out of it, and a front flap. */
 function BuildStrip() {
   const [open, setOpen] = useState(0);
 
   return (
     <div className="@container mt-6">
-      <div className="flex h-[340px] gap-3 sm:h-[372px]">
+      <div className="flex h-[348px] gap-3 sm:h-[380px]">
         {builds.map((b, i) => {
           const isOpen = i === open;
           const look = BUILD_LOOK[b.id];
+          const n = String(i + 1).padStart(2, "0");
           return (
             <article
               key={b.id}
@@ -818,93 +826,119 @@ function BuildStrip() {
               onFocus={() => setOpen(i)}
               onClick={() => setOpen(i)}
               aria-expanded={isOpen}
-              className={`bv-grad relative cursor-pointer overflow-hidden rounded-2xl text-white outline-none transition-[flex-grow,box-shadow,transform] duration-500 ease-out focus-visible:ring-2 focus-visible:ring-ink ${
-                isOpen
-                  ? "flex-[3.6] shadow-[0_30px_50px_-24px_rgba(0,0,0,0.6)]"
-                  : "flex-[1] shadow-[0_16px_28px_-20px_rgba(0,0,0,0.55)] hover:-translate-y-1.5"
+              className={`relative cursor-pointer text-white outline-none transition-[flex-grow,transform] duration-500 ease-out focus-visible:[&>.bv-body]:ring-2 focus-visible:[&>.bv-body]:ring-ink ${
+                isOpen ? "flex-[3.6]" : "flex-[1] hover:-translate-y-1.5"
               }`}
-              style={{ backgroundImage: look.grad }}
             >
-              {/* soft light, so the colour has depth */}
-              <span
-                className="pointer-events-none absolute -right-10 -top-12 h-52 w-52 rounded-full bg-white/20 blur-3xl"
-                aria-hidden="true"
-              />
-              <span
-                className="pointer-events-none absolute -bottom-16 -left-10 h-48 w-48 rounded-full bg-black/20 blur-3xl"
-                aria-hidden="true"
-              />
-
-              {/* folded: number, a live dot, the name running up the spine */}
+              {/* the tab on the folder's top edge */}
               <div
-                className={`absolute inset-0 flex flex-col items-center justify-between px-2 pb-6 pt-6 transition-opacity duration-300 ${
-                  isOpen ? "pointer-events-none opacity-0" : "opacity-100"
-                }`}
+                className="absolute left-0 top-0 flex h-9 items-center rounded-tl-xl pl-3.5 pr-7 text-xs font-semibold tracking-wide"
+                style={{
+                  backgroundColor: look.tab,
+                  clipPath: "polygon(0 0, calc(100% - 16px) 0, 100% 100%, 0 100%)",
+                  width: isOpen ? "min(190px, 70%)" : "calc(100% - 22px)",
+                  transition: "width 500ms cubic-bezier(.2,.8,.2,1)",
+                }}
               >
-                <span className="label text-white/80">{String(i + 1).padStart(2, "0")}</span>
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-70" />
-                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
-                </span>
-                <span
-                  className="whitespace-nowrap text-xl font-semibold tracking-tight"
-                  style={{ writingMode: "vertical-rl", rotate: "180deg" }}
-                >
-                  {b.name}
+                <span className="whitespace-nowrap">
+                  {n}
+                  {isOpen ? ` · ${b.id}/` : ""}
                 </span>
               </div>
 
-              {/* open: the project, and the thing it does */}
+              {/* the folder body */}
               <div
-                className={`absolute inset-0 flex items-center transition-opacity duration-500 ${
-                  isOpen ? "opacity-100 delay-150" : "pointer-events-none opacity-0"
+                className={`bv-body bv-grad absolute inset-x-0 bottom-0 top-8 rounded-b-2xl rounded-tr-2xl transition-shadow duration-500 ${
+                  isOpen
+                    ? "shadow-[0_30px_50px_-24px_rgba(0,0,0,0.6)]"
+                    : "shadow-[0_16px_28px_-20px_rgba(0,0,0,0.55)]"
                 }`}
+                style={{ backgroundImage: look.grad }}
               >
-                <div className="flex h-full min-w-0 flex-1 flex-col p-6 @3xl:pr-2">
-                  <span className="label text-white/75">
-                    {String(i + 1).padStart(2, "0")} · {b.year}
-                  </span>
-                  <h4 className="mt-1.5 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-                    {b.name}
-                  </h4>
-                  <p className="mt-1.5 font-serif text-lg italic leading-snug text-white/90">
-                    {b.tagline}
-                  </p>
-                  <p className="mt-3 line-clamp-5 text-[0.9rem] leading-relaxed text-white/85">
-                    {b.blurb}
-                  </p>
+                {/* soft light for depth, clipped to the folder */}
+                <span className="pointer-events-none absolute inset-0 overflow-hidden rounded-b-2xl rounded-tr-2xl" aria-hidden="true">
+                  <span className="absolute -right-10 -top-12 h-52 w-52 rounded-full bg-white/20 blur-3xl" />
+                  <span className="absolute -bottom-16 -left-10 h-48 w-48 rounded-full bg-black/20 blur-3xl" />
+                </span>
 
-                  <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-4">
-                    <div className="flex flex-wrap gap-1.5">
-                      {b.stack.slice(0, 3).map((t) => (
-                        <span
-                          key={t}
-                          className="label !text-[0.65rem] rounded-full border border-white/45 bg-white/15 px-2.5 py-1 text-white backdrop-blur-sm"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    {b.caseStudy ? (
-                      <Link
-                        href={b.caseStudy}
-                        className="btn-fill !px-4 !py-2 text-sm font-medium"
-                        style={
-                          {
-                            "--btn-ink": "#ffffff",
-                            "--btn-fill": "#ffffff",
-                            "--btn-text": look.text,
-                          } as React.CSSProperties
-                        }
-                      >
-                        Case study
-                        <span className="btn-sep" aria-hidden="true">→</span>
-                      </Link>
-                    ) : null}
-                  </div>
+                {/* folded: a live dot and the name down the spine */}
+                <div
+                  className={`absolute inset-0 flex flex-col items-center justify-between px-2 pb-6 pt-7 transition-opacity duration-300 ${
+                    isOpen ? "pointer-events-none opacity-0" : "opacity-100"
+                  }`}
+                >
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-70" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
+                  </span>
+                  <span
+                    className="whitespace-nowrap text-xl font-semibold tracking-tight"
+                    style={{ writingMode: "vertical-rl", rotate: "180deg" }}
+                  >
+                    {b.name}
+                  </span>
                 </div>
 
-                <div className="bv-float mr-6 hidden shrink-0 @3xl:block">{look.scene}</div>
+                {/* open: the page poking out of the folder */}
+                <div
+                  className={`bv-float absolute -top-7 right-6 z-10 hidden transition-opacity duration-500 @3xl:block ${
+                    isOpen ? "opacity-100 delay-150" : "pointer-events-none opacity-0"
+                  }`}
+                >
+                  {look.scene}
+                </div>
+
+                {/* open: what it is */}
+                <div
+                  className={`absolute inset-x-0 top-0 p-6 pt-5 transition-opacity duration-500 @3xl:pr-[260px] ${
+                    isOpen ? "opacity-100 delay-150" : "pointer-events-none opacity-0"
+                  }`}
+                >
+                  <span className="label text-white/75">{b.year}</span>
+                  <h4 className="mt-1 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+                    {b.name}
+                  </h4>
+                  <p className="mt-1 font-serif text-lg italic leading-snug text-white/90">
+                    {b.tagline}
+                  </p>
+                  <p className="mt-2.5 line-clamp-4 text-[0.88rem] leading-relaxed text-white/85">
+                    {b.blurb}
+                  </p>
+                </div>
+
+                {/* the front flap: stack and link */}
+                <div
+                  className={`absolute inset-x-0 bottom-0 z-20 flex h-[27%] min-h-[74px] items-center justify-between gap-3 rounded-b-2xl border-t border-white/30 bg-black/25 px-6 backdrop-blur-md transition-opacity duration-500 ${
+                    isOpen ? "opacity-100 delay-150" : "pointer-events-none opacity-0"
+                  }`}
+                >
+                  <div className="flex flex-wrap gap-1.5">
+                    {b.stack.slice(0, 3).map((t) => (
+                      <span
+                        key={t}
+                        className="label !text-[0.65rem] rounded-full border border-white/50 bg-white/15 px-2.5 py-1 text-white"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                  {b.caseStudy ? (
+                    <Link
+                      href={b.caseStudy}
+                      className="btn-fill shrink-0 !px-4 !py-2 text-sm font-medium"
+                      style={
+                        {
+                          "--btn-ink": "#ffffff",
+                          "--btn-fill": "#ffffff",
+                          "--btn-text": look.text,
+                        } as React.CSSProperties
+                      }
+                    >
+                      Case study
+                      <span className="btn-sep" aria-hidden="true">→</span>
+                    </Link>
+                  ) : null}
+                </div>
               </div>
             </article>
           );
