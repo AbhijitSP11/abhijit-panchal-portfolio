@@ -84,12 +84,13 @@ export default function Hero() {
     <section
       ref={root}
       id="top"
-      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden bg-paper pb-24 pt-28 sm:pt-32"
+      className="relative flex min-h-[100svh] flex-col overflow-hidden bg-paper pb-24 pt-28 sm:pt-32"
     >
-      <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
-        <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
+      <div className="mx-auto flex w-full max-w-[1400px] flex-1 flex-col px-5 sm:px-8">
+        <div className="grid flex-1 items-stretch gap-12 lg:grid-cols-12 lg:gap-8">
           {/* copy — nudged in from the edge so the name sits nearer the middle */}
-          <div className="lg:col-span-5">
+          <div className="flex flex-col justify-between gap-14 lg:col-span-6">
+            <div>
             <p className="hero-fade label text-muted">{profile.role}</p>
 
             <div className="relative mt-6 inline-block">
@@ -117,8 +118,11 @@ export default function Hero() {
               Abhijit<span className="text-accent">.</span>
             </h1>
 
+            <UntangleGraph className="mt-8 w-full max-w-[400px]" />
+            </div>
 
-            <div className="mt-12 flex flex-wrap items-center gap-3 sm:mt-16">
+
+            <div className="flex flex-wrap items-center gap-3">
               <a
                 href="/Abhijit_Panchal_Resume.pdf"
                 download
@@ -152,12 +156,9 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* the graph and the portrait share the right side, side by side */}
-          <div className="lg:col-span-7">
-            <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-center sm:gap-6 lg:gap-8">
-              <UntangleGraph className="w-full min-w-0 sm:flex-1" />
-              <HeroPortrait className="shrink-0 sm:w-[210px] lg:w-[230px]" />
-            </div>
+          {/* the portrait, given the whole right side */}
+          <div className="flex items-center justify-center lg:col-span-6">
+            <HeroPortrait className="!max-w-none w-[250px] sm:w-[290px] lg:w-[330px]" />
           </div>
         </div>
       </div>

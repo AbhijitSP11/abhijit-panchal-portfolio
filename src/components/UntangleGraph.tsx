@@ -4,9 +4,9 @@ import { useEffect, useRef } from "react";
 import { gsap, registerGsap, prefersReducedMotion } from "@/lib/anim";
 
 /**
- * One thread. It draws itself as a knot, then works loose into a climbing
- * graph, and the figures it stands for appear along the line one after
- * another before the whole thing runs again.
+ * One thread. It draws itself as a knot, works loose into a climbing graph,
+ * and three handwritten notes arrive along it — each one a finance problem
+ * from the work, with an arrow to the point on the line it belongs to.
  *
  * The knot and the graph are the same path — the same count of cubic segments
  * through a moved set of points — so GSAP tweens the `d` attribute straight
@@ -81,20 +81,58 @@ function graphPoints(): Pt[] {
 const GRAPH_PTS = graphPoints();
 const KNOT = toPath(knotPoints());
 const GRAPH = toPath(GRAPH_PTS);
-/** The graph, closed down to the baseline, for the soft fill beneath it. */
+/** The graph closed down to the baseline, for the soft fill beneath it. */
 const AREA = `${GRAPH} L ${GRAPH_PTS[GRAPH_PTS.length - 1][0]} ${H - 14} L ${GRAPH_PTS[0][0]} ${H - 14} Z`;
 
-/** The figures that appear along the climb, taken from the projects. */
+/**
+ * The problems the line stands for, in the words of the work itself.
+ * `side` is where the note sits relative to its point: "below" puts it under
+ * the curve with the arrow pointing back up at the dot, "above" puts it over
+ * the curve with the arrow pointing down.
+ */
 const MARKS = [
-  { at: 0.26, text: "100,000+ rows matched", align: "left" as const },
-  { at: 0.6, text: "3 days → 20 minutes", align: "left" as const },
-  { at: 0.97, text: "4,000+ invoices a cycle", align: "right" as const },
+  {
+    at: 0.34,
+    side: "below" as const,
+    text: "3 bank systems reconciled, 100K+ rows a run",
+  },
+  {
+    at: 0.66,
+    side: "below" as const,
+    text: "month-end billing: 3 days → 20 minutes",
+  },
+  {
+    at: 0.97,
+    side: "above" as const,
+    text: "bond settlements across 2 regulators",
+  },
 ];
 
 const markPos = MARKS.map((m) => {
   const p = GRAPH_PTS[Math.round(m.at * SEGMENTS)];
   return { x: p[0], y: p[1] };
 });
+
+/** A hand-drawn curved arrow, tail top-left and head bottom-right. */
+function HandArrow({ className = "" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 50 34" className={className} fill="none" aria-hidden="true">
+      <path
+        d="M4 4 C 18 2, 36 9, 44 26"
+        stroke="var(--color-chart)"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+      />
+      <path
+        d="M35 24 L 45 29 L 42 18"
+        stroke="var(--color-chart)"
+        strokeWidth="2.4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
 
 export default function UntangleGraph({ className = "" }: { className?: string }) {
   const root = useRef<HTMLDivElement>(null);
@@ -108,16 +146,13 @@ export default function UntangleGraph({ className = "" }: { className?: string }
     if (prefersReducedMotion()) {
       el.setAttribute("d", GRAPH);
       el.style.strokeDashoffset = "0";
-      gsap.set(".ug-mark, .ug-area, .ug-out", { opacity: 1 });
+      gsap.set(".ug-mark, .ug-area, .ug-dot", { opacity: 1, y: 0, scale: 1 });
       return;
     }
 
     const ctx = gsap.context(() => {
       const len = el.getTotalLength();
       gsap.set(el, { strokeDasharray: len, strokeDashoffset: len });
-
-      const dim = { opacity: 0.3, duration: 0.4, ease: "power2.out" };
-      const lit = { opacity: 1, duration: 0.4, ease: "power2.out" };
 
       const tl = gsap.timeline({
         repeat: -1,
@@ -131,144 +166,125 @@ export default function UntangleGraph({ className = "" }: { className?: string }
         .set(".ug-area", { opacity: 0 })
         .set(".ug-mark", { opacity: 0, y: 8 })
         .set(".ug-dot", { opacity: 0, scale: 0 })
-        .set(".ug-in", { opacity: 0.3 })
-        .set(".ug-out", { opacity: 0.3 })
         // 1.5s: the knot draws itself
         .to(el, { strokeDashoffset: 0, duration: 1.5, ease: "power1.inOut" })
-        .to(".ug-in", lit, "<0.35")
         // 1.5s: it works loose into the climb
         .to(el, { attr: { d: GRAPH }, duration: 1.5, ease: "power3.inOut" })
-        .to(".ug-in", dim, "<")
-        .to(".ug-out", lit, "<0.8")
-        .to(".ug-area", { opacity: 1, duration: 0.9, ease: "power2.out" }, "<0.5")
-        // the figures arrive along the line, one at a time
+        .to(".ug-area", { opacity: 1, duration: 0.9, ease: "power2.out" }, "<0.6")
+        // the notes arrive along the line, one at a time
         .to(
           ".ug-dot",
-          { opacity: 1, scale: 1, duration: 0.35, stagger: 0.4, ease: "back.out(3)" },
-          "-=0.4"
+          { opacity: 1, scale: 1, duration: 0.35, stagger: 0.45, ease: "back.out(3)" },
+          "-=0.5"
         )
         .to(
           ".ug-mark",
-          { opacity: 1, y: 0, duration: 0.5, stagger: 0.4, ease: "power3.out" },
+          { opacity: 1, y: 0, duration: 0.55, stagger: 0.45, ease: "power3.out" },
           "<0.1"
         )
         // hold so it can be read, then round again
-        .to({}, { duration: 1.6 })
-        .to(".ug-mark", { opacity: 0, duration: 0.4 })
-        .to(".ug-out", dim, "<");
+        .to({}, { duration: 2.2 })
+        .to(".ug-mark", { opacity: 0, duration: 0.4 });
     }, root);
 
     return () => ctx.revert();
   }, []);
 
   return (
-    <div ref={root} className={className}>
-      <div className="mb-2 flex items-center justify-between gap-4">
-        <span
-          className="ug-in label flex items-center gap-2 !text-xs text-ink/75"
-          style={{ opacity: 0.3 }}
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-gain" />
-          complex problem
-        </span>
-        <span className="hidden h-px flex-1 bg-ink/15 sm:block" aria-hidden="true" />
-        <span
-          className="ug-out label flex items-center gap-2 !text-xs text-ink/75"
-          style={{ opacity: 0.3 }}
-        >
-          working system
-          <span className="h-1.5 w-1.5 rounded-full bg-gain" />
-        </span>
-      </div>
+    <div ref={root} className={`relative ${className}`}>
+      <svg
+        viewBox={`0 0 ${W} ${H}`}
+        className="block h-auto w-full overflow-visible"
+        fill="none"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="ug-line" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="currentColor" stopOpacity="0.25" />
+            <stop offset="55%" stopColor="var(--color-chart)" stopOpacity="0.95" />
+            <stop offset="100%" stopColor="var(--color-chart)" stopOpacity="1" />
+          </linearGradient>
+          <linearGradient id="ug-fill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--color-chart)" stopOpacity="0.2" />
+            <stop offset="100%" stopColor="var(--color-chart)" stopOpacity="0" />
+          </linearGradient>
+        </defs>
 
-      <div className="relative">
-        <svg
-          viewBox={`0 0 ${W} ${H}`}
-          className="block h-auto w-full overflow-visible"
-          fill="none"
-          aria-hidden="true"
-        >
-          <defs>
-            <linearGradient id="ug-line" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="currentColor" stopOpacity="0.25" />
-              <stop offset="55%" stopColor="var(--color-gain)" stopOpacity="0.95" />
-              <stop offset="100%" stopColor="var(--color-gain)" stopOpacity="1" />
-            </linearGradient>
-            <linearGradient id="ug-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--color-gain)" stopOpacity="0.2" />
-              <stop offset="100%" stopColor="var(--color-gain)" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-
-          {/* baseline and gridlines, so the end state reads as a chart */}
-          {[0.25, 0.5, 0.75].map((g) => (
-            <line
-              key={g}
-              x1="16"
-              x2={W - 16}
-              y1={H - 14 - g * (H - 40)}
-              y2={H - 14 - g * (H - 40)}
-              stroke="currentColor"
-              strokeOpacity="0.07"
-            />
-          ))}
-          <line x1="16" x2={W - 16} y1={H - 14} y2={H - 14} stroke="currentColor" strokeOpacity="0.2" />
-
-          <path className="ug-area" d={AREA} fill="url(#ug-fill)" style={{ opacity: 0 }} />
-
-          <path
-            ref={path}
-            d={KNOT}
-            stroke="url(#ug-line)"
-            strokeWidth="2.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        {/* baseline and gridlines, so the end state reads as a chart */}
+        {[0.25, 0.5, 0.75].map((g) => (
+          <line
+            key={g}
+            x1="16"
+            x2={W - 16}
+            y1={H - 14 - g * (H - 40)}
+            y2={H - 14 - g * (H - 40)}
+            stroke="currentColor"
+            strokeOpacity="0.07"
           />
+        ))}
+        <line x1="16" x2={W - 16} y1={H - 14} y2={H - 14} stroke="currentColor" strokeOpacity="0.2" />
 
-          {markPos.map((p, i) => (
-            <g key={i}>
-              <line
-                x1={p.x}
-                x2={p.x}
-                y1={p.y}
-                y2={p.y - 34}
-                stroke="var(--color-gain)"
-                strokeOpacity="0.45"
-                strokeDasharray="2 3"
-              />
-              <circle
-                className="ug-dot"
-                cx={p.x}
-                cy={p.y}
-                r="5"
-                fill="var(--color-paper)"
-                stroke="var(--color-gain)"
-                strokeWidth="2"
-                style={{ opacity: 0, transformOrigin: `${p.x}px ${p.y}px` }}
-              />
-            </g>
-          ))}
-        </svg>
+        <path className="ug-area" d={AREA} fill="url(#ug-fill)" style={{ opacity: 0 }} />
 
-        {/* the figures, with an arrow each */}
-        {MARKS.map((m, i) => (
+        <path
+          ref={path}
+          d={KNOT}
+          stroke="url(#ug-line)"
+          strokeWidth="3.4"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+
+        {markPos.map((p, i) => (
+          <circle
+            key={i}
+            className="ug-dot"
+            cx={p.x}
+            cy={p.y}
+            r="8"
+            fill="var(--color-paper)"
+            stroke="var(--color-chart)"
+            strokeWidth="3"
+            style={{ opacity: 0, transformOrigin: `${p.x}px ${p.y}px` }}
+          />
+        ))}
+      </svg>
+
+      {/* the handwritten notes, each with an arrow to its point on the line */}
+      {MARKS.map((m, i) => {
+        const above = m.side === "above";
+        const left = `${((markPos[i].x + (above ? -10 : 10)) / W) * 100}%`;
+        const top = `${((markPos[i].y + (above ? -12 : 12)) / H) * 100}%`;
+
+        return (
           <div
             key={m.text}
-            className="ug-mark pointer-events-none absolute z-10"
+            className="ug-mark pointer-events-none absolute z-10 w-max"
             style={{
-              left: `${(markPos[i].x / W) * 100}%`,
-              top: `${((markPos[i].y - 34) / H) * 100}%`,
-              transform: m.align === "right" ? "translate(-100%, -100%)" : "translate(-12%, -100%)",
+              left,
+              top,
               opacity: 0,
+              transform: above ? "translate(-100%, -100%)" : undefined,
             }}
           >
-            <span className="flex items-center gap-1.5 whitespace-nowrap border border-gain/45 bg-paper px-2.5 py-1 text-xs font-medium text-gain-deep shadow-sm sm:text-sm">
-              <span aria-hidden="true">↑</span>
-              {m.text}
-            </span>
+            {above ? (
+              <div className="flex items-start gap-1">
+                <p className="hand max-w-[190px] text-right text-[1.2rem] leading-[1.05] text-chart-deep">
+                  {m.text}
+                </p>
+                <HandArrow className="mt-1 h-7 w-10 shrink-0" />
+              </div>
+            ) : (
+              <div className="flex items-end gap-1">
+                <HandArrow className="h-7 w-10 shrink-0 rotate-180" />
+                <p className="hand max-w-[190px] text-[1.2rem] leading-[1.05] text-chart-deep">
+                  {m.text}
+                </p>
+              </div>
+            )}
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }

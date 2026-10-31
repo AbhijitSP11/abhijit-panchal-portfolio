@@ -44,7 +44,6 @@ const workTabs: Tab[] = [
   { key: "about", icon: "🙂", label: "about me", path: "about" },
   { key: "work-log", icon: "🗂️", label: "work log", path: "work-log" },
   { key: "stack", icon: "🧰", label: "stack", path: "stack" },
-  { key: "schooling", icon: "🎓", label: "schooling", path: "schooling" },
 ];
 
 /**
@@ -442,7 +441,7 @@ function Panel({ tabKey }: { tabKey: string }) {
                 style={job.logo ? undefined : { backgroundColor: ["#d62d46", "#c9584a", "#a8324a"][i % 3] }}
                 aria-hidden="true"
               >
-                {job.logo ? <Logo logo={job.logo} size={44} /> : job.company.slice(0, 1)}
+                {job.logo ? <Logo logo={job.logo} size={30} /> : job.company.slice(0, 1)}
               </span>
               <div className="min-w-0 flex-1">
                 <div className="text-lg font-medium tracking-tight sm:text-xl">

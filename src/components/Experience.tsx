@@ -96,7 +96,7 @@ export default function Experience() {
                   style={job.logo ? undefined : { backgroundColor: tints[i % tints.length] }}
                   aria-hidden="true"
                 >
-                  {job.logo ? <Logo logo={job.logo} size={44} /> : job.company.slice(0, 1)}
+                  {job.logo ? <Logo logo={job.logo} size={30} /> : job.company.slice(0, 1)}
                 </span>
 
                 <span

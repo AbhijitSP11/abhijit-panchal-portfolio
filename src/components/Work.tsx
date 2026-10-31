@@ -119,11 +119,11 @@ export default function Work() {
                 {/* who built it, and for whom */}
                 <div className="flex items-center justify-between gap-4 border-b border-ink/10 px-7 py-4">
                   <div className="flex items-center gap-3">
-                    <Logo logo={builder} size={54} />
+                    <Logo logo={builder} size={40} />
                     {client ? (
                       <>
-                        <span className="h-9 w-px bg-ink/25" aria-hidden="true" />
-                        <Logo logo={client} size={54} />
+                        <span className="h-8 w-px bg-ink/25" aria-hidden="true" />
+                        <Logo logo={client} size={40} />
                       </>
                     ) : null}
                   </div>

@@ -9,9 +9,9 @@
   /* blue */
   --color-accent: #d62d46;
   --color-accent-soft: #f0a0ac;
-  /* money going the right way: the graph and its figures */
-  --color-gain: #1a9150;
-  --color-gain-deep: #166534;
+  /* the hero graph and its notes */
+  --color-chart: #2563eb;
+  --color-chart-deep: #1d4ed8;
   --color-muted: #6b6d64;
   --color-muted-dark: #8d8f84;
 
