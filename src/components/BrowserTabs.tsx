@@ -16,6 +16,7 @@ import {
 import { builds } from "@/lib/building";
 import { scrollToY } from "@/lib/smooth";
 import Placeholder from "./Placeholder";
+import { PropVisual, MarketVisual, AsterVisual } from "./BuildVisuals";
 import Logo from "./Logo";
 import PolaroidLineCarousel from "@/components/ui/polaroid-line-carousel";
 
@@ -777,122 +778,138 @@ function TravelLine() {
 }
 
 /**
- * The independent projects as three blocks side by side. The hovered one opens
- * out to say what it is, what it is built with and where to read more; the
- * others fold down to a coloured spine. Nothing scrolls.
+ * The independent projects as three colour blocks side by side. The hovered
+ * one opens out: what it is, what it is built with, and a looping scene of the
+ * product doing its job. The others fold down to a spine and keep glowing, so
+ * the row always has something moving in it. Nothing scrolls.
  */
+const BUILD_LOOK: Record<string, { grad: string; text: string; scene: React.ReactNode }> = {
+  "prop-ai": {
+    grad: "linear-gradient(135deg,#065f46 0%,#0f9d6b 55%,#34d399 100%)",
+    text: "#065f46",
+    scene: <PropVisual />,
+  },
+  "market-ai": {
+    grad: "linear-gradient(135deg,#9f1239 0%,#e11d48 50%,#fb923c 100%)",
+    text: "#9f1239",
+    scene: <MarketVisual />,
+  },
+  aster: {
+    grad: "linear-gradient(135deg,#3730a3 0%,#4f6bed 55%,#22d3ee 100%)",
+    text: "#3730a3",
+    scene: <AsterVisual />,
+  },
+};
+
 function BuildStrip() {
   const [open, setOpen] = useState(0);
 
   return (
-    <div className="mt-6 flex h-[330px] gap-3 sm:h-[360px]">
-      {builds.map((b, i) => {
-        const isOpen = i === open;
-        return (
-          <article
-            key={b.id}
-            tabIndex={0}
-            onMouseEnter={() => setOpen(i)}
-            onFocus={() => setOpen(i)}
-            onClick={() => setOpen(i)}
-            aria-expanded={isOpen}
-            className={`relative cursor-pointer overflow-hidden rounded-2xl border outline-none transition-[flex-grow,box-shadow,transform] duration-500 ease-out focus-visible:ring-2 focus-visible:ring-accent ${
-              isOpen
-                ? "flex-[3.6] shadow-[0_26px_44px_-26px_rgba(0,0,0,0.45)]"
-                : "flex-[1] hover:-translate-y-1"
-            }`}
-            style={{
-              borderColor: isOpen ? b.accent : "rgba(36,38,32,0.12)",
-              backgroundColor: isOpen ? "#ffffff" : `${b.accent}14`,
-            }}
-          >
-            {/* accent edge */}
-            <span
-              className="absolute inset-x-0 top-0 h-1.5"
-              style={{ backgroundColor: b.accent }}
-              aria-hidden="true"
-            />
-
-            {/* folded: number and the name running up the spine */}
-            <div
-              className={`absolute inset-0 flex flex-col items-center justify-between px-2 pb-6 pt-7 transition-opacity duration-300 ${
-                isOpen ? "pointer-events-none opacity-0" : "opacity-100"
+    <div className="@container mt-6">
+      <div className="flex h-[340px] gap-3 sm:h-[372px]">
+        {builds.map((b, i) => {
+          const isOpen = i === open;
+          const look = BUILD_LOOK[b.id];
+          return (
+            <article
+              key={b.id}
+              tabIndex={0}
+              onMouseEnter={() => setOpen(i)}
+              onFocus={() => setOpen(i)}
+              onClick={() => setOpen(i)}
+              aria-expanded={isOpen}
+              className={`bv-grad relative cursor-pointer overflow-hidden rounded-2xl text-white outline-none transition-[flex-grow,box-shadow,transform] duration-500 ease-out focus-visible:ring-2 focus-visible:ring-ink ${
+                isOpen
+                  ? "flex-[3.6] shadow-[0_30px_50px_-24px_rgba(0,0,0,0.6)]"
+                  : "flex-[1] shadow-[0_16px_28px_-20px_rgba(0,0,0,0.55)] hover:-translate-y-1.5"
               }`}
+              style={{ backgroundImage: look.grad }}
             >
-              <span className="label" style={{ color: b.accent }}>
-                {String(i + 1).padStart(2, "0")}
-              </span>
+              {/* soft light, so the colour has depth */}
               <span
-                className="whitespace-nowrap text-lg font-medium tracking-tight"
-                style={{ writingMode: "vertical-rl", rotate: "180deg", color: b.accent }}
-              >
-                {b.name}
-              </span>
-            </div>
+                className="pointer-events-none absolute -right-10 -top-12 h-52 w-52 rounded-full bg-white/20 blur-3xl"
+                aria-hidden="true"
+              />
+              <span
+                className="pointer-events-none absolute -bottom-16 -left-10 h-48 w-48 rounded-full bg-black/20 blur-3xl"
+                aria-hidden="true"
+              />
 
-            {/* open: the project, told plainly */}
-            <div
-              className={`absolute inset-0 flex flex-col p-6 pt-8 transition-opacity duration-500 ${
-                isOpen ? "opacity-100 delay-150" : "pointer-events-none opacity-0"
-              }`}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <span className="label" style={{ color: b.accent }}>
-                    {String(i + 1).padStart(2, "0")} · {b.year}
-                  </span>
-                  <h4 className="mt-1.5 text-2xl font-medium leading-tight tracking-tight sm:text-3xl">
-                    {b.name}
-                  </h4>
-                </div>
+              {/* folded: number, a live dot, the name running up the spine */}
+              <div
+                className={`absolute inset-0 flex flex-col items-center justify-between px-2 pb-6 pt-6 transition-opacity duration-300 ${
+                  isOpen ? "pointer-events-none opacity-0" : "opacity-100"
+                }`}
+              >
+                <span className="label text-white/80">{String(i + 1).padStart(2, "0")}</span>
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-70" />
+                  <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
+                </span>
                 <span
-                  className="grid h-12 w-12 shrink-0 place-items-center rounded-full text-lg font-semibold text-white"
-                  style={{ backgroundColor: b.accent }}
-                  aria-hidden="true"
+                  className="whitespace-nowrap text-xl font-semibold tracking-tight"
+                  style={{ writingMode: "vertical-rl", rotate: "180deg" }}
                 >
-                  {b.name.slice(0, 1)}
+                  {b.name}
                 </span>
               </div>
 
-              <p className="mt-2 font-serif text-lg italic leading-snug" style={{ color: b.accent }}>
-                {b.tagline}
-              </p>
+              {/* open: the project, and the thing it does */}
+              <div
+                className={`absolute inset-0 flex items-center transition-opacity duration-500 ${
+                  isOpen ? "opacity-100 delay-150" : "pointer-events-none opacity-0"
+                }`}
+              >
+                <div className="flex h-full min-w-0 flex-1 flex-col p-6 @3xl:pr-2">
+                  <span className="label text-white/75">
+                    {String(i + 1).padStart(2, "0")} · {b.year}
+                  </span>
+                  <h4 className="mt-1.5 text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+                    {b.name}
+                  </h4>
+                  <p className="mt-1.5 font-serif text-lg italic leading-snug text-white/90">
+                    {b.tagline}
+                  </p>
+                  <p className="mt-3 line-clamp-5 text-[0.9rem] leading-relaxed text-white/85">
+                    {b.blurb}
+                  </p>
 
-              <p className="mt-3 line-clamp-6 text-[0.92rem] leading-relaxed text-ink/70">{b.blurb}</p>
-
-              <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-4">
-                <div className="flex flex-wrap gap-1.5">
-                  {b.stack.slice(0, 4).map((t) => (
-                    <span
-                      key={t}
-                      className="label !text-[0.65rem] border px-2 py-1"
-                      style={{ borderColor: `${b.accent}55`, color: b.accent }}
-                    >
-                      {t}
-                    </span>
-                  ))}
+                  <div className="mt-auto flex flex-wrap items-end justify-between gap-3 pt-4">
+                    <div className="flex flex-wrap gap-1.5">
+                      {b.stack.slice(0, 3).map((t) => (
+                        <span
+                          key={t}
+                          className="label !text-[0.65rem] rounded-full border border-white/45 bg-white/15 px-2.5 py-1 text-white backdrop-blur-sm"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    {b.caseStudy ? (
+                      <Link
+                        href={b.caseStudy}
+                        className="btn-fill !px-4 !py-2 text-sm font-medium"
+                        style={
+                          {
+                            "--btn-ink": "#ffffff",
+                            "--btn-fill": "#ffffff",
+                            "--btn-text": look.text,
+                          } as React.CSSProperties
+                        }
+                      >
+                        Case study
+                        <span className="btn-sep" aria-hidden="true">→</span>
+                      </Link>
+                    ) : null}
+                  </div>
                 </div>
-                {b.caseStudy ? (
-                  <Link
-                    href={b.caseStudy}
-                    className="btn-fill !px-4 !py-2 text-sm font-medium"
-                    style={
-                      {
-                        "--btn-ink": b.accent,
-                        "--btn-fill": b.accent,
-                        "--btn-text": "#ffffff",
-                      } as React.CSSProperties
-                    }
-                  >
-                    Case study
-                    <span className="btn-sep" aria-hidden="true">→</span>
-                  </Link>
-                ) : null}
+
+                <div className="bv-float mr-6 hidden shrink-0 @3xl:block">{look.scene}</div>
               </div>
-            </div>
-          </article>
-        );
-      })}
+            </article>
+          );
+        })}
+      </div>
     </div>
   );
 }

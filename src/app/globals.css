@@ -312,3 +312,31 @@ label[for] {
     transform: rotate(-3deg);
   }
 }
+
+/* Building tab: looping product scenes. 8s each; every step appears, holds, fades. */
+@keyframes bv-in-1{0%,3%{opacity:0;transform:translateY(10px) scale(.96)}8%,90%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(0) scale(1)}}
+.bv-s1{animation:bv-in-1 8s ease-out infinite both}
+@keyframes bv-in-2{0%,12%{opacity:0;transform:translateY(10px) scale(.96)}17%,90%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(0) scale(1)}}
+.bv-s2{animation:bv-in-2 8s ease-out infinite both}
+@keyframes bv-in-3{0%,24%{opacity:0;transform:translateY(10px) scale(.96)}29%,90%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(0) scale(1)}}
+.bv-s3{animation:bv-in-3 8s ease-out infinite both}
+@keyframes bv-in-4{0%,38%{opacity:0;transform:translateY(10px) scale(.96)}43%,90%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(0) scale(1)}}
+.bv-s4{animation:bv-in-4 8s ease-out infinite both}
+@keyframes bv-in-5{0%,52%{opacity:0;transform:translateY(10px) scale(.96)}57%,90%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(0) scale(1)}}
+.bv-s5{animation:bv-in-5 8s ease-out infinite both}
+@keyframes bv-in-6{0%,66%{opacity:0;transform:translateY(10px) scale(.96)}71%,90%{opacity:1;transform:none}96%,100%{opacity:0;transform:translateY(0) scale(1)}}
+.bv-s6{animation:bv-in-6 8s ease-out infinite both}
+@keyframes bv-draw{0%,4%{stroke-dashoffset:200}40%,90%{stroke-dashoffset:0}96%,100%{stroke-dashoffset:200}}
+.bv-draw{stroke-dasharray:200;animation:bv-draw 8s ease-in-out infinite}
+@keyframes bv-fill{0%,4%{transform:scaleX(0)}50%,90%{transform:scaleX(1)}96%,100%{transform:scaleX(0)}}
+.bv-fill{animation:bv-fill 8s ease-in-out infinite}
+@keyframes bv-type{0%,4%{width:0}26%,90%{width:100%}96%,100%{width:0}}
+.bv-type{width:0;overflow:hidden;white-space:nowrap;animation:bv-type 8s steps(24) infinite}
+@keyframes bv-shift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.bv-grad{background-size:170% 170%;animation:bv-shift 9s ease-in-out infinite}
+@keyframes bv-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.bv-float{animation:bv-float 5s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){
+  .bv-s1,.bv-s2,.bv-s3,.bv-s4,.bv-s5,.bv-s6,.bv-draw,.bv-fill,.bv-grad,.bv-float{animation:none;opacity:1;transform:none;stroke-dashoffset:0}
+  .bv-type{animation:none;width:100%}
+}
