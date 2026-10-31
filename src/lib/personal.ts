@@ -138,10 +138,8 @@ export type Artwork = {
 };
 
 export const artworks: Artwork[] = [
-  { title: "Untitled 01", medium: "Acrylic on canvas", src: null, tint: "#d62d46" },
-  { title: "Untitled 02", medium: "Watercolour", src: null, tint: "#9c4a6e" },
-  { title: "Untitled 03", medium: "Ink on paper", src: null, tint: "#2e3129" },
-  { title: "Untitled 04", medium: "Acrylic on canvas", src: null, tint: "#a8324a" },
+  { title: "Krishna with a lotus", medium: "Watercolour", src: "/art/krishna-lotus.jpg", tint: "#2e6fa8" },
+  { title: "Krishna and Radha", medium: "Watercolour", src: "/art/radha-krishna.jpg", tint: "#c9584a" },
 ];
 
 /** Portrait in the about tab. Drop a file in /public/photos and set `src`. */

@@ -700,12 +700,12 @@ function Panel({ tabKey }: { tabKey: string }) {
   if (interest.id === "paint") {
     return (
       <div className={panel}>
-        <div className="grid grid-cols-4 gap-2.5">
+        <div className="flex justify-center gap-4 md:justify-start">
           {artworks.map((a) => (
             <figure
               key={a.title}
               tabIndex={0}
-              className="group relative h-[240px] cursor-pointer overflow-hidden rounded-xl border border-ink/10 outline-none transition-transform duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-accent sm:h-[300px]"
+              className="group relative aspect-[3/4] h-[250px] cursor-pointer overflow-hidden rounded-xl border border-ink/10 shadow-[0_22px_38px_-22px_rgba(0,0,0,0.5)] outline-none transition-transform duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-accent sm:h-[320px]"
             >
               <div className="h-full w-full transition-transform duration-700 group-hover:scale-105">
                 {a.src ? (
