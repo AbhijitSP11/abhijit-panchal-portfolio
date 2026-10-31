@@ -73,14 +73,15 @@ export default function Contact() {
             className="magnetic btn-fill text-base font-medium text-ink"
           >
             {profile.email}
-            <span aria-hidden="true">→</span>
+            <span className="btn-sep" aria-hidden="true">→</span>
           </a>
           <a
             href="/Abhijit_Panchal_Resume.pdf"
             download
             className="btn-fill group text-base font-medium text-ink"
           >
-            <svg
+            <span className="btn-sep-left" aria-hidden="true">
+                  <svg
               viewBox="0 0 24 24"
               className="h-4 w-4 transition-transform group-hover:translate-y-0.5"
               fill="none"
@@ -94,6 +95,7 @@ export default function Contact() {
               <path d="m7 10 5 5 5-5" />
               <path d="M5 21h14" />
             </svg>
+                </span>
             Download resume
           </a>
           <a

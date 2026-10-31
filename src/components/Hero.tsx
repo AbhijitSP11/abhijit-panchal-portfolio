@@ -94,7 +94,7 @@ export default function Hero() {
       <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* copy — nudged in from the edge so the name sits nearer the middle */}
-          <div className="lg:col-span-7 lg:col-start-2">
+          <div className="lg:col-span-7">
             <p className="hero-fade label text-muted">{profile.role}</p>
 
             <div className="relative mt-6 inline-block">
@@ -133,7 +133,8 @@ export default function Hero() {
                 download
                 className="hero-fade btn-fill group text-sm font-medium text-ink"
               >
-                <svg
+                <span className="btn-sep-left" aria-hidden="true">
+                  <svg
                   viewBox="0 0 24 24"
                   className="h-4 w-4 transition-transform group-hover:translate-y-0.5"
                   fill="none"
@@ -147,6 +148,7 @@ export default function Hero() {
                   <path d="m7 10 5 5 5-5" />
                   <path d="M5 21h14" />
                 </svg>
+                </span>
                 Download resume
               </a>
               <a
@@ -154,7 +156,7 @@ export default function Hero() {
                 className="hero-fade btn-fill text-sm font-medium text-ink"
               >
                 See the work
-                <span aria-hidden="true">↓</span>
+                <span className="btn-sep" aria-hidden="true">↓</span>
               </a>
             </div>
           </div>

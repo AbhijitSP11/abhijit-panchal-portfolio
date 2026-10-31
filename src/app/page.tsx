@@ -25,10 +25,19 @@ export default function Home() {
         <Marquee />
 
         <WordScroll
+          kicker="The job, in one line"
           words={["every", "rupee", "has", "to", "land", "where", "it", "should."]}
           accentAt={[5, 6, 7]}
+          tags={[
+            "reconciliation",
+            "billing",
+            "securities settlement",
+            "100,000+ rows a night",
+            "maker-checker",
+            "SWIFT MT/MX",
+          ]}
           footnote="keep scrolling ↓"
-          length={2.6}
+          length={1.9}
         />
 
         {/* each section resolves from blurred to sharp as it comes into view */}

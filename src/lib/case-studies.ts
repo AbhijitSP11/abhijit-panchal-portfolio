@@ -255,6 +255,83 @@ export const caseStudies: CaseStudy[] = [
     stack: ["React", "Redux", "AG Grid", "C# / .NET", "SWIFT MT/MX"],
   },
   {
+    slug: "ai-platform",
+    title: "Taiyo.AI — AI Infrastructure Platform",
+    lede: "An agent that does the digging, over 25 million records.",
+    blurb:
+      "An infrastructure-intelligence platform with an AI agent that plans a question, calls the right tools in sequence, and assembles the answer.",
+    accent: "#b05a7a",
+    meta: [
+      { label: "Role", value: "Frontend engineer" },
+      { label: "Company", value: "Taiyo.AI" },
+      { label: "Where", value: "San Francisco (remote)" },
+      { label: "Scale", value: "25M+ records, 50+ clients" },
+      { label: "Year", value: "2023 — 2024" },
+    ],
+    overview: {
+      heading: "Infrastructure intelligence, and the time it took.",
+      body: [
+        "Taiyo.AI sells intelligence on infrastructure projects — tenders, contracts, spend — to enterprise clients deciding where to bid. The value is in the dataset: tens of millions of records, across countries and languages.",
+        "The problem was never whether the answer was in there. It was how long it took an analyst to assemble it: roughly four hours of searching, filtering and cross-referencing for a single usable insight.",
+      ],
+    },
+    problem: {
+      heading: "The problem",
+      question: "How do you answer a question that needs five searches, not one?",
+      body: "Real questions decompose. 'Which water projects in these three states slipped last quarter, and who won them' is a search, a filter, a join and a summary. A single prompt against a single index answers none of it.",
+    },
+    insights: [
+      { n: "01", text: "Analysts were not short of data. They were short of the hours it took to assemble it." },
+      { n: "02", text: "One prompt, one answer does not survive a question with several steps in it." },
+      { n: "03", text: "At 25M records, latency is the product — a correct answer after five seconds is still a bad experience." },
+    ],
+    iterations: [
+      {
+        label: "Pass 01",
+        title: "Make the search fast enough to build on",
+        points: [
+          "Profiled the Elasticsearch queries behind the slowest screens and found the bottlenecks were in how the queries were shaped, not the cluster size.",
+          "Designed multi-tier caching so repeated and near-repeated queries do not touch the index.",
+        ],
+        outcome:
+          "API latency fell from 5s to 0.8s and infrastructure spend by $3,200 a month.",
+        outcomeKind: "win",
+      },
+      {
+        label: "Pass 02",
+        title: "An agent that calls tools, not a chatbot",
+        points: [
+          "Exposed the platform's own capabilities — search, filter, aggregate, summarise — as tools the model can call.",
+          "The agent plans a question into steps, calls each tool in turn, and assembles the result from what comes back.",
+          "Every step is inspectable, so an analyst can see which searches produced the answer rather than trusting a paragraph.",
+        ],
+        outcome:
+          "Four hours of manual assembly became about three minutes of agent work.",
+        outcomeKind: "win",
+      },
+      {
+        label: "Pass 03",
+        title: "Making the generated text trustworthy",
+        points: [
+          "Built a Gen-AI news module on OpenAI streaming APIs for 100+ users.",
+          "A/B-tested prompt variants against a fixed question set rather than tuning by feel.",
+          "Cut token costs 45% by trimming context to what each step actually needed.",
+        ],
+        outcome: "Hallucination rate fell from 12% to 7.8% on the evaluation set.",
+        outcomeKind: "win",
+      },
+    ],
+    results: [
+      { value: "4h → 3min", label: "to a usable insight" },
+      { value: "5s → 0.8s", label: "API latency" },
+      { value: "45%", label: "lower token cost" },
+      { value: "50+", label: "enterprise clients served" },
+    ],
+    closing:
+      "The agent was the interesting part. Letting a model call the platform's own tools, in an order it chooses, turned a search product into something that answers the question you actually asked.",
+    stack: ["React", "Elasticsearch", "Redis", "OpenAI", "Python"],
+  },
+  {
     slug: "aster",
     title: "Aster — AI Project Management",
     lede: "Ask a question in English. Get the right rows back.",

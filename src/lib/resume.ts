@@ -42,6 +42,8 @@ export type Project = {
   status: "In production" | "Rolling out" | "Delivered";
   /** Short pull-outs the eye can land on before reading anything. */
   highlights: string[];
+  /** Phrases inside the blurb to pick out. */
+  marks: string[];
   /** The handwritten note pointing at the card's numbers. */
   note: string;
 };
@@ -49,6 +51,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: "recon",
+    marks: ["three independent sources","every mismatch"],
     status: "In production",
     highlights: ["3 sources","binary parsers","zero silent drops"],
     note: "every mismatch, accounted for",
@@ -75,6 +78,7 @@ export const projects: Project[] = [
   },
   {
     id: "billing",
+    marks: ["what each bank owes","evidences every line"],
     status: "In production",
     highlights: ["multi-tenant","idempotent","maker-checker"],
     note: "this one replaced a spreadsheet",
@@ -102,6 +106,7 @@ export const projects: Project[] = [
   },
   {
     id: "mirae",
+    marks: ["safekeeps bonds","settles their trades","three countries"],
     status: "Delivered",
     highlights: ["SWIFT MT/MX","2 regulators","AG Grid"],
     note: "shipped across three time zones",
@@ -124,6 +129,32 @@ export const projects: Project[] = [
     metrics: [
       { value: "33+", label: "interactive screens" },
       { value: "3", label: "countries, one team" },
+    ],
+  },
+  {
+    id: "taiyo",
+    marks: ["25M+ records","calls the right tools"],
+    status: "Delivered",
+    highlights: ["agentic tool-calls", "25M+ records", "4h → 3min"],
+    note: "the agent does the digging now",
+    slug: "ai-platform",
+    index: "04",
+    eyebrow: "B2B SaaS · AI Infrastructure",
+    title: "Taiyo.AI — AI Infrastructure Platform",
+    org: "Taiyo.AI · San Francisco",
+    year: "2023 — 2024",
+    accent: "#b05a7a",
+    blurb:
+      "An infrastructure-intelligence platform over 25M+ records, with an AI agent that plans a question, calls the right tools and comes back with an answer.",
+    stack: ["React", "Elasticsearch", "Redis", "OpenAI", "Python"],
+    points: [
+      "Built an AI agent that decomposes a question, calls search, filter and summarise tools in sequence, and assembles the result — rather than answering from a single prompt.",
+      "Diagnosed Elasticsearch bottlenecks and designed multi-tier caching: API latency 5s to 0.8s, infrastructure spend down $3,200 a month.",
+    ],
+    metrics: [
+      { value: "25M+", label: "records searched" },
+      { value: "4h → 3min", label: "to an insight" },
+      { value: "50+", label: "enterprise clients" },
     ],
   },
 ];

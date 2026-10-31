@@ -458,7 +458,7 @@ function Panel({ tabKey }: { tabKey: string }) {
               className="btn-fill text-sm font-medium text-ink"
             >
               View on GitHub
-              <span aria-hidden="true">↗</span>
+              <span className="btn-sep" aria-hidden="true">↗</span>
             </a>
             <Link
               href="/work/aster"
@@ -466,7 +466,7 @@ function Panel({ tabKey }: { tabKey: string }) {
               style={{ "--btn-fill": "var(--color-accent)" } as React.CSSProperties}
             >
               Read the case study
-              <span aria-hidden="true">→</span>
+              <span className="btn-sep" aria-hidden="true">→</span>
             </Link>
           </div>
         </div>

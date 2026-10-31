@@ -128,7 +128,7 @@ export default function CaseStudyView({
             href="/#work"
             className="btn-fill label !px-4 !py-2 text-ink"
           >
-            Close <span aria-hidden="true">×</span>
+            Close <span className="btn-sep" aria-hidden="true">×</span>
           </Link>
         </div>
       </div>

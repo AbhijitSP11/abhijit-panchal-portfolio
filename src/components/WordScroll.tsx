@@ -12,6 +12,10 @@ type Props = {
   length?: number;
   dark?: boolean;
   footnote?: string;
+  /** Small label above the words. */
+  kicker?: string;
+  /** Chips under the words, so the panel is not all whitespace. */
+  tags?: string[];
 };
 
 /**
@@ -25,6 +29,8 @@ export default function WordScroll({
   length = 2.4,
   dark = false,
   footnote,
+  kicker,
+  tags = [],
 }: Props) {
   const root = useRef<HTMLElement>(null);
 
@@ -84,6 +90,14 @@ export default function WordScroll({
     >
       <div className="sticky top-0 flex h-[100svh] items-center justify-center px-5 sm:px-8">
         <div className="mx-auto max-w-5xl text-center">
+          {kicker ? (
+            <div
+              className={`label mb-8 ${dark ? "text-paper/45" : "text-ink/55"}`}
+            >
+              {kicker}
+            </div>
+          ) : null}
+
           <p className="flex flex-wrap items-baseline justify-center gap-x-[0.28em] gap-y-1 text-[9vw] font-medium leading-[1.06] tracking-tight sm:text-[7vw] lg:text-[5.4vw]">
             {words.map((w, i) => (
               <span
@@ -99,9 +113,26 @@ export default function WordScroll({
             ))}
           </p>
 
+          {tags.length ? (
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
+              {tags.map((t) => (
+                <span
+                  key={t}
+                  className={`label border px-3 py-1.5 ${
+                    dark
+                      ? "border-paper/20 text-paper/65"
+                      : "border-ink/15 text-ink/60"
+                  }`}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          ) : null}
+
           {footnote ? (
             <p
-              className={`ws-foot label mt-12 ${
+              className={`ws-foot label mt-8 ${
                 dark ? "text-paper/45" : "text-muted"
               }`}
             >

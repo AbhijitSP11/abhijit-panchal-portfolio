@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap, registerGsap, prefersReducedMotion, revealUp } from "@/lib/anim";
 import { experience } from "@/lib/resume";
+import CountUp from "./CountUp";
 
 const tints = ["#1d4ed8", "#4f46e5", "#7c3aed"];
 
@@ -132,7 +133,7 @@ export default function Experience() {
                         className="text-2xl font-medium tracking-tight"
                         style={{ color: tints[i % tints.length] }}
                       >
-                        {job.metric}
+                        <CountUp value={job.metric} />
                       </div>
                       <div className="label mt-1 max-w-[20ch] leading-relaxed text-muted">
                         {job.metricLabel}
