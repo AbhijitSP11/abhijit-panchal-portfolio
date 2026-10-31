@@ -170,41 +170,6 @@ export default function MiraeCaseStudy({ onClose }: { onClose: () => void }) {
             </ol>
           </section>
 
-          {/* architecture */}
-          <section>
-            <h3 className="font-serif text-3xl leading-tight tracking-tight sm:text-4xl">
-              {c.architecture.heading}
-            </h3>
-            <figure className="mt-8">
-              <div className="overflow-hidden rounded-xl border border-ink/10 bg-white p-4 shadow-[0_24px_44px_-28px_rgba(0,0,0,0.45)] sm:p-8">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={c.architecture.image}
-                  alt={c.architecture.alt}
-                  className="mx-auto h-auto w-full max-w-3xl"
-                  loading="lazy"
-                />
-              </div>
-              <figcaption className="hand mt-3 text-lg text-ink/55">{c.architecture.caption}</figcaption>
-            </figure>
-            <ul className="mt-6 grid gap-4 sm:grid-cols-3">
-              {c.architecture.callouts.map((k) => (
-                <li key={k.n} className="flex gap-3">
-                  <span
-                    className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-sm font-semibold text-white"
-                    style={{ backgroundColor: c.accent }}
-                  >
-                    {k.n}
-                  </span>
-                  <div>
-                    <div className="font-medium">{k.title}</div>
-                    <div className="mt-0.5 text-sm leading-relaxed text-ink/65">{k.text}</div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </section>
-
           {/* my part + outcomes */}
           <section className="grid gap-10 md:grid-cols-2 md:gap-14">
             <div>

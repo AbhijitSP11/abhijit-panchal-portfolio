@@ -92,18 +92,6 @@ export const miraeCase = {
     ],
   },
 
-  architecture: {
-    heading: "How the pieces connect.",
-    image: "/case/swift-architecture.png",
-    alt: "Diagram: the back office and its API client connect through a VPN and API gateway to application channels on SWIFT's Alliance Cloud service, which reaches the SWIFT network.",
-    caption: "SWIFT's recommended pattern for Messaging API 2.0 on Alliance Cloud.",
-    callouts: [
-      { n: "1", title: "Alliance Cloud", text: "SWIFT's hosted service, and the route to the network." },
-      { n: "2", title: "API gateway", text: "A secured VPN link between the bank and SWIFT." },
-      { n: "3", title: "Application channels", text: "Separate channels so message flows stay isolated." },
-    ],
-  },
-
   mine: {
     heading: "What I built.",
     points: [
