@@ -10,7 +10,7 @@ import Stats from "@/components/Stats";
 import Work from "@/components/Work";
 import Experience from "@/components/Experience";
 import TabsWindow from "@/components/TabsWindow";
-import OffTheClock from "@/components/OffTheClock";
+import LifeTabs from "@/components/LifeTabs";
 import Contact from "@/components/Contact";
 
 export default function Home() {
@@ -49,9 +49,9 @@ export default function Home() {
           <TabsWindow />
         </BlurIn>
 
-        <BlurIn>
-          <OffTheClock />
-        </BlurIn>
+        {/* not wrapped in BlurIn: the section pins itself with position:sticky,
+            and an ancestor carrying a filter confines that stickiness */}
+        <LifeTabs />
 
         <WordScroll
           words={[

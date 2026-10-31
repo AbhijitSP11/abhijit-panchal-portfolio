@@ -18,59 +18,93 @@ export const offTheClockIntro = {
 export type Interest = {
   id: string;
   icon: "pan" | "camera" | "film" | "brush" | "trail" | "chart";
+  /** Tab label in the browser chrome. */
+  tab: string;
+  /** Path segment shown in the fake address bar. */
+  path: string;
   title: string;
   line: string;
   detail: string;
+  /** A picture for this interest; null draws a placeholder. */
+  image: string | null;
+  tint: string;
+  /** Small chips under the copy. */
+  chips?: string[];
 };
 
 export const interests: Interest[] = [
   {
     id: "cook",
     icon: "pan",
+    tab: "kitchen",
+    path: "kitchen",
     title: "I cook",
     line: "dal khichdi & uttapam",
     detail:
       "A properly good bowl of dal khichdi is my house speciality, and I will argue about the tempering. Uttapam is the other one I have got down.",
+    image: null,
+    tint: "#b05a7a",
+    chips: ["Dal khichdi", "Uttapam", "Opinions about tempering"],
   },
   {
     id: "photo",
     icon: "camera",
+    tab: "camera roll",
+    path: "photos",
     title: "I shoot",
     line: "usually other people's profiles",
     detail:
       "I take the pictures; my friends post them. A fair trade, mostly. Faces, streets, and whatever the light is doing that evening.",
+    image: null,
+    tint: "#4f46e5",
   },
   {
     id: "film",
     icon: "film",
+    tab: "watchlist",
+    path: "films",
     title: "I watch",
     line: "films, properly",
     detail:
       "Not background noise — phone away, lights off. I will happily lose an evening to something slow if the craft is there.",
+    image: null,
+    tint: "#1d4ed8",
   },
   {
     id: "paint",
     icon: "brush",
+    tab: "studio",
+    path: "paintings",
     title: "I paint",
     line: "when I need to think",
     detail:
       "The one hobby with no keyboard. It is the closest thing I have to switching the analytical part off for a few hours.",
+    image: null,
+    tint: "#7c3aed",
   },
   {
     id: "travel",
     icon: "trail",
+    tab: "trips",
+    path: "trips",
     title: "I travel",
     line: "beaches, and the odd trek",
     detail:
       "Give me a free weekend and I am on a beach somewhere within reach. In between, the Sahyadris around Mumbai and Pune.",
+    image: null,
+    tint: "#2e5f8a",
   },
   {
     id: "markets",
     icon: "chart",
+    tab: "markets",
+    path: "markets",
     title: "I trade",
     line: "and read far too much research",
     detail:
       "Building for banks all day turned into an actual interest in markets. I research, I take positions, and I keep notes on both.",
+    image: null,
+    tint: "#166534",
   },
 ];
 
