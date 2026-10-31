@@ -5,12 +5,11 @@ import {
   gsap,
   registerGsap,
   prefersReducedMotion,
-  splitWords,
   onPreloaderDone,
 } from "@/lib/anim";
 import { profile } from "@/lib/resume";
 import HeroFrames from "./HeroFrames";
-import PuzzleCube from "./PuzzleCube";
+import UntangleThread from "./UntangleThread";
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -33,10 +32,6 @@ export default function Hero() {
           gsap.set(squiggle.current, { strokeDasharray: len, strokeDashoffset: len });
         }
 
-        const sub = root.current?.querySelector<HTMLElement>(".hero-sub");
-        const subWords = sub ? splitWords(sub) : [];
-        if (sub) sub.style.opacity = "1";
-
         if (reduced) {
           gsap.set(
             [".hero-fade", ".hero-hey", ".hf-card", ".hero-meta", ".hero-cue"],
@@ -56,7 +51,6 @@ export default function Hero() {
             0.5
           )
           .from(letters, { yPercent: 118, duration: 1.1, stagger: 0.035 }, 0.3)
-          .from(subWords, { yPercent: 115, duration: 0.9, stagger: 0.03 }, 0.8)
           .from(
             ".hf-card",
             { opacity: 0, y: 46, scale: 0.92, duration: 1.1, stagger: 0.12 },
@@ -123,12 +117,10 @@ export default function Hero() {
               Abhijit<span className="text-accent">.</span>
             </h1>
 
-            <p className="hero-sub reveal-ready mt-8 max-w-xl text-balance text-lg leading-relaxed text-muted sm:text-xl">
-              I build reconciliation, billing and settlement platforms for banks
-              and capital-markets firms — end to end.
-            </p>
+            {/* a knot that sorts itself out, in place of a sentence */}
+            <UntangleThread className="mt-6 h-[130px] w-full max-w-xl text-ink sm:h-[160px]" />
 
-            <div className="mt-9 flex flex-wrap items-center gap-3">
+            <div className="mt-7 flex flex-wrap items-center gap-3">
               <a
                 href="/Abhijit_Panchal_Resume.pdf"
                 download
@@ -164,12 +156,7 @@ export default function Hero() {
 
           {/* the cube sorts itself out, then the frames below it */}
           <div className="lg:col-span-5">
-            <PuzzleCube
-              className="hero-cube mx-auto [--pc-size:170px] sm:[--pc-size:200px]"
-            />
-            <div className="mt-6">
-              <HeroFrames />
-            </div>
+            <HeroFrames />
           </div>
         </div>
       </div>
