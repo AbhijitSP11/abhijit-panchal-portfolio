@@ -163,78 +163,61 @@ export const photos: Photo[] = [
 ];
 
 /**
- * Travel prints on the hanging line. `image` is null until you drop a photo
- * into /public/photos and fill the path; until then the carousel paints a
- * landscape from `palette` and `seed`, so the line is never empty.
+ * The prints on the hanging line: real photographs from the trips, in
+ * /public/photos/trips. Captions describe what each one shows rather than
+ * naming a place, since the file names alone do not say where they were taken
+ * — put a location in `where` when you want one shown.
  */
 export type Place = {
+  /** The print's title, written under the photograph. */
   name: string;
-  kind: "Beach" | "Trek";
-  near: string;
+  kind: "Beach" | "City" | "Hills";
   caption: string;
-  palette: "dawn" | "alpine" | "dusk" | "mist";
-  seed: number;
-  image: string | null;
+  image: string;
+  /** Optional: where it was taken. Shown after the kind when set. */
+  where?: string;
 };
 
 export const travel = {
   line: "beaches first, hills second",
   places: [
     {
-      name: "Alibaug",
+      name: "Last light",
       kind: "Beach",
-      near: "Raigad",
-      caption: "The default weekend. Ferry across, and the week is gone.",
-      palette: "dawn",
-      seed: 3,
-      image: null,
+      caption: "Palms against the last of the sun.",
+      image: "/photos/trips/cabo.jpeg",
     },
     {
-      name: "Kashid",
+      name: "Blue hour",
+      kind: "City",
+      caption: "The Taj, lit up after dark.",
+      image: "/photos/trips/taj.jpeg",
+    },
+    {
+      name: "Quiet shore",
       kind: "Beach",
-      near: "Raigad",
-      caption: "Quieter sand than Alibaug, if you leave early enough.",
-      palette: "dusk",
-      seed: 8,
-      image: null,
+      caption: "Clouds stacking up over an empty stretch of sand.",
+      image: "/photos/trips/beach.jpeg",
     },
     {
-      name: "Gokarna",
-      kind: "Beach",
-      near: "Karnataka",
-      caption: "Worth the overnight. Four beaches, one long walk.",
-      palette: "dawn",
-      seed: 14,
-      image: null,
+      name: "Above the cloud",
+      kind: "Hills",
+      caption: "A bridge disappearing into the monsoon.",
+      image: "/photos/trips/bridge.jpeg",
     },
     {
-      name: "Rajmachi",
-      kind: "Trek",
-      near: "Pune",
-      caption: "Monsoon green, and the fort still up there in the cloud.",
-      palette: "alpine",
-      seed: 21,
-      image: null,
+      name: "Golden hour",
+      kind: "City",
+      caption: "Mumbai's skyline against the evening sea.",
+      image: "/photos/trips/marine.jpeg",
     },
     {
-      name: "Kalsubai",
-      kind: "Trek",
-      near: "Nashik",
-      caption: "The highest point in Maharashtra. Ladders near the top.",
-      palette: "mist",
-      seed: 34,
-      image: null,
+      name: "After the rain",
+      kind: "Hills",
+      caption: "Green ridges, and a village tucked below.",
+      image: "/photos/trips/mountain.jpeg",
     },
-    {
-      name: "Sandhan Valley",
-      kind: "Trek",
-      near: "Pune",
-      caption: "A canyon you walk down into. Cold, narrow, no phone signal.",
-      palette: "alpine",
-      seed: 55,
-      image: null,
-    },
-  ] satisfies Place[],
+  ] as Place[],
   note: "Almost every trip ends up pointed at a beach. The treks happen when the Sahyadris are green and somebody talks me into waking up at four.",
 };
 

@@ -270,3 +270,45 @@ label[for] {
 .btn-fill:focus-visible {
   color: var(--btn-text, #ffffff);
 }
+
+/* ---- Hero portrait -----------------------------------------------------------
+   The tilt and the shadow are driven by --rx/--ry/--sx/--sy, written by
+   HeroPortrait on pointer move. At rest it sits a few degrees off-square with a
+   soft shadow; on hover it straightens, lifts, and the shadow deepens and
+   slides against the tilt. */
+.hp-print {
+  --rx: 0deg;
+  --ry: 0deg;
+  --sx: 0px;
+  --sy: 30px;
+  --gx: 50%;
+  --gy: 50%;
+  transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry)) rotate(-3deg) scale(1);
+  box-shadow:
+    var(--sx) var(--sy) 54px -26px rgba(36, 38, 32, 0.55),
+    0 2px 6px rgba(36, 38, 32, 0.12);
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+.hp-print:hover {
+  transform: perspective(1000px) rotateX(var(--rx)) rotateY(var(--ry)) rotate(0deg) scale(1.045);
+  box-shadow:
+    var(--sx) calc(var(--sy) + 16px) 76px -24px rgba(36, 38, 32, 0.62),
+    0 6px 14px rgba(36, 38, 32, 0.16);
+}
+.hp-sheen {
+  background: radial-gradient(
+    circle at var(--gx) var(--gy),
+    rgba(255, 255, 255, 0.5),
+    rgba(255, 255, 255, 0) 58%
+  );
+}
+@media (prefers-reduced-motion: reduce) {
+  .hp-print,
+  .hp-print:hover {
+    transition: none;
+    transform: rotate(-3deg);
+  }
+}
