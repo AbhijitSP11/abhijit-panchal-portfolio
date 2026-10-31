@@ -882,7 +882,13 @@ function FilmStrip() {
                 alt=""
                 aria-hidden="true"
                 draggable={false}
-                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${isOpen ? "opacity-100" : "opacity-40"}`}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${isOpen ? "opacity-100" : "opacity-45"}`}
+              />
+            ) : null}
+            {f.poster ? (
+              <span
+                className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"
+                aria-hidden="true"
               />
             ) : null}
             <span
@@ -896,7 +902,7 @@ function FilmStrip() {
               }`}
             >
               <span
-                className="label whitespace-nowrap text-muted"
+                className={`label whitespace-nowrap ${f.poster ? "text-white [text-shadow:0_1px_6px_rgba(0,0,0,.8)]" : "text-muted"}`}
                 style={{ writingMode: "vertical-rl", rotate: "180deg" }}
               >
                 {f.title}
@@ -914,11 +920,11 @@ function FilmStrip() {
                 {String(i + 1).padStart(2, "0")}
               </span>
               <span className="block">
-                <span className="label block text-muted">{f.year}</span>
-                <span className="mt-1.5 block text-xl font-medium leading-tight tracking-tight sm:text-2xl">
+                <span className={`label block ${f.poster ? "text-white/75" : "text-muted"}`}>{f.year}</span>
+                <span className={`mt-1.5 block text-xl font-medium leading-tight tracking-tight sm:text-2xl ${f.poster ? "text-white" : ""}`}>
                   {f.title}
                 </span>
-                <span className="mt-2 block max-w-xs text-xs leading-relaxed text-muted">
+                <span className={`mt-2 block max-w-xs text-xs leading-relaxed ${f.poster ? "text-white/80" : "text-muted"}`}>
                   {f.note}
                 </span>
               </span>

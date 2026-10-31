@@ -122,12 +122,12 @@ export type Film = {
 };
 
 export const films: Film[] = [
-  { title: "Business Proposal", year: "2022", note: "The comfort watch: a rom-com that never takes itself seriously.", tint: "#d62d46" },
-  { title: "Musafir Cafe", year: "—", note: "Slow, warm and easy to rewatch.", tint: "#c9584a" },
-  { title: "Jubilee", year: "2023", note: "Old Bollywood, and the craft behind building it.", tint: "#a8324a" },
-  { title: "Goblin", year: "2016", note: "Fantasy, grief and a long wait, all in one drama.", tint: "#9c4a6e" },
-  { title: "Naruto", year: "2002", note: "The one I grew up on, and still the one I recommend first.", tint: "#d9680c" },
-  { title: "The Hangover", year: "2009", note: "Switch your brain off and laugh.", tint: "#8a5a5e" },
+  { title: "Business Proposal", year: "2022", note: "The comfort watch: a rom-com that never takes itself seriously.", tint: "#d62d46", poster: "/posters/business-proposal.jpg" },
+  { title: "Musafir Cafe", year: "—", note: "Slow, warm and easy to rewatch.", tint: "#c9584a", poster: "/posters/musafir-cafe.jpg" },
+  { title: "Jubilee", year: "2023", note: "Old Bollywood, and the craft behind building it.", tint: "#a8324a", poster: "/posters/jubilee.jpg" },
+  { title: "Goblin", year: "2016", note: "Fantasy, grief and a long wait, all in one drama.", tint: "#9c4a6e", poster: "/posters/goblin.jpg" },
+  { title: "Naruto", year: "2002", note: "The one I grew up on, and still the one I recommend first.", tint: "#d9680c", poster: "/posters/naruto.jpg" },
+  { title: "The Hangover", year: "2009", note: "Switch your brain off and laugh.", tint: "#8a5a5e", poster: "/posters/the-hangover.jpg" },
 ];
 
 export type Artwork = {
