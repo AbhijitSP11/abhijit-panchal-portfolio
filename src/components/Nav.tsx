@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap, registerGsap, ScrollTrigger, onPreloaderDone } from "@/lib/anim";
 import { profile } from "@/lib/resume";
+import { mailtoHref, openMail } from "@/lib/mail";
 
 const links = [
   { href: "#work", label: "work" },
@@ -131,7 +132,8 @@ export default function Nav() {
             </a>
 
             <a
-              href={`mailto:${profile.email}`}
+              href={mailtoHref}
+              onClick={openMail}
               className={`label hidden whitespace-nowrap border px-4 py-2 transition-colors sm:inline-block ${
                 lightPill
                   ? "bg-paper text-ink hover:bg-accent hover:text-paper"
@@ -186,8 +188,11 @@ export default function Nav() {
           Download resume <span aria-hidden="true">↓</span>
         </a>
         <a
-          href={`mailto:${profile.email}`}
-          onClick={() => setOpen(false)}
+          href={mailtoHref}
+          onClick={(e) => {
+            openMail(e);
+            setOpen(false);
+          }}
           className="m-item mt-5 break-all text-base text-accent"
         >
           {profile.email}

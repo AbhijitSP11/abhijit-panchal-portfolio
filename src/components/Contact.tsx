@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap, registerGsap, revealWords, revealUp } from "@/lib/anim";
 import { profile } from "@/lib/resume";
+import { mailtoHref, openMail } from "@/lib/mail";
 
 export default function Contact() {
   const root = useRef<HTMLElement>(null);
@@ -44,7 +45,8 @@ export default function Contact() {
 
         <div className="ct-fade reveal-ready mt-12 flex flex-wrap items-center gap-4">
           <a
-            href={`mailto:${profile.email}`}
+            href={mailtoHref}
+              onClick={openMail}
             className="btn-fill text-base font-medium text-ink"
           >
             {profile.email}
