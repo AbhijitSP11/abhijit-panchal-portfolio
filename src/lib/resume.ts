@@ -61,7 +61,7 @@ export const projects: Project[] = [
     title: "CMS — Reconciliation Platform",
     org: "Oneture Technologies · UBI Bank",
     year: "2025 — Present",
-    accent: "#e0702f",
+    accent: "#d62d46",
     blurb:
       "A reconciliation platform whose matching logic pairs transaction records across three independent sources and flags every mismatch across lakhs of rows.",
     stack: ["Python", "PostgreSQL", "Binary parsing", "Excel"],
@@ -88,7 +88,7 @@ export const projects: Project[] = [
     title: "CMS — Enterprise Billing Platform",
     org: "Oneture Technologies · Axis Bank, SBI",
     year: "2025",
-    accent: "#c08344",
+    accent: "#c9584a",
     blurb:
       "Calculates what each bank owes every month for cash management and cash van services, issues the invoice, and evidences every line — replacing a spreadsheet-and-email process.",
     stack: ["Python", "FastAPI", "Celery", "PostgreSQL", "React", "Vite"],
@@ -116,7 +116,7 @@ export const projects: Project[] = [
     title: "Mirae Asset — Bond Custodian Platform",
     org: "Oneture Technologies · South Korea & Brazil",
     year: "2024 — 2025",
-    accent: "#a8584f",
+    accent: "#a8324a",
     blurb:
       "A bond custodian platform that safekeeps bonds for investors and settles their trades, delivered by a small cross-functional team spread across three countries.",
     stack: ["React", "Redux", "AG Grid", "C# / .NET", "SWIFT MT/MX"],
@@ -143,7 +143,7 @@ export const projects: Project[] = [
     title: "Taiyo.AI — AI Infrastructure Platform",
     org: "Taiyo.AI · San Francisco",
     year: "2023 — 2024",
-    accent: "#a9607a",
+    accent: "#9c4a6e",
     blurb:
       "An infrastructure-intelligence platform over 25M+ records, with an AI agent that plans a question, calls the right tools and comes back with an answer.",
     stack: ["React", "Elasticsearch", "Redis", "OpenAI", "Python"],

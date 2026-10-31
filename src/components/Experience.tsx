@@ -5,7 +5,7 @@ import { gsap, registerGsap, prefersReducedMotion, revealUp } from "@/lib/anim";
 import { experience } from "@/lib/resume";
 import CountUp from "./CountUp";
 
-const tints = ["#e0702f", "#c08344", "#a8584f"];
+const tints = ["#d62d46", "#c9584a", "#a8324a"];
 
 export default function Experience() {
   const root = useRef<HTMLElement>(null);

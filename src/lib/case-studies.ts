@@ -35,7 +35,7 @@ export const caseStudies: CaseStudy[] = [
     lede: "Three sources, one truth. Across lakhs of rows a night.",
     blurb:
       "A bank reconciliation platform that pairs transaction records across three independent systems and flags every mismatch.",
-    accent: "#e0702f",
+    accent: "#d62d46",
     meta: [
       { label: "Role", value: "Full stack engineer" },
       { label: "Client", value: "UBI Bank" },
@@ -111,7 +111,7 @@ export const caseStudies: CaseStudy[] = [
     lede: "Three days of month-end, done in twenty minutes.",
     blurb:
       "Calculates what each bank owes for cash management and cash van services, issues the invoice, and evidences every line.",
-    accent: "#c08344",
+    accent: "#c9584a",
     meta: [
       { label: "Role", value: "Full stack engineer" },
       { label: "Clients", value: "Axis Bank, SBI" },
@@ -185,7 +185,7 @@ export const caseStudies: CaseStudy[] = [
     lede: "Settling bonds across two regulators and three time zones.",
     blurb:
       "A custodian platform that safekeeps bonds for investors and settles their trades, built by a small team spread across three countries.",
-    accent: "#a8584f",
+    accent: "#a8324a",
     meta: [
       { label: "Role", value: "Full stack engineer" },
       { label: "Client", value: "Mirae Asset" },
@@ -260,7 +260,7 @@ export const caseStudies: CaseStudy[] = [
     lede: "An agent that does the digging, over 25 million records.",
     blurb:
       "An infrastructure-intelligence platform with an AI agent that plans a question, calls the right tools in sequence, and assembles the answer.",
-    accent: "#a9607a",
+    accent: "#9c4a6e",
     meta: [
       { label: "Role", value: "Frontend engineer" },
       { label: "Company", value: "Taiyo.AI" },
@@ -337,7 +337,7 @@ export const caseStudies: CaseStudy[] = [
     lede: "Ask a question in English. Get the right rows back.",
     blurb:
       "A full stack platform with real-time dashboards and a Groq-backed assistant that turns natural-language questions into SQL.",
-    accent: "#a9607a",
+    accent: "#9c4a6e",
     meta: [
       { label: "Role", value: "Everything" },
       { label: "Type", value: "Independent project" },

@@ -42,7 +42,7 @@ export const builds: Build[] = [
       "Returns one of five verdicts — buy, buy with caution, wait, not suitable, avoid — with reports saved to Supabase behind Google sign-in.",
     ],
     stack: ["TypeScript", "Node 22", "Express 5", "React", "Supabase", "Claude API", "Zod"],
-    accent: "#e0702f",
+    accent: "#d62d46",
     repo: "https://github.com/AbhijitSP11/quantsieve",
   },
   {
@@ -58,7 +58,7 @@ export const builds: Build[] = [
       "Production AWS provisioned from scratch — VPC, EC2, RDS and Cognito — with RBAC applied at the data layer so generated queries inherit the caller's scope.",
     ],
     stack: ["Next.js", "TypeScript", "Express", "Prisma", "PostgreSQL", "AWS", "Groq"],
-    accent: "#a8584f",
+    accent: "#a8324a",
     repo: "https://github.com/AbhijitSP11/aster",
     caseStudy: "/work/aster",
   },
@@ -75,7 +75,7 @@ export const builds: Build[] = [
       "Replace this entry in src/lib/building.ts with the real description.",
     ],
     stack: ["TBC"],
-    accent: "#a9607a",
+    accent: "#9c4a6e",
     placeholder: true,
   },
 ];
