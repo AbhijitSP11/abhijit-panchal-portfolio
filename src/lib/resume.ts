@@ -49,7 +49,7 @@ export const projects: Project[] = [
     title: "CMS — Reconciliation Platform",
     org: "Oneture Technologies · UBI Bank",
     year: "2025 — Present",
-    accent: "#0e7c66",
+    accent: "#1d4ed8",
     blurb:
       "A reconciliation platform whose matching logic pairs transaction records across three independent sources and flags every mismatch across lakhs of rows.",
     stack: ["Python", "PostgreSQL", "Binary parsing", "Excel"],
@@ -72,7 +72,7 @@ export const projects: Project[] = [
     title: "CMS — Enterprise Billing Platform",
     org: "Oneture Technologies · Axis Bank, SBI",
     year: "2025",
-    accent: "#2f6f9f",
+    accent: "#4f46e5",
     blurb:
       "Calculates what each bank owes every month for cash management and cash van services, issues the invoice, and evidences every line — replacing a spreadsheet-and-email process.",
     stack: ["Python", "FastAPI", "Celery", "PostgreSQL", "React", "Vite"],
@@ -96,7 +96,7 @@ export const projects: Project[] = [
     title: "Mirae Asset — Bond Custodian Platform",
     org: "Oneture Technologies · South Korea & Brazil",
     year: "2024 — 2025",
-    accent: "#6b5bb8",
+    accent: "#7c3aed",
     blurb:
       "A bond custodian platform that safekeeps bonds for investors and settles their trades, delivered by a small cross-functional team spread across three countries.",
     stack: ["React", "Redux", "AG Grid", "C# / .NET", "SWIFT MT/MX"],
@@ -270,7 +270,7 @@ export const achievements = [
 export const heroCards = [
   { scene: "city" as const, caption: "based in mumbai", tilt: -3.5 },
   { scene: "grid" as const, caption: "banks & capital markets", tilt: 2.5 },
-  { scene: "terminal" as const, caption: "3.5 years in, still shipping", tilt: -1.5 },
+  { scene: "terminal" as const, caption: "3.5 years in", tilt: -1.5 },
 ];
 
 export const marqueeWords = [

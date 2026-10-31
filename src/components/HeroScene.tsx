@@ -1,30 +1,11 @@
 "use client";
 
-import { heroCards } from "@/lib/resume";
-
-/** Polaroid-ish frames: a small drawn scene over a handwritten caption. */
-export default function HeroCards() {
-  return (
-    <div className="flex flex-wrap items-start gap-5 sm:gap-7">
-      {heroCards.map((c) => (
-        <figure
-          key={c.caption}
-          className="hero-card w-[150px] shrink-0 rounded-[3px] bg-white p-2.5 pb-3 shadow-[0_14px_34px_-18px_rgba(36,38,32,0.5)] sm:w-[185px]"
-          style={{ rotate: `${c.tilt}deg` }}
-        >
-          <div className="aspect-[4/3] w-full overflow-hidden rounded-[2px] bg-paper-2">
-            <Scene kind={c.scene} />
-          </div>
-          <figcaption className="hand mt-2 px-1 text-lg leading-tight text-ink/70 sm:text-xl">
-            {c.caption}
-          </figcaption>
-        </figure>
-      ))}
-    </div>
-  );
-}
-
-function Scene({ kind }: { kind: "city" | "grid" | "terminal" }) {
+/** The small drawn scene inside each hero frame. */
+export default function HeroScene({
+  kind,
+}: {
+  kind: "city" | "grid" | "terminal";
+}) {
   if (kind === "city") {
     return (
       <svg viewBox="0 0 120 90" className="h-full w-full" aria-hidden="true">
@@ -38,7 +19,6 @@ function Scene({ kind }: { kind: "city" | "grid" | "terminal" }) {
           <rect x="80" y="46" width="12" height="44" />
           <rect x="96" y="58" width="14" height="32" />
         </g>
-        {/* lit windows */}
         <g fill="var(--color-accent)">
           <rect x="31" y="42" width="3" height="3" />
           <rect x="36" y="50" width="3" height="3" />

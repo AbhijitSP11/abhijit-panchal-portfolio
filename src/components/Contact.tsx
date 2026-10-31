@@ -76,6 +76,27 @@ export default function Contact() {
             <span aria-hidden="true">→</span>
           </a>
           <a
+            href="/Abhijit_Panchal_Resume.pdf"
+            download
+            className="group inline-flex items-center gap-2.5 rounded-full border border-ink/20 px-6 py-4 text-base font-medium transition-colors hover:border-accent hover:text-accent"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4 transition-transform group-hover:translate-y-0.5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M12 3v12" />
+              <path d="m7 10 5 5 5-5" />
+              <path d="M5 21h14" />
+            </svg>
+            Download resume
+          </a>
+          <a
             href={`tel:${profile.phone.replace(/[^+\d]/g, "")}`}
             className="link-sweep text-base text-muted"
           >

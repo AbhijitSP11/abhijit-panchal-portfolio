@@ -5,6 +5,7 @@ import ScrollRail from "@/components/ScrollRail";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import WordScroll from "@/components/WordScroll";
+import BlurIn from "@/components/BlurIn";
 import Stats from "@/components/Stats";
 import Work from "@/components/Work";
 import Experience from "@/components/Experience";
@@ -30,10 +31,22 @@ export default function Home() {
           length={2.6}
         />
 
-        <Stats />
-        <Work />
-        <Experience />
-        <TabsWindow />
+        {/* each section resolves from blurred to sharp as it comes into view */}
+        <BlurIn>
+          <Stats />
+        </BlurIn>
+
+        <BlurIn>
+          <Work />
+        </BlurIn>
+
+        <BlurIn>
+          <Experience />
+        </BlurIn>
+
+        <BlurIn>
+          <TabsWindow />
+        </BlurIn>
 
         <WordScroll
           words={[
@@ -54,7 +67,9 @@ export default function Home() {
           length={2.8}
         />
 
-        <Contact />
+        <BlurIn>
+          <Contact />
+        </BlurIn>
       </main>
     </>
   );

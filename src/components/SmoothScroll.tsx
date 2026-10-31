@@ -44,12 +44,31 @@ export default function SmoothScroll({
     if (waitForIntro) lenis.stop();
     const offReady = onPreloaderDone(() => {
       lenis.start();
+
+      // Triggers created while the preloader was up measured against a locked,
+      // shorter page. Re-measure now that the real layout is in place,
+      // otherwise sections further down never reach the end of their scrub.
+      ScrollTrigger.refresh();
       // honour a hash the page was opened with, now that scrolling is live
       if (window.location.hash) {
         const target = document.querySelector(window.location.hash);
         if (target) lenis.scrollTo(target as HTMLElement, { offset: -64, immediate: true });
       }
     });
+
+    // Web fonts land after first paint and change every text block's height,
+    // which moves every trigger below them.
+    let fontsDone = false;
+    document.fonts?.ready.then(() => {
+      fontsDone = true;
+      ScrollTrigger.refresh();
+    });
+
+    // Images and late layout shifts do the same.
+    const onLoad = () => {
+      if (!fontsDone) ScrollTrigger.refresh();
+    };
+    window.addEventListener("load", onLoad);
 
     // Lenis owns the scroll position, so in-page links go through it.
     const onClick = (e: MouseEvent) => {
@@ -67,6 +86,7 @@ export default function SmoothScroll({
 
     return () => {
       offReady();
+      window.removeEventListener("load", onLoad);
       document.removeEventListener("click", onClick);
       gsap.ticker.remove(raf);
       lenis.destroy();

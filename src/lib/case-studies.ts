@@ -35,7 +35,7 @@ export const caseStudies: CaseStudy[] = [
     lede: "Three sources, one truth. Across lakhs of rows a night.",
     blurb:
       "A bank reconciliation platform that pairs transaction records across three independent systems and flags every mismatch.",
-    accent: "#0e7c66",
+    accent: "#1d4ed8",
     meta: [
       { label: "Role", value: "Full stack engineer" },
       { label: "Client", value: "UBI Bank" },
@@ -111,7 +111,7 @@ export const caseStudies: CaseStudy[] = [
     lede: "Three days of month-end, done in twenty minutes.",
     blurb:
       "Calculates what each bank owes for cash management and cash van services, issues the invoice, and evidences every line.",
-    accent: "#2f6f9f",
+    accent: "#4f46e5",
     meta: [
       { label: "Role", value: "Full stack engineer" },
       { label: "Clients", value: "Axis Bank, SBI" },
@@ -185,7 +185,7 @@ export const caseStudies: CaseStudy[] = [
     lede: "Settling bonds across two regulators and three time zones.",
     blurb:
       "A custodian platform that safekeeps bonds for investors and settles their trades, built by a small team spread across three countries.",
-    accent: "#6b5bb8",
+    accent: "#7c3aed",
     meta: [
       { label: "Role", value: "Full stack engineer" },
       { label: "Client", value: "Mirae Asset" },

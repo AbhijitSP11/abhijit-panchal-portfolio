@@ -123,6 +123,14 @@ export default function Nav() {
             ))}
 
             <a
+              href="/Abhijit_Panchal_Resume.pdf"
+              download
+              className="link-sweep label hidden items-center gap-1.5 whitespace-nowrap opacity-70 transition-opacity hover:opacity-100 md:inline-flex"
+            >
+              resume <span aria-hidden="true">↓</span>
+            </a>
+
+            <a
               href={`mailto:${profile.email}`}
               className={`label hidden whitespace-nowrap rounded-full px-4 py-2 transition-colors sm:inline-block ${
                 lightPill
@@ -170,9 +178,17 @@ export default function Nav() {
           </a>
         ))}
         <a
+          href="/Abhijit_Panchal_Resume.pdf"
+          download
+          onClick={() => setOpen(false)}
+          className="m-item mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-accent px-5 py-3 text-base font-medium text-paper"
+        >
+          Download resume <span aria-hidden="true">↓</span>
+        </a>
+        <a
           href={`mailto:${profile.email}`}
           onClick={() => setOpen(false)}
-          className="m-item mt-8 break-all text-base text-accent"
+          className="m-item mt-5 break-all text-base text-accent"
         >
           {profile.email}
         </a>
