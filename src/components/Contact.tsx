@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap, registerGsap, prefersReducedMotion, revealWords, revealUp } from "@/lib/anim";
+import { gsap, registerGsap, revealWords, revealUp } from "@/lib/anim";
 import { profile } from "@/lib/resume";
 
 export default function Contact() {
@@ -17,31 +17,6 @@ export default function Contact() {
         trigger: root.current!,
         stagger: 0.07,
       });
-
-      if (prefersReducedMotion()) return;
-
-      // magnetic pull on the primary button
-      const btn = root.current!.querySelector<HTMLElement>(".magnetic");
-      if (!btn) return;
-      const xTo = gsap.quickTo(btn, "x", { duration: 0.5, ease: "power3.out" });
-      const yTo = gsap.quickTo(btn, "y", { duration: 0.5, ease: "power3.out" });
-
-      const move = (e: MouseEvent) => {
-        const r = btn.getBoundingClientRect();
-        xTo((e.clientX - (r.left + r.width / 2)) * 0.35);
-        yTo((e.clientY - (r.top + r.height / 2)) * 0.45);
-      };
-      const reset = () => {
-        xTo(0);
-        yTo(0);
-      };
-
-      btn.addEventListener("mousemove", move);
-      btn.addEventListener("mouseleave", reset);
-      return () => {
-        btn.removeEventListener("mousemove", move);
-        btn.removeEventListener("mouseleave", reset);
-      };
     }, root);
 
     return () => ctx.revert();
@@ -70,7 +45,7 @@ export default function Contact() {
         <div className="ct-fade reveal-ready mt-12 flex flex-wrap items-center gap-4">
           <a
             href={`mailto:${profile.email}`}
-            className="magnetic btn-fill text-base font-medium text-ink"
+            className="btn-fill text-base font-medium text-ink"
           >
             {profile.email}
             <span className="btn-sep" aria-hidden="true">→</span>
