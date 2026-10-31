@@ -34,19 +34,6 @@ export type Interest = {
 
 export const interests: Interest[] = [
   {
-    id: "cook",
-    icon: "pan",
-    tab: "being chef",
-    path: "chef",
-    title: "I cook",
-    line: "dal khichdi & uttapam",
-    detail:
-      "A properly good bowl of dal khichdi is my house speciality, and I will argue about the tempering. Uttapam is the other one I have got down.",
-    image: null,
-    tint: "#9c4a6e",
-    chips: ["Dal khichdi", "Uttapam", "Opinions about tempering"],
-  },
-  {
     id: "photo",
     icon: "camera",
     tab: "camera roll",

@@ -50,7 +50,7 @@ const workTabs: Tab[] = [
  * Life tabs, minus the camera roll — independent work took its slot — and
  * with trips moved to the end so the section finishes on the travel line.
  */
-const lifeOrder = ["cook", "film", "paint", "markets", "travel"];
+const lifeOrder = ["film", "paint", "markets", "travel"];
 
 const lifeTabs: Tab[] = lifeOrder
   .map((id) => interests.find((i) => i.id === id)!)
@@ -617,35 +617,6 @@ function Panel({ tabKey }: { tabKey: string }) {
   );
 
   const panel = "grid items-stretch gap-7 lg:grid-cols-2";
-  const media = "h-[240px] overflow-hidden rounded-xl border border-ink/10 sm:h-[300px]";
-
-  if (interest.id === "cook") {
-    return (
-      <div className={panel}>
-        <div className={media}>
-          {interest.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={interest.image} alt={interest.title} className="h-full w-full object-cover" />
-          ) : (
-            <Placeholder label="kitchen" tint={interest.tint} />
-          )}
-        </div>
-        <div>
-          {copy}
-          <div className="mt-6 flex flex-wrap gap-2">
-            {interest.chips?.map((c) => (
-              <span
-                key={c}
-                className="label rounded-full border border-ink/15 px-3 py-1.5 text-ink/65"
-              >
-                {c}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   if (interest.id === "photo") {
     return (
