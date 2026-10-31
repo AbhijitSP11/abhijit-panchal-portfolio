@@ -15,7 +15,7 @@ import { gsap, registerGsap, prefersReducedMotion } from "@/lib/anim";
  */
 
 const W = 640;
-const H = 230;
+const H = 300;
 const SEGMENTS = 40;
 
 function rng(seed: number) {
@@ -168,7 +168,7 @@ export default function UntangleGraph({ className = "" }: { className?: string }
           className="ug-in label flex items-center gap-2 !text-xs text-ink/75"
           style={{ opacity: 0.3 }}
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          <span className="h-1.5 w-1.5 rounded-full bg-gain" />
           complex problem
         </span>
         <span className="hidden h-px flex-1 bg-ink/15 sm:block" aria-hidden="true" />
@@ -177,7 +177,7 @@ export default function UntangleGraph({ className = "" }: { className?: string }
           style={{ opacity: 0.3 }}
         >
           working system
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+          <span className="h-1.5 w-1.5 rounded-full bg-gain" />
         </span>
       </div>
 
@@ -191,12 +191,12 @@ export default function UntangleGraph({ className = "" }: { className?: string }
           <defs>
             <linearGradient id="ug-line" x1="0" y1="0" x2="1" y2="0">
               <stop offset="0%" stopColor="currentColor" stopOpacity="0.25" />
-              <stop offset="55%" stopColor="var(--color-accent)" stopOpacity="0.95" />
-              <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="1" />
+              <stop offset="55%" stopColor="var(--color-gain)" stopOpacity="0.95" />
+              <stop offset="100%" stopColor="var(--color-gain)" stopOpacity="1" />
             </linearGradient>
             <linearGradient id="ug-fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="var(--color-accent)" stopOpacity="0.2" />
-              <stop offset="100%" stopColor="var(--color-accent)" stopOpacity="0" />
+              <stop offset="0%" stopColor="var(--color-gain)" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="var(--color-gain)" stopOpacity="0" />
             </linearGradient>
           </defs>
 
@@ -232,7 +232,7 @@ export default function UntangleGraph({ className = "" }: { className?: string }
                 x2={p.x}
                 y1={p.y}
                 y2={p.y - 34}
-                stroke="var(--color-accent)"
+                stroke="var(--color-gain)"
                 strokeOpacity="0.45"
                 strokeDasharray="2 3"
               />
@@ -242,7 +242,7 @@ export default function UntangleGraph({ className = "" }: { className?: string }
                 cy={p.y}
                 r="5"
                 fill="var(--color-paper)"
-                stroke="var(--color-accent)"
+                stroke="var(--color-gain)"
                 strokeWidth="2"
                 style={{ opacity: 0, transformOrigin: `${p.x}px ${p.y}px` }}
               />
@@ -262,7 +262,7 @@ export default function UntangleGraph({ className = "" }: { className?: string }
               opacity: 0,
             }}
           >
-            <span className="flex items-center gap-1.5 whitespace-nowrap border border-accent/40 bg-paper px-2.5 py-1 text-xs font-medium text-accent shadow-sm sm:text-sm">
+            <span className="flex items-center gap-1.5 whitespace-nowrap border border-gain/45 bg-paper px-2.5 py-1 text-xs font-medium text-gain-deep shadow-sm sm:text-sm">
               <span aria-hidden="true">↑</span>
               {m.text}
             </span>

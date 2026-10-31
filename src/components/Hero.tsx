@@ -8,7 +8,7 @@ import {
   onPreloaderDone,
 } from "@/lib/anim";
 import { profile } from "@/lib/resume";
-import HeroFrames from "./HeroFrames";
+import HeroPortrait from "./HeroPortrait";
 import UntangleGraph from "./UntangleGraph";
 
 export default function Hero() {
@@ -34,7 +34,7 @@ export default function Hero() {
 
         if (reduced) {
           gsap.set(
-            [".hero-fade", ".hero-hey", ".hf-card", ".hero-meta", ".hero-cue"],
+            [".hero-fade", ".hero-hey", ".hp-card", ".hero-meta", ".hero-cue"],
             { opacity: 1, y: 0 }
           );
           gsap.set(squiggle.current, { strokeDashoffset: 0 });
@@ -52,7 +52,7 @@ export default function Hero() {
           )
           .from(letters, { yPercent: 118, duration: 1.1, stagger: 0.035 }, 0.3)
           .from(
-            ".hf-card",
+            ".hp-card",
             { opacity: 0, y: 46, scale: 0.92, duration: 1.1, stagger: 0.12 },
             0.75
           )
@@ -63,7 +63,7 @@ export default function Hero() {
       const offReady = onPreloaderDone(intro);
       if (reduced) return offReady;
 
-      gsap.to(".hf-card", {
+      gsap.to(".hp-card", {
         y: (i) => -18 - i * 14,
         ease: "none",
         scrollTrigger: {
@@ -89,7 +89,7 @@ export default function Hero() {
       <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
         <div className="grid items-center gap-12 lg:grid-cols-12 lg:gap-8">
           {/* copy — nudged in from the edge so the name sits nearer the middle */}
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-5">
             <p className="hero-fade label text-muted">{profile.role}</p>
 
             <div className="relative mt-6 inline-block">
@@ -118,7 +118,7 @@ export default function Hero() {
             </h1>
 
 
-            <div className="mt-7 flex flex-wrap items-center gap-3">
+            <div className="mt-12 flex flex-wrap items-center gap-3 sm:mt-16">
               <a
                 href="/Abhijit_Panchal_Resume.pdf"
                 download
@@ -152,11 +152,11 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* the knot that resolves into a graph, with a single frame below it */}
-          <div className="lg:col-span-5">
-            <UntangleGraph className="w-full" />
-            <div className="mt-6">
-              <HeroFrames only={2} />
+          {/* the graph and the portrait share the right side, side by side */}
+          <div className="lg:col-span-7">
+            <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-center sm:gap-6 lg:gap-8">
+              <UntangleGraph className="w-full min-w-0 sm:flex-1" />
+              <HeroPortrait className="shrink-0 sm:w-[210px] lg:w-[230px]" />
             </div>
           </div>
         </div>

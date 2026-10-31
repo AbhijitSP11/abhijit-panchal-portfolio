@@ -310,13 +310,6 @@ export const achievements = [
   "Drove an 84% API latency cut at Taiyo.AI and a 26% page-speed gain at My Next Film.",
 ];
 
-/** Tilted cards under the hero name, each with a handwritten caption. */
-export const heroCards = [
-  { scene: "city" as const, caption: "based in mumbai", tilt: -3.5 },
-  { scene: "grid" as const, caption: "banks & capital markets", tilt: 2.5 },
-  { scene: "terminal" as const, caption: "3.5 years in", tilt: -1.5 },
-];
-
 export const marqueeWords = [
   "Full Stack",
   "Fintech",

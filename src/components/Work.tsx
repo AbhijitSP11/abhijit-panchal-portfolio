@@ -122,9 +122,7 @@ export default function Work() {
                     <Logo logo={builder} size={54} />
                     {client ? (
                       <>
-                        <span className="text-xl text-ink/30" aria-hidden="true">
-                          ×
-                        </span>
+                        <span className="h-9 w-px bg-ink/25" aria-hidden="true" />
                         <Logo logo={client} size={54} />
                       </>
                     ) : null}
@@ -136,7 +134,12 @@ export default function Work() {
                     <div className="text-sm font-medium text-ink/80">
                       {logoName(builder)}
                       {client ? (
-                        <span className="text-ink/50"> for {logoName(client)}</span>
+                        <>
+                          <span className="mx-2 text-ink/30" aria-hidden="true">
+                            |
+                          </span>
+                          <span className="text-ink/55">{logoName(client)}</span>
+                        </>
                       ) : null}
                     </div>
                   </div>
