@@ -13,7 +13,6 @@ import UntangleGraph from "./UntangleGraph";
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
-  const squiggle = useRef<SVGPathElement>(null);
 
   useEffect(() => {
     registerGsap();
@@ -27,29 +26,17 @@ export default function Hero() {
         // leave the letters parked outside their masks
         const letters = reduced ? [] : splitLetters(nameEl);
 
-        const len = squiggle.current?.getTotalLength() ?? 400;
-        if (!reduced) {
-          gsap.set(squiggle.current, { strokeDasharray: len, strokeDashoffset: len });
-        }
-
         if (reduced) {
           gsap.set(
-            [".hero-fade", ".hero-hey", ".hp-card", ".hero-meta", ".hero-cue"],
+            [".hero-fade", ".hp-card", ".hero-meta", ".hero-cue"],
             { opacity: 1, y: 0 }
           );
-          gsap.set(squiggle.current, { strokeDashoffset: 0 });
           return;
         }
 
         gsap
           .timeline({ defaults: { ease: "expo.out" } })
           .from(".hero-fade", { opacity: 0, y: 14, duration: 0.9, stagger: 0.07 }, 0)
-          .from(".hero-hey", { opacity: 0, y: 20, duration: 1 }, 0.1)
-          .to(
-            squiggle.current,
-            { strokeDashoffset: 0, duration: 0.9, ease: "power2.inOut" },
-            0.5
-          )
           .from(letters, { yPercent: 118, duration: 1.1, stagger: 0.035 }, 0.3)
           .from(
             ".hp-card",
@@ -91,32 +78,15 @@ export default function Hero() {
           {/* copy — nudged in from the edge so the name sits nearer the middle */}
           <div className="flex flex-col justify-between gap-14 lg:col-span-6">
             <div>
-            <p className="hero-fade label text-muted">{profile.role}</p>
-
-            <div className="relative mt-6 inline-block">
-              <span className="hero-hey block font-serif text-4xl italic leading-none sm:text-5xl lg:text-6xl">
-                hey, I&rsquo;m
-              </span>
-              <svg
-                viewBox="0 0 300 18"
-                preserveAspectRatio="none"
-                className="absolute -bottom-3 left-0 h-3.5 w-full text-accent"
-                aria-hidden="true"
-              >
-                <path
-                  ref={squiggle}
-                  d="M4 12 C 58 3, 104 16, 158 8 S 250 3, 296 11"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3.5"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-
-            <h1 className="hero-name-inner mt-5 text-[15vw] font-medium leading-[0.86] tracking-[-0.04em] sm:mt-6 sm:text-[10vw] lg:text-[7.4vw]">
+            <h1 className="hero-name-inner text-[15vw] font-medium leading-[0.86] tracking-[-0.04em] sm:text-[10vw] lg:text-[7.4vw]">
               Abhijit<span className="text-accent">.</span>
             </h1>
+
+            <p className="hero-fade mt-6 flex items-center gap-3 text-lg tracking-tight sm:text-xl">
+              <span className="font-medium">Abhijit Panchal</span>
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+              <span className="text-muted">Software Engineer</span>
+            </p>
 
             <UntangleGraph className="mt-8 w-full max-w-[400px]" />
             </div>
