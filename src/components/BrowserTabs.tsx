@@ -13,6 +13,7 @@ import {
   markets,
   portrait,
 } from "@/lib/personal";
+import { builds } from "@/lib/building";
 import { scrollToY } from "@/lib/smooth";
 import Placeholder from "./Placeholder";
 import PolaroidLineCarousel from "@/components/ui/polaroid-line-carousel";
@@ -45,16 +46,28 @@ const workTabs: Tab[] = [
   { key: "schooling", icon: "🎓", label: "schooling", path: "schooling" },
 ];
 
-const lifeTabs: Tab[] = interests.map((i) => ({
-  key: i.id,
-  icon: "",
-  label: i.tab,
-  path: `life/${i.path}`,
-  dot: i.tint,
-}));
+/**
+ * Life tabs, minus the camera roll — independent work took its slot — and
+ * with trips moved to the end so the section finishes on the travel line.
+ */
+const lifeOrder = ["cook", "film", "paint", "markets", "travel"];
 
-/** The side project moved to its own section, so it is no longer a tab. */
-const tabs: Tab[] = [...workTabs, ...lifeTabs];
+const lifeTabs: Tab[] = lifeOrder
+  .map((id) => interests.find((i) => i.id === id)!)
+  .filter(Boolean)
+  .map((i) => ({
+    key: i.id,
+    icon: "",
+    label: i.tab,
+    path: `life/${i.path}`,
+    dot: i.tint,
+  }));
+
+const tabs: Tab[] = [
+  ...workTabs,
+  { key: "building", icon: "🛠️", label: "building", path: "building" },
+  ...lifeTabs,
+];
 
 /**
  * Scroll distance per tab. Kept short on purpose: a tab should turn over
@@ -166,7 +179,7 @@ export default function BrowserTabs() {
           {/* heading */}
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
             <div>
-              <div className="bt-head reveal-ready label text-muted">04 / About me</div>
+              <div className="bt-head reveal-ready label text-muted">03 / About me</div>
               <h2 className="bt-head reveal-ready mt-2 text-3xl font-medium leading-[1.05] tracking-tight sm:text-4xl">
                 a little more{" "}
                 <span className="font-serif italic text-accent">about me.</span>
@@ -526,6 +539,120 @@ function Panel({ tabKey }: { tabKey: string }) {
     );
   }
 
+  if (tabKey === "building") {
+    return (
+      <div>
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <Heading kicker="Independent work" lead="things I'm" accent="building." />
+          <p className="hand text-lg text-ink/50">
+            nobody asked for these — that&rsquo;s the point
+          </p>
+        </div>
+
+        <div className="mt-6 grid gap-4 lg:grid-cols-3">
+          {builds.map((b, i) => (
+            <article
+              key={b.id}
+              className="group relative flex flex-col border border-ink/12 bg-paper p-5 transition-colors hover:border-ink/30"
+            >
+              <span
+                className="absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
+                style={{ backgroundColor: b.accent }}
+                aria-hidden="true"
+              />
+
+              <div className="flex items-center justify-between gap-3">
+                <span
+                  className="label px-2 py-0.5 text-paper"
+                  style={{ backgroundColor: b.accent }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className="inline-flex items-center gap-1.5 border px-2 py-0.5"
+                  style={{ borderColor: `${b.accent}44`, backgroundColor: `${b.accent}0f` }}
+                >
+                  <span className="relative flex h-1.5 w-1.5">
+                    {b.status === "Live" && (
+                      <span
+                        className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-70"
+                        style={{ backgroundColor: b.accent }}
+                      />
+                    )}
+                    <span
+                      className="relative inline-flex h-1.5 w-1.5 rounded-full"
+                      style={{ backgroundColor: b.accent }}
+                    />
+                  </span>
+                  <span className="label" style={{ color: b.accent }}>
+                    {b.status}
+                  </span>
+                </span>
+              </div>
+
+              <h4 className="mt-3 text-xl font-semibold tracking-tight">{b.name}</h4>
+              <p
+                className="mt-1 font-serif text-base italic leading-snug"
+                style={{ color: b.accent }}
+              >
+                {b.tagline}
+              </p>
+
+              <p
+                className={`mt-3 text-xs leading-relaxed ${
+                  b.placeholder ? "italic text-ink/45" : "text-ink/70"
+                }`}
+              >
+                {b.blurb}
+              </p>
+
+              <div className="mt-3 flex flex-wrap gap-1">
+                {b.stack.slice(0, 4).map((s) => (
+                  <span
+                    key={s}
+                    className="label border border-ink/15 px-1.5 py-0.5 text-[0.62rem] text-ink/55"
+                  >
+                    {s}
+                  </span>
+                ))}
+              </div>
+
+              <div className="mt-auto flex flex-wrap gap-2 pt-4">
+                {b.repo ? (
+                  <a
+                    href={b.repo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-fill !px-3 !py-2 text-xs font-medium"
+                    style={{ "--btn-ink": "var(--color-ink)" } as React.CSSProperties}
+                  >
+                    GitHub
+                    <span className="btn-sep !pl-2" aria-hidden="true">↗</span>
+                  </a>
+                ) : null}
+                {b.caseStudy ? (
+                  <Link
+                    href={b.caseStudy}
+                    className="btn-fill !px-3 !py-2 text-xs font-medium"
+                    style={
+                      {
+                        "--btn-ink": b.accent,
+                        "--btn-fill": b.accent,
+                      } as React.CSSProperties
+                    }
+                  >
+                    Case study
+                    <span className="btn-sep !pl-2" aria-hidden="true">→</span>
+                  </Link>
+                ) : null}
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (!interest) return null;
 
   // ── off-the-clock tabs ───────────────────────────────────────────────
@@ -721,10 +848,7 @@ function Panel({ tabKey }: { tabKey: string }) {
         </div>
 
         {/* the interest that turned into a tool */}
-        <a
-          href={markets.built.href}
-          className="group mt-4 flex items-center justify-between gap-4 border border-accent/35 bg-accent/[0.06] px-4 py-3 transition-colors hover:bg-accent/[0.12]"
-        >
+        <div className="mt-4 flex items-center justify-between gap-4 border border-accent/35 bg-accent/[0.06] px-4 py-3">
           <span className="min-w-0">
             <span className="label text-accent">Built from this</span>
             <span className="mt-1 block text-sm text-ink/75">
@@ -732,13 +856,10 @@ function Panel({ tabKey }: { tabKey: string }) {
               — {markets.built.line}
             </span>
           </span>
-          <span
-            className="shrink-0 text-accent transition-transform group-hover:translate-x-1"
-            aria-hidden="true"
-          >
+          <span className="shrink-0 text-accent" aria-hidden="true">
             →
           </span>
-        </a>
+        </div>
       </div>
     </div>
   );

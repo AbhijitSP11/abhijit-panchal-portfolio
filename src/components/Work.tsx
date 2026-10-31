@@ -235,7 +235,7 @@ export default function Work() {
                   className="btn-fill !px-5 !py-2.5 text-sm font-medium"
                   style={
                     {
-                      color: p.accent,
+                      "--btn-ink": p.accent,
                       "--btn-fill": p.accent,
                       "--btn-text": "#ffffff",
                     } as React.CSSProperties

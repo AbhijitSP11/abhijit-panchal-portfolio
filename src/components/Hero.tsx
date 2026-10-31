@@ -10,6 +10,7 @@ import {
 } from "@/lib/anim";
 import { profile } from "@/lib/resume";
 import HeroFrames from "./HeroFrames";
+import PuzzleCube from "./PuzzleCube";
 
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
@@ -118,7 +119,7 @@ export default function Hero() {
               </svg>
             </div>
 
-            <h1 className="hero-name-inner mt-5 text-[19vw] font-medium leading-[0.84] tracking-[-0.045em] sm:mt-7 sm:text-[14vw] lg:text-[11.5vw]">
+            <h1 className="hero-name-inner mt-5 text-[15vw] font-medium leading-[0.86] tracking-[-0.04em] sm:mt-6 sm:text-[10vw] lg:text-[7.4vw]">
               Abhijit<span className="text-accent">.</span>
             </h1>
 
@@ -161,9 +162,14 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* interactive frames, beside the name */}
-          <div className="lg:col-span-4">
-            <HeroFrames />
+          {/* the cube sorts itself out, then the frames below it */}
+          <div className="lg:col-span-5">
+            <PuzzleCube
+              className="hero-cube mx-auto [--pc-size:170px] sm:[--pc-size:200px]"
+            />
+            <div className="mt-6">
+              <HeroFrames />
+            </div>
           </div>
         </div>
       </div>

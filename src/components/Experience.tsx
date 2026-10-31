@@ -62,7 +62,7 @@ export default function Experience() {
     <section ref={root} id="experience" className="border-t border-ink/10 bg-paper">
       <div className="mx-auto max-w-[1400px] px-5 py-20 sm:px-8 lg:py-28">
         <div className="mb-12 flex items-end justify-between border-b border-ink/15 pb-5">
-          <h2 className="xp-head reveal-ready label text-muted">03 / Experience</h2>
+          <h2 className="xp-head reveal-ready label text-muted">02 / Experience</h2>
           <span className="xp-head reveal-ready label text-muted">2022 — Present</span>
         </div>
 

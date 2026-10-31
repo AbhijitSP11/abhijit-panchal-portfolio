@@ -135,12 +135,17 @@ html.lenis body {
   /* Square, transparent, bordered. On hover the colour wipes in from the
      left behind the label. The fill is a pseudo-element rather than a
      background-position trick so the text never shifts. */
+  /* The resting colour comes through --btn-ink rather than an inline `color`
+     or a text-* utility. An inline style beats every rule, and a utility sits
+     in a later layer than this one, so either would win over :hover and leave
+     dark text sitting on the filled background. */
   .btn-fill {
     position: relative;
     display: inline-flex;
     align-items: center;
     gap: 0.625rem;
     overflow: hidden;
+    color: var(--btn-ink, currentColor);
     border: 1px solid currentColor;
     border-radius: 0;
     padding: 0.875rem 1.5rem;
