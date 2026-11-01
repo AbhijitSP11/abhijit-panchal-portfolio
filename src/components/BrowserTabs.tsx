@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useLayoutEffect } from "react";
 import Link from "next/link";
 import { gsap, ScrollTrigger, registerGsap, prefersReducedMotion, revealUp } from "@/lib/anim";
 import { profile, experience, skills, education, achievements } from "@/lib/resume";
@@ -140,25 +140,36 @@ export default function BrowserTabs() {
 
       if (prefersReducedMotion()) return;
 
-      // No hysteresis and no settle delay — the band flips the moment the
-      // scroll crosses it, which is what makes it feel instant.
-      const st = ScrollTrigger.create({
-        trigger: root.current,
-        start: "top top",
-        end: "bottom bottom",
-        onUpdate: (self) => {
-          const i = Math.min(
-            tabs.length - 1,
-            Math.floor(self.progress * tabs.length)
-          );
-          if (i === last.current) return;
-          last.current = i;
-          setIndex(i);
-        },
+      // From laptop width up the window is pinned and the scroll drives the
+      // tabs. On a phone or tablet it is an ordinary tap-through window, so there is no
+      // band to create. matchMedia builds and tears the band down as the
+      // screen is rotated or resized.
+      const mm = gsap.matchMedia();
+      mm.add("(min-width: 1024px)", () => {
+        // No hysteresis and no settle delay — the band flips the moment the
+        // scroll crosses it, which is what makes it feel instant.
+        const st = ScrollTrigger.create({
+          trigger: root.current,
+          start: "top top",
+          end: "bottom bottom",
+          onUpdate: (self) => {
+            const i = Math.min(
+              tabs.length - 1,
+              Math.floor(self.progress * tabs.length)
+            );
+            if (i === last.current) return;
+            last.current = i;
+            setIndex(i);
+          },
+        });
+        band.current = st;
+        return () => {
+          st.kill();
+          band.current = null;
+        };
       });
-      band.current = st;
 
-      return () => st.kill();
+      return () => mm.revert();
     }, root);
 
     return () => ctx.revert();
@@ -192,10 +203,10 @@ export default function BrowserTabs() {
     <section
       ref={root}
       id="about"
-      style={{ height: `${tabs.length * BAND_VH + TAIL_VH}vh` }}
-      className="relative border-t border-ink/10 bg-paper"
+      style={{ "--band-h": `${tabs.length * BAND_VH + TAIL_VH}vh` } as React.CSSProperties}
+      className="relative border-t border-ink/10 bg-paper lg:h-[var(--band-h)]"
     >
-      <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden px-5 py-10 sm:px-8">
+      <div className="flex flex-col px-5 py-14 sm:px-8 lg:sticky lg:top-0 lg:h-[100svh] lg:justify-center lg:overflow-hidden lg:py-10">
         <div className="mx-auto flex w-full max-w-[1500px] flex-col">
           {/* heading */}
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
@@ -212,7 +223,7 @@ export default function BrowserTabs() {
           </div>
 
           {/* ── browser window ── */}
-          <div className="flex h-[min(84svh,900px)] flex-col overflow-hidden rounded-2xl bg-ink shadow-[0_40px_90px_-50px_rgba(36,38,32,0.8)]">
+          <div className="flex flex-col overflow-hidden rounded-2xl bg-ink lg:h-[min(84svh,900px)] shadow-[0_40px_90px_-50px_rgba(36,38,32,0.8)]">
             {/* tab strip */}
             <div
               ref={strip}
@@ -291,23 +302,27 @@ export default function BrowserTabs() {
               {shown.prev !== null && (
                 <div
                   key={`out-${shown.prev}`}
-                  className="bt-out pointer-events-none absolute inset-0 overflow-hidden px-5 pb-14 pt-3 sm:px-8"
+                  className="bt-out pointer-events-none absolute inset-x-0 top-0 overflow-hidden px-5 pb-6 pt-4 sm:px-8 lg:inset-0 lg:pb-14 lg:pt-3"
                   style={{ "--dir": shown.dir } as React.CSSProperties}
                   aria-hidden="true"
                 >
-                  <Panel tabKey={tabs[shown.prev].key} />
+                  <FitPanel>
+                    <Panel tabKey={tabs[shown.prev].key} />
+                  </FitPanel>
                 </div>
               )}
               <div
                 key={`in-${shown.cur}`}
-                className="bt-in absolute inset-0 overflow-hidden px-5 pb-14 pt-3 sm:px-8"
+                className="bt-in relative px-5 pb-6 pt-4 sm:px-8 lg:absolute lg:inset-0 lg:overflow-hidden lg:pb-14 lg:pt-3"
                 style={{ "--dir": shown.dir } as React.CSSProperties}
               >
-                <Panel tabKey={tabs[shown.cur].key} />
+                <FitPanel>
+                  <Panel tabKey={tabs[shown.cur].key} />
+                </FitPanel>
               </div>
 
               {/* next-tab nudge */}
-              <div className="pointer-events-none absolute bottom-4 right-5 z-10 sm:right-8">
+              <div className="pointer-events-none absolute bottom-4 right-5 z-10 hidden sm:right-8 lg:block">
                 <div className="flex items-center gap-3 rounded-full bg-ink px-4 py-2.5 text-paper shadow-lg">
                   <span className="label whitespace-nowrap opacity-60">
                     {isLast ? "that's the lot" : "keep scrolling"}
@@ -327,6 +342,26 @@ export default function BrowserTabs() {
               </div>
             </div>
 
+            {/* phones: step through the tabs */}
+            <div className="flex shrink-0 items-center justify-between gap-3 border-t border-ink/10 bg-paper px-4 py-3 lg:hidden">
+              <button
+                type="button"
+                onClick={() => selectTab(Math.max(0, index - 1))}
+                disabled={index === 0}
+                className="label rounded-full border border-ink/20 px-4 py-2.5 text-ink transition-opacity disabled:opacity-30"
+              >
+                ← {index === 0 ? "start" : tabs[index - 1].label}
+              </button>
+              <button
+                type="button"
+                onClick={() => selectTab(Math.min(tabs.length - 1, index + 1))}
+                disabled={isLast}
+                className="label rounded-full bg-ink px-4 py-2.5 text-paper transition-opacity disabled:opacity-30"
+              >
+                {isLast ? "end" : next.label} →
+              </button>
+            </div>
+
             {/* position dashes */}
             <div className="flex shrink-0 justify-center gap-1.5 bg-paper pb-4" aria-hidden="true">
               {tabs.map((t, i) => (
@@ -343,6 +378,56 @@ export default function BrowserTabs() {
       </div>
     </section>
   );
+}
+
+/**
+ * In the pinned (laptop and up) window every panel has a fixed box and nothing
+ * scrolls, so on a short screen a panel can be taller than its box. Rather than
+ * cut it off, scale it down just enough to fit (never below 72%), laying it out
+ * at the wider size so the text reflows with it. On a phone or tablet the
+ * window grows with its content, so this does nothing.
+ */
+function FitPanel({ children }: { children: React.ReactNode }) {
+  const inner = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const box = inner.current;
+    const outer = box?.parentElement;
+    if (!box || !outer) return;
+
+    const fit = () => {
+      if (!window.matchMedia("(min-width: 1024px)").matches) {
+        box.style.cssText = "";
+        return;
+      }
+      const cs = getComputedStyle(outer);
+      const avail =
+        outer.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      box.style.cssText = `height:${avail}px;width:100%;transform:none`;
+      let k = 1;
+      // a wider layout can change the height too, so settle over a few passes
+      for (let pass = 0; pass < 4; pass++) {
+        const need = box.scrollHeight * k;
+        if (need <= avail + 1) break;
+        k = Math.max(0.72, k * (avail / need));
+        box.style.cssText = `height:${avail / k}px;width:${100 / k}%;transform:scale(${k});transform-origin:top left`;
+        if (k === 0.72) break;
+      }
+      if (k === 1) box.style.cssText = `height:${avail}px`;
+    };
+
+    fit();
+    const late = window.setTimeout(fit, 350);
+    document.fonts?.ready.then(fit).catch(() => {});
+    const ro = new ResizeObserver(fit);
+    ro.observe(outer);
+    return () => {
+      window.clearTimeout(late);
+      ro.disconnect();
+    };
+  }, []);
+
+  return <div ref={inner}>{children}</div>;
 }
 
 function NavIcon({ d }: { d: string }) {
@@ -659,7 +744,7 @@ function Panel({ tabKey }: { tabKey: string }) {
             <figure
               key={a.title}
               tabIndex={0}
-              className="group relative aspect-[3/4] h-[250px] cursor-pointer overflow-hidden rounded-xl border border-ink/10 shadow-[0_22px_38px_-22px_rgba(0,0,0,0.5)] outline-none transition-transform duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-accent sm:h-[320px]"
+              className="group relative aspect-[3/4] w-[calc(50%-0.5rem)] cursor-pointer overflow-hidden rounded-xl border border-ink/10 shadow-[0_22px_38px_-22px_rgba(0,0,0,0.5)] outline-none transition-transform duration-500 hover:-translate-y-1.5 focus-visible:ring-2 focus-visible:ring-accent sm:h-[320px] sm:w-auto"
             >
               <div className="h-full w-full transition-transform duration-700 group-hover:scale-105">
                 {a.src ? (
@@ -844,7 +929,7 @@ function BuildStrip() {
 
   return (
     <div className="@container mt-6">
-      <div className="flex h-[348px] gap-3 sm:h-[380px]">
+      <div className="flex flex-col gap-3 md:h-[350px] md:flex-row">
         {builds.map((b, i) => {
           const isOpen = i === open;
           const look = BUILD_LOOK[b.id];
@@ -857,19 +942,23 @@ function BuildStrip() {
               onFocus={() => setOpen(i)}
               onClick={() => setOpen(i)}
               aria-expanded={isOpen}
-              className={`relative cursor-pointer text-white outline-none transition-[flex-grow,transform] duration-500 ease-out focus-visible:[&>.bv-body]:ring-2 focus-visible:[&>.bv-body]:ring-ink ${
-                isOpen ? "flex-[3.6]" : "flex-[1] hover:-translate-y-1.5"
+              className={`relative cursor-pointer text-white outline-none transition-[flex-grow,transform,height] duration-500 ease-out focus-visible:[&>.bv-body]:ring-2 focus-visible:[&>.bv-body]:ring-ink ${
+                isOpen
+                  ? "h-[372px] md:h-auto md:flex-[3.6]"
+                  : "h-[80px] md:h-auto md:flex-[1] md:hover:-translate-y-1.5"
               }`}
             >
               {/* the tab on the folder's top edge */}
               <div
-                className="absolute left-0 top-0 flex h-9 items-center rounded-tl-xl pl-3.5 pr-7 text-xs font-semibold tracking-wide"
-                style={{
-                  backgroundColor: look.tab,
-                  clipPath: "polygon(0 0, calc(100% - 16px) 0, 100% 100%, 0 100%)",
-                  width: isOpen ? "min(190px, 70%)" : "calc(100% - 22px)",
-                  transition: "width 500ms cubic-bezier(.2,.8,.2,1)",
-                }}
+                className="absolute left-0 top-0 flex h-9 w-[min(170px,70%)] items-center rounded-tl-xl pl-3.5 pr-7 text-xs font-semibold tracking-wide md:w-[var(--tab-w)]"
+                style={
+                  {
+                    backgroundColor: look.tab,
+                    clipPath: "polygon(0 0, calc(100% - 16px) 0, 100% 100%, 0 100%)",
+                    "--tab-w": isOpen ? "min(190px, 70%)" : "calc(100% - 22px)",
+                    transition: "width 500ms cubic-bezier(.2,.8,.2,1)",
+                  } as React.CSSProperties
+                }
               >
                 <span className="whitespace-nowrap">
                   {n}
@@ -894,7 +983,7 @@ function BuildStrip() {
 
                 {/* folded: a live dot and the name down the spine */}
                 <div
-                  className={`absolute inset-0 flex flex-col items-center justify-between px-2 pb-6 pt-7 transition-opacity duration-300 ${
+                  className={`absolute inset-0 flex flex-row items-center justify-start gap-3 px-5 pt-2 transition-opacity duration-300 md:flex-col md:justify-between md:px-2 md:pb-6 md:pt-7 ${
                     isOpen ? "pointer-events-none opacity-0" : "opacity-100"
                   }`}
                 >
@@ -902,10 +991,7 @@ function BuildStrip() {
                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-70" />
                     <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-white" />
                   </span>
-                  <span
-                    className="whitespace-nowrap text-xl font-semibold tracking-tight"
-                    style={{ writingMode: "vertical-rl", rotate: "180deg" }}
-                  >
+                  <span className="whitespace-nowrap text-xl font-semibold tracking-tight md:rotate-180 md:[writing-mode:vertical-rl]">
                     {b.name}
                   </span>
                 </div>
@@ -921,7 +1007,7 @@ function BuildStrip() {
 
                 {/* open: what it is */}
                 <div
-                  className={`absolute inset-x-0 top-0 p-6 pt-5 transition-opacity duration-500 @3xl:pr-[260px] ${
+                  className={`absolute inset-0 overflow-hidden rounded-b-2xl p-5 pt-4 transition-opacity duration-500 sm:p-6 sm:pt-5 @3xl:pr-[260px] ${
                     isOpen ? "opacity-100 delay-150" : "pointer-events-none opacity-0"
                   }`}
                 >
@@ -939,7 +1025,7 @@ function BuildStrip() {
 
                 {/* the front flap: stack and link */}
                 <div
-                  className={`absolute inset-x-0 bottom-0 z-20 flex h-[27%] min-h-[74px] items-center justify-between gap-3 rounded-b-2xl border-t border-white/30 bg-black/25 px-6 backdrop-blur-md transition-opacity duration-500 ${
+                  className={`absolute inset-x-0 bottom-0 z-20 flex min-h-[74px] flex-wrap items-center justify-between gap-x-3 gap-y-2 rounded-b-2xl border-t border-white/30 bg-black/25 px-5 py-3 backdrop-blur-md transition-opacity duration-500 sm:px-6 md:h-[27%] md:py-0 ${
                     isOpen ? "opacity-100 delay-150" : "pointer-events-none opacity-0"
                   }`}
                 >

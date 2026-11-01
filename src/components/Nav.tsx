@@ -167,7 +167,8 @@ export default function Nav() {
       <div
         ref={menu}
         style={{ display: "none", opacity: 0 }}
-        className="fixed inset-0 z-40 hidden flex-col justify-center gap-2 bg-ink px-6 pt-16 text-paper md:!hidden"
+        data-lenis-prevent
+        className="fixed inset-0 z-40 hidden flex-col justify-center gap-2 overflow-y-auto overscroll-contain bg-ink px-6 pb-10 pt-20 text-paper md:!hidden [@media(max-height:760px)]:justify-start"
       >
         {links.map((l) => (
           <a

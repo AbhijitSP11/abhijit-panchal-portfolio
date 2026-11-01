@@ -86,7 +86,7 @@ export default function Work() {
       className="dotgrid relative border-t border-ink/10 bg-paper-2/40"
     >
       <div className="mx-auto max-w-[1500px] px-5 py-20 sm:px-8 lg:py-24">
-        <div className="mb-10 flex items-end justify-between border-b border-ink/15 pb-5">
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b border-ink/15 pb-5">
           <h2 className="w-head reveal-ready label !text-sm text-ink/75">
             01 / Selected work
           </h2>
@@ -105,13 +105,13 @@ export default function Work() {
           </p>
         </div>
 
-        <div className="w-grid grid gap-6 lg:grid-cols-2">
+        <div className="w-grid grid grid-cols-1 gap-6 lg:grid-cols-2">
           {projects.map((p) => {
             const [builder, client] = p.logos;
             return (
               <article
                 key={p.id}
-                className="w-card reveal-ready group relative flex flex-col border border-ink/12 bg-paper transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-1 hover:border-ink/30 hover:shadow-[0_34px_60px_-38px_rgba(36,38,32,0.5)]"
+                className="w-card reveal-ready group relative flex min-w-0 flex-col border border-ink/12 bg-paper transition-[transform,border-color,box-shadow] duration-500 hover:-translate-y-1 hover:border-ink/30 hover:shadow-[0_34px_60px_-38px_rgba(36,38,32,0.5)]"
               >
                 <span
                   className="absolute inset-x-0 top-0 z-20 h-[3px] origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
@@ -120,7 +120,7 @@ export default function Work() {
                 />
 
                 {/* who built it, and for whom */}
-                <div className="flex items-center justify-between gap-4 border-b border-ink/10 px-7 py-4">
+                <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-ink/10 px-5 py-4 sm:px-7">
                   <div className="flex items-center gap-3">
                     <Logo logo={builder} size={40} />
                     {client ? (
@@ -130,7 +130,7 @@ export default function Work() {
                       </>
                     ) : null}
                   </div>
-                  <div className="text-right">
+                  <div className="text-left sm:text-right">
                     <div className="label !text-xs text-ink/55">
                       {client ? "Built at" : "Built at"}
                     </div>
@@ -149,7 +149,7 @@ export default function Work() {
                 </div>
 
                 {/* engagement header */}
-                <header className="flex items-start justify-between gap-4 border-b border-ink/10 px-7 pb-5 pt-6">
+                <header className="flex flex-wrap items-start justify-between gap-4 border-b border-ink/10 px-5 pb-5 pt-6 sm:px-7">
                   <div className="min-w-0">
                     <div className="flex items-center gap-2.5">
                       <span
@@ -158,7 +158,7 @@ export default function Work() {
                       />
                       <span className="label !text-xs text-ink/65">{p.eyebrow}</span>
                     </div>
-                    <h3 className="mt-3 text-3xl font-semibold leading-tight tracking-tight text-ink sm:text-[2rem]">
+                    <h3 className="mt-3 text-2xl font-semibold leading-tight tracking-tight text-ink sm:text-[2rem]">
                       {p.title}
                     </h3>
                     <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-base text-ink/65">
@@ -170,7 +170,7 @@ export default function Work() {
 
                   <div className="flex shrink-0 flex-col items-end gap-2">
                     <span
-                      className="select-none text-5xl font-semibold leading-none tracking-tighter text-ink/[0.1]"
+                      className="hidden select-none text-5xl sm:block font-semibold leading-none tracking-tighter text-ink/[0.1]"
                       aria-hidden="true"
                     >
                       {p.index}
@@ -194,8 +194,8 @@ export default function Work() {
                 </header>
 
                 {/* body */}
-                <div className="grid flex-1 gap-6 px-7 py-6 sm:grid-cols-5">
-                  <div className="sm:col-span-3">
+                <div className="grid flex-1 gap-6 px-5 py-6 sm:grid-cols-5 sm:px-7">
+                  <div className="min-w-0 sm:col-span-3">
                     <p className="text-base leading-relaxed text-ink/80">
                       <Marked text={p.blurb} marks={p.marks} tint={p.accent} />
                     </p>
@@ -228,7 +228,7 @@ export default function Work() {
                     </ul>
                   </div>
 
-                  <div className="sm:col-span-2">
+                  <div className="min-w-0 sm:col-span-2">
                     <div className="relative h-[110px] overflow-hidden border border-ink/10 bg-paper-2/60 px-3 pt-3">
                       <div className="origin-top scale-[0.6] opacity-80 transition-all duration-700 group-hover:scale-[0.64] group-hover:opacity-100">
                         <ProjectMock accent={p.accent} />
@@ -267,7 +267,7 @@ export default function Work() {
                 </div>
 
                 {/* footer */}
-                <footer className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-ink/10 px-7 py-5">
+                <footer className="mt-auto flex flex-wrap items-center justify-between gap-4 border-t border-ink/10 px-5 py-5 sm:px-7">
                   <div className="flex flex-wrap gap-1.5">
                     {p.stack.slice(0, 4).map((s) => (
                       <span

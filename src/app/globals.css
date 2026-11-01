@@ -77,6 +77,14 @@ html.lenis body {
     text-transform: uppercase;
   }
 
+  /* a touch larger on phones, where 11px mono caps get hard to read */
+  @media (max-width: 639px) {
+    .label {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+    }
+  }
+
   .dotgrid {
     background-image: radial-gradient(
       rgba(36, 38, 32, 0.16) 1px,

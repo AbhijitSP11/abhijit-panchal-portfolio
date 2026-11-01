@@ -78,7 +78,7 @@ export default function Contact() {
           </a>
           <a
             href={`tel:${profile.phone.replace(/[^+\d]/g, "")}`}
-            className="link-sweep text-base text-muted"
+            className="link-sweep py-2 text-base text-muted"
           >
             {profile.phone}
           </a>
@@ -89,7 +89,7 @@ export default function Contact() {
             href={profile.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-sweep label text-ink/70"
+            className="link-sweep label py-2.5 text-ink/70"
           >
             LinkedIn — {profile.linkedinLabel}
           </a>
@@ -97,7 +97,7 @@ export default function Contact() {
             href={profile.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="link-sweep label text-ink/70"
+            className="link-sweep label py-2.5 text-ink/70"
           >
             GitHub — {profile.githubLabel}
           </a>

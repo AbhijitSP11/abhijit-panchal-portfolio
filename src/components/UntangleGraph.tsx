@@ -254,22 +254,25 @@ export default function UntangleGraph({ className = "" }: { className?: string }
       {MARKS.map((m, i) => {
         const above = m.side === "above";
         const left = `${((markPos[i].x + (above ? -10 : 10)) / W) * 100}%`;
+        // on a phone the notes are kept inside the graph; the clamp only applies there
         const top = `${((markPos[i].y + (above ? -12 : 12)) / H) * 100}%`;
 
         return (
           <div
             key={m.text}
-            className="ug-mark pointer-events-none absolute z-10 w-max"
+            className={`ug-mark pointer-events-none absolute z-10 w-max left-[var(--l)] ${
+              above ? "" : "max-sm:left-[min(var(--l),calc(100%_-_172px))]"
+            }`}
             style={{
-              left,
+              "--l": left,
               top,
               opacity: 0,
               transform: above ? "translate(-100%, -100%)" : undefined,
-            }}
+            } as React.CSSProperties}
           >
             {above ? (
               <div className="flex items-start gap-1">
-                <p className="hand max-w-[190px] text-right text-[1.2rem] leading-[1.05] text-chart-deep">
+                <p className="hand max-w-[190px] text-right text-[1.2rem] leading-[1.05] text-chart-deep max-sm:max-w-[135px] max-sm:text-[1.02rem]">
                   {m.text}
                 </p>
                 <HandArrow className="mt-1 h-7 w-10 shrink-0" />
@@ -277,7 +280,7 @@ export default function UntangleGraph({ className = "" }: { className?: string }
             ) : (
               <div className="flex items-end gap-1">
                 <HandArrow className="h-7 w-10 shrink-0 rotate-180" />
-                <p className="hand max-w-[190px] text-[1.2rem] leading-[1.05] text-chart-deep">
+                <p className="hand max-w-[190px] text-[1.2rem] leading-[1.05] text-chart-deep max-sm:max-w-[135px] max-sm:text-[1.02rem]">
                   {m.text}
                 </p>
               </div>
