@@ -28,7 +28,7 @@ export default function OpengraphImage() {
           <span style={{ color: "#d62d46" }}>.</span>
         </div>
         <div style={{ display: "flex", fontSize: 40, color: "#3a3c33" }}>
-          I build the systems banks run on — fintech, payments and data-heavy products.
+          I build software for banks and fintech: payments, reconciliation and billing.
         </div>
       </div>
     ),

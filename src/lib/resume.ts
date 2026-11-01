@@ -12,7 +12,7 @@ export const profile = {
   linkedinLabel: "abhijit-panchal",
   github: "https://github.com/abhijitsp11",
   githubLabel: "abhijitsp11",
-  tagline: "I build the systems banks run on.",
+  tagline: "I build software for banks and fintech.",
   summary:
     "Full stack software engineer with a B.Tech in Computer Science and 3.5+ years building service-oriented web applications for banks and capital-markets firms. Strong in object-oriented programming, data structures and algorithms, and API design; builds record-matching and batch pipelines over 100,000+ rows per run and search systems over 25M+ records.",
   summary2:
