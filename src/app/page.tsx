@@ -9,6 +9,7 @@ import BlurIn from "@/components/BlurIn";
 import Stats from "@/components/Stats";
 import Work from "@/components/Work";
 import Experience from "@/components/Experience";
+import Values from "@/components/Values";
 import BrowserTabs from "@/components/BrowserTabs";
 import Contact from "@/components/Contact";
 
@@ -63,6 +64,10 @@ export default function Home() {
 
         <BlurIn>
           <Experience />
+        </BlurIn>
+
+        <BlurIn>
+          <Values />
         </BlurIn>
 
         {/* not wrapped in BlurIn: the section pins itself with position:sticky,
