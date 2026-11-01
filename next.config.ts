@@ -1,14 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
-    ],
-  },
+  // the floating dev badge sits on top of the hero's bottom-left meta
+  devIndicators: false,
 };
 
 export default nextConfig;
